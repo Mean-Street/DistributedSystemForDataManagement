@@ -1,17 +1,17 @@
-package WeatherWizard;
+package WeatherWizard.OpenWeatherMap;
 
 import akka.http.javadsl.model.HttpRequest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class OpenWeatherMapCurrentWeatherRequestTest {
+class CurrentWeatherRequestTest {
 
     @Test
     public void whenCreatingCurrentWeatherRequest() {
         String key = "123456789abc";
-        OpenWeatherMapCurrentWeatherRequest request
-                = new OpenWeatherMapCurrentWeatherRequest(key, "Roma", "it");
+        CurrentWeatherRequest request
+                = new CurrentWeatherRequest( "Roma", "it");
         HttpRequest httpRequest = request.create();
 
         assertEquals(httpRequest.getUri().scheme(), "http");

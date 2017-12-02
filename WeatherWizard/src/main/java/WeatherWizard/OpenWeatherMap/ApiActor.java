@@ -1,4 +1,4 @@
-package WeatherWizard;
+package WeatherWizard.OpenWeatherMap;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
@@ -17,13 +17,13 @@ import java.util.concurrent.CompletionStage;
 
 
 /**
- * This class implements the methods needed to communicate with OpenWeatherMap's API.
- * When a correct request is sent to this actor, it will connect to OpenWeatherMap's
+ * This class implements the methods needed to communicate with ApiActor's API.
+ * When a correct request is sent to this actor, it will connect to ApiActor's
  * servers and process the response, returning it to the sender.
  * Currently it supports:
  *  - Get current weather
  */
-public class OpenWeatherMap extends AbstractActor {
+public class ApiActor extends AbstractActor {
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
     private Http httpGate;
     private Materializer materializer;
@@ -34,19 +34,19 @@ public class OpenWeatherMap extends AbstractActor {
     // Actor's name
     public static String name = "openWeatherMap";
 
-    public OpenWeatherMap(Http httpGate, Materializer materializer) {
+    public ApiActor(Http httpGate, Materializer materializer) {
         this.httpGate = httpGate;
         this.materializer = materializer;
     }
 
-    static Props props(Http httpGate, Materializer materializer) {
-        return Props.create(OpenWeatherMap.class, () -> new OpenWeatherMap(httpGate, materializer));
+    public static Props props(Http httpGate, Materializer materializer) {
+        return Props.create(ApiActor.class, () -> new ApiActor(httpGate, materializer));
     }
 
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match(OpenWeatherMapCurrentWeatherRequest.class, request -> {
+                .match(CurrentWeatherRequest.class, request -> {
                     target = getSender();
                     requestCurrentWeather(request)
                             .thenAccept(resp -> {log.info(resp.toString()); target.tell(resp, getSelf());});
@@ -54,11 +54,12 @@ public class OpenWeatherMap extends AbstractActor {
                 .build();
     }
 
-    private CompletionStage<OpenWeatherMapCurrentWeatherResponse>
-            requestCurrentWeather(OpenWeatherMapCurrentWeatherRequest request) {
+    private CompletionStage<CurrentWeatherResponse>
+            requestCurrentWeather(CurrentWeatherRequest request) {
+        log.info("Request: " + request.toString());
         CompletionStage<HttpResponse> responseFuture = httpGate.singleRequest(request.create(), materializer);
-        Unmarshaller<HttpEntity, OpenWeatherMapCurrentWeatherResponse> decoder
-                = Jackson.unmarshaller(OpenWeatherMapCurrentWeatherResponse.class);
+        Unmarshaller<HttpEntity, CurrentWeatherResponse> decoder
+                = Jackson.unmarshaller(CurrentWeatherResponse.class);
         return responseFuture.thenCompose(resp -> decoder.unmarshal(resp.entity(), this.materializer));
     }
 }
