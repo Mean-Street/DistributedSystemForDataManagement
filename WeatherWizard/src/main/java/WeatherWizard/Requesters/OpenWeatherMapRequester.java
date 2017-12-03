@@ -1,4 +1,4 @@
-package WeatherWizard.HttpRequesters;
+package WeatherWizard.Requesters;
 
 import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherRequest;
 import WeatherWizard.Responses.OpenWeatherMapCurrentWeatherResponse;

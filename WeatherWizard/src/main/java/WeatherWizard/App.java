@@ -1,6 +1,6 @@
 package WeatherWizard;
 
-import WeatherWizard.HttpRequesters.OpenWeatherMapRequester;
+import WeatherWizard.Requesters.OpenWeatherMapRequester;
 import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherRequest;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
