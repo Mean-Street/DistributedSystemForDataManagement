@@ -1,7 +1,6 @@
 package WeatherWizard.HttpRequesters;
 
-import WeatherWizard.Configurations.OpenWeatherMapConfig;
-import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherOpenWeatherMapRequest;
+import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherRequest;
 import WeatherWizard.Responses.OpenWeatherMapCurrentWeatherResponse;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -9,7 +8,6 @@ import akka.http.javadsl.Http;
 import akka.stream.ActorMaterializer;
 import akka.stream.Materializer;
 import akka.testkit.javadsl.TestKit;
-import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -39,7 +37,7 @@ class OpenWeatherMapRequesterTest {
             final Materializer materializer = ActorMaterializer.create(system);
             final ActorRef openWeatherActorRef = system.actorOf(OpenWeatherMapRequester.props(httpGate, materializer));
 
-            OpenWeatherMapCurrentWeatherOpenWeatherMapRequest request = new OpenWeatherMapCurrentWeatherOpenWeatherMapRequest( "Roma", "it");
+            OpenWeatherMapCurrentWeatherRequest request = new OpenWeatherMapCurrentWeatherRequest( "Roma", "it");
 
             openWeatherActorRef.tell(request, getRef());
             expectMsgClass(OpenWeatherMapCurrentWeatherResponse.class);
@@ -56,7 +54,7 @@ class OpenWeatherMapRequesterTest {
             final Materializer materializer = ActorMaterializer.create(system);
             final ActorRef openWeatherActorRef = system.actorOf(OpenWeatherMapRequester.props(httpGate, materializer));
 
-            OpenWeatherMapCurrentWeatherOpenWeatherMapRequest request = new OpenWeatherMapCurrentWeatherOpenWeatherMapRequest( "Roma", "fr");
+            OpenWeatherMapCurrentWeatherRequest request = new OpenWeatherMapCurrentWeatherRequest( "Roma", "fr");
 
             openWeatherActorRef.tell(request, getRef());
             expectNoMsg();

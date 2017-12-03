@@ -1,7 +1,7 @@
 package WeatherWizard;
 
 import WeatherWizard.HttpRequesters.OpenWeatherMapRequester;
-import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherOpenWeatherMapRequest;
+import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherRequest;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.http.javadsl.Http;
@@ -23,7 +23,7 @@ public class App
 
         ActorRef openWeatherMapApiRef = system.actorOf(OpenWeatherMapRequester.props(httpGate, materializer), OpenWeatherMapRequester.name);
 
-        openWeatherMapApiRef.tell(new OpenWeatherMapCurrentWeatherOpenWeatherMapRequest("Roma", "it"),
+        openWeatherMapApiRef.tell(new OpenWeatherMapCurrentWeatherRequest("Roma", "it"),
                                   ActorRef.noSender());
 
         // system.terminate();
