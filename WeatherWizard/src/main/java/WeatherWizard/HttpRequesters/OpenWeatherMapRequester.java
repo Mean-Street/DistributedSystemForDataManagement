@@ -1,6 +1,6 @@
 package WeatherWizard.HttpRequesters;
 
-import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherOpenWeatherMapRequest;
+import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherRequest;
 import WeatherWizard.Responses.OpenWeatherMapCurrentWeatherResponse;
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
@@ -48,7 +48,7 @@ public class OpenWeatherMapRequester extends AbstractActor {
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match(OpenWeatherMapCurrentWeatherOpenWeatherMapRequest.class, request -> {
+                .match(OpenWeatherMapCurrentWeatherRequest.class, request -> {
                     target = getSender();
                     requestCurrentWeather(request)
                             .thenAccept(resp -> {log.info(resp.toString()); target.tell(resp, getSelf());});
@@ -57,7 +57,7 @@ public class OpenWeatherMapRequester extends AbstractActor {
     }
 
     private CompletionStage<OpenWeatherMapCurrentWeatherResponse>
-            requestCurrentWeather(OpenWeatherMapCurrentWeatherOpenWeatherMapRequest request) {
+            requestCurrentWeather(OpenWeatherMapCurrentWeatherRequest request) {
         CompletionStage<HttpResponse> responseFuture = httpGate.singleRequest(request.create(), materializer);
         Unmarshaller<HttpEntity, OpenWeatherMapCurrentWeatherResponse> decoder
                 = Jackson.unmarshaller(OpenWeatherMapCurrentWeatherResponse.class);
