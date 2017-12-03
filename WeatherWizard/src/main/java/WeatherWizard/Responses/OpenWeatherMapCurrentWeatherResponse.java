@@ -1,17 +1,17 @@
-package WeatherWizard.OpenWeatherMap;
+package WeatherWizard.Responses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 
 /**
- * This class describes a response from ApiActor when queried with a Current Weather request.
+ * This class describes a response from OpenWeatherMapRequester when queried with a Current Weather request.
  * Currently, it only stores:
  *  - Coordinates (longitude, latitude)
  *  - Temperature
  */
 @JsonIgnoreProperties({"weather", "base", "visibility", "wind", "clouds", "dt", "sys", "id", "name", "cod"})
-public class CurrentWeatherResponse {
+public class OpenWeatherMapCurrentWeatherResponse {
     public class Coordinates {
         public Double lon;
         public Double lat;

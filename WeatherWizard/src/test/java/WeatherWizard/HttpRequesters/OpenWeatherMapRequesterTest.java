@@ -1,16 +1,20 @@
-package WeatherWizard.OpenWeatherMap;
+package WeatherWizard.HttpRequesters;
 
+import WeatherWizard.Configurations.OpenWeatherMapConfig;
+import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherOpenWeatherMapRequest;
+import WeatherWizard.Responses.OpenWeatherMapCurrentWeatherResponse;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.http.javadsl.Http;
 import akka.stream.ActorMaterializer;
 import akka.stream.Materializer;
 import akka.testkit.javadsl.TestKit;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class ApiActorTest {
+class OpenWeatherMapRequesterTest {
 
     static ActorSystem system;
 
@@ -33,13 +37,12 @@ class ApiActorTest {
         new TestKit(system) {{
             final Http httpGate = Http.get(system);
             final Materializer materializer = ActorMaterializer.create(system);
-            final ActorRef openWeatherActorRef = system.actorOf(ApiActor.props(httpGate, materializer));
+            final ActorRef openWeatherActorRef = system.actorOf(OpenWeatherMapRequester.props(httpGate, materializer));
 
-            String key = "7f484592e9396fae071a8f19acdc0e71";
-            CurrentWeatherRequest request = new CurrentWeatherRequest( "Roma", "it");
+            OpenWeatherMapCurrentWeatherOpenWeatherMapRequest request = new OpenWeatherMapCurrentWeatherOpenWeatherMapRequest( "Roma", "it");
 
             openWeatherActorRef.tell(request, getRef());
-            expectMsgClass(CurrentWeatherResponse.class);
+            expectMsgClass(OpenWeatherMapCurrentWeatherResponse.class);
         }};
     }
 
@@ -51,10 +54,9 @@ class ApiActorTest {
         new TestKit(system) {{
             final Http httpGate = Http.get(system);
             final Materializer materializer = ActorMaterializer.create(system);
-            final ActorRef openWeatherActorRef = system.actorOf(ApiActor.props(httpGate, materializer));
+            final ActorRef openWeatherActorRef = system.actorOf(OpenWeatherMapRequester.props(httpGate, materializer));
 
-            String key = "7f484592e9396fae071a8f19acdc0e71";
-            CurrentWeatherRequest request = new CurrentWeatherRequest( "Roma", "fr");
+            OpenWeatherMapCurrentWeatherOpenWeatherMapRequest request = new OpenWeatherMapCurrentWeatherOpenWeatherMapRequest( "Roma", "fr");
 
             openWeatherActorRef.tell(request, getRef());
             expectNoMsg();
