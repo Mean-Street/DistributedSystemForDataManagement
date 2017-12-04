@@ -1,8 +1,9 @@
 package WeatherWizard.Requesters;
 
 import WeatherWizard.Requests.Location;
-import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherRequest;
-import WeatherWizard.Responses.OpenWeatherMapCurrentWeatherResponse;
+import WeatherWizard.Requests.OpenWeatherMapRequest;
+import WeatherWizard.Requests.Request;
+import WeatherWizard.Responses.OpenWeatherMapResponse;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.http.javadsl.Http;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-class OpenWeatherMapRequesterTest {
+class OpenWeatherMapRequestDispacherTest {
 
     static ActorSystem system;
 
@@ -36,12 +37,14 @@ class OpenWeatherMapRequesterTest {
         new TestKit(system) {{
             final Http httpGate = Http.get(system);
             final Materializer materializer = ActorMaterializer.create(system);
-            final ActorRef openWeatherActorRef = system.actorOf(OpenWeatherMapRequester.props(httpGate, materializer));
+            final ActorRef openWeatherActorRef = system.actorOf(
+                    Requester.props(httpGate, materializer, OpenWeatherMapRequest.class,
+                                    OpenWeatherMapResponse.class));
 
-            OpenWeatherMapCurrentWeatherRequest request = new OpenWeatherMapCurrentWeatherRequest(new Location("Roma", "it"));
+            OpenWeatherMapRequest request = new OpenWeatherMapRequest(new Location("Roma", "it"));
 
             openWeatherActorRef.tell(request, getRef());
-            expectMsgClass(OpenWeatherMapCurrentWeatherResponse.class);
+            expectMsgClass(OpenWeatherMapResponse.class);
         }};
     }
 
@@ -53,9 +56,11 @@ class OpenWeatherMapRequesterTest {
         new TestKit(system) {{
             final Http httpGate = Http.get(system);
             final Materializer materializer = ActorMaterializer.create(system);
-            final ActorRef openWeatherActorRef = system.actorOf(OpenWeatherMapRequester.props(httpGate, materializer));
+            final ActorRef openWeatherActorRef = system.actorOf(
+                    Requester.props(httpGate, materializer, OpenWeatherMapRequest.class,
+                                    OpenWeatherMapResponse.class));
 
-            OpenWeatherMapCurrentWeatherRequest request = new OpenWeatherMapCurrentWeatherRequest(new Location("Roma", "fr"));
+            OpenWeatherMapRequest request = new OpenWeatherMapRequest(new Location("Roma", "fr"));
 
             openWeatherActorRef.tell(request, getRef());
             expectNoMsg();

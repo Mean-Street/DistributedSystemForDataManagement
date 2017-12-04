@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
  *  - Coordinates (longitude, latitude)
  *  - Temperature
  */
-public class ApixuCurrentWeatherResponse {
+public class ApixuResponse {
     
     @JsonIgnoreProperties({"name", "region", "country", "tz_id", "localtime_epoch", "localtime"})
     public class Coordinates {

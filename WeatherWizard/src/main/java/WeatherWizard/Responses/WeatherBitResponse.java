@@ -12,8 +12,9 @@ import java.util.List;
  *  - Coordinates (longitude, latitude)
  *  - Temperature
  */
+
 @JsonIgnoreProperties({"count"})
-public class WeatherBitCurrentWeatherResponse {
+public class WeatherBitResponse extends Response {
     
 //    public class Coordinates {
 //        public Double lon;
