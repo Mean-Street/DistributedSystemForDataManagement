@@ -25,6 +25,7 @@ public abstract class WeatherBitRequest {
 
     public HttpRequest create() {
         configureUrl();
+        System.out.println("Url : " + getUrl() + "&" + config.keyTag() + "=" + config.key());
         return HttpRequest.create(getUrl() + "&" + config.keyTag() + "=" + config.key());
     }
 }

@@ -1,8 +1,10 @@
 package WeatherWizard;
 
 
+import WeatherWizard.Requesters.ApixuRequester;
 import WeatherWizard.Requesters.OpenWeatherMapRequester;
 import WeatherWizard.Requesters.WeatherBitRequester;
+import WeatherWizard.Requests.ApixuCurrentWeatherRequest;
 import WeatherWizard.Requests.Location;
 import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherRequest;
 import WeatherWizard.Requests.WeatherBitCurrentWeatherRequest;
@@ -36,22 +38,22 @@ public class App
         Materializer materializer = ActorMaterializer.create(system);
 
         // launch actors
-//        ActorRef ApixuApiRef = system.actorOf(ApixuRequester.props(httpGate, materializer), ApixuRequester.name);
+//        ActorRef ApixuApiRef = system.actorOf(ApixuRequester.props(http, materializer), ApixuRequester.name);
 //        
 //        ApixuApiRef.tell(new ApixuCurrentWeatherRequest("Grenoble"),
 //                                  ActorRef.noSender());
+
+//        ActorRef openWeatherMapApiRef = system.actorOf(OpenWeatherMapRequester.props(http, materializer), OpenWeatherMapRequester.name);
 //
-        ActorRef openWeatherMapApiRef = system.actorOf(OpenWeatherMapRequester.props(http, materializer), OpenWeatherMapRequester.name);
-
-        openWeatherMapApiRef.tell(new OpenWeatherMapCurrentWeatherRequest(new Location("Grenoble", "fr")),
-                                  ActorRef.noSender());
-
+//        openWeatherMapApiRef.tell(new OpenWeatherMapCurrentWeatherRequest(new Location("Grenoble", "fr")),
+//                                  ActorRef.noSender());
+//
         ActorRef WeatherBitApiRef = system.actorOf(WeatherBitRequester.props(http, materializer), WeatherBitRequester.name);
 
-        WeatherBitApiRef.tell(new WeatherBitCurrentWeatherRequest("Grenoble"),
+        WeatherBitApiRef.tell(new WeatherBitCurrentWeatherRequest("Paris"),
                                   ActorRef.noSender());
 
-        HttpServer server = new HttpServer(openWeatherMapApiRef);
+        HttpServer server = new HttpServer(WeatherBitApiRef);
 
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = server.createRoute().flow(system, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(routeFlow,

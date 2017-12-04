@@ -51,7 +51,7 @@ public class OpenWeatherMapRequester extends AbstractActor {
                 .match(OpenWeatherMapCurrentWeatherRequest.class, request -> {
                     target = getSender();
                     requestCurrentWeather(request)
-                            .thenAccept(resp -> target.tell(resp, getSelf()));
+                            .thenAccept(resp -> {log.info(resp.toString()); target.tell(resp, getSelf());});
                 })
                 .build();
     }
