@@ -1,6 +1,8 @@
 package WeatherWizard.Requesters;
 
 
+import WeatherWizard.Requests.Location;
+import WeatherWizard.Requests.OpenWeatherMapRequest;
 import WeatherWizard.Requests.Request;
 import WeatherWizard.Responses.Response;
 import akka.actor.AbstractActor;
@@ -34,7 +36,8 @@ public class Requester<RequestClass extends Request, ResponseClass extends Respo
         this.materializer = materializer;
     }
 
-    static <ReqType extends Request, RespType extends Response> Props props(
+    // ATTENTION? passé en public pour le TIMER
+    public static <ReqType extends Request, RespType extends Response> Props props(
             Http httpGate, Materializer materializer, Class<ReqType> reqClass, Class<RespType> respClass) {
         return Props.create(Requester.class, () -> new Requester<>(httpGate, materializer, reqClass, respClass));
     }
@@ -45,6 +48,12 @@ public class Requester<RequestClass extends Request, ResponseClass extends Respo
                 .match(requestClass, request -> {
                     target = getSender();
                     requestCurrentWeather(request)
+                            .thenAccept(resp -> {log.info(resp.toString()); target.tell(resp, getSelf());});
+                })
+                .matchEquals("Tick", request -> {
+                    target = getSender();
+                    OpenWeatherMapRequest req = new OpenWeatherMapRequest(new Location("Paris", "fr"));
+                    requestCurrentWeather((RequestClass) req)
                             .thenAccept(resp -> {log.info(resp.toString()); target.tell(resp, getSelf());});
                 })
                 .build();
