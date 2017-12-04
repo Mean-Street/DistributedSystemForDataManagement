@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class OpenWeatherMapCurrentWeatherRequestTest {
+class OpenWeatherMapRequestTest {
 
     @Test
     public void whenCreatingCurrentWeatherRequest() {
-        OpenWeatherMapCurrentWeatherRequest request
-                = new OpenWeatherMapCurrentWeatherRequest(new Location("Roma", "it"));
+        OpenWeatherMapRequest request
+                = new OpenWeatherMapRequest(new Location("Roma", "it"));
         HttpRequest httpRequest = request.create();
 
         assertEquals(httpRequest.getUri().scheme(), "http");

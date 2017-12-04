@@ -4,25 +4,31 @@ import akka.http.javadsl.model.HttpRequest;
 import org.aeonbits.owner.ConfigFactory;
 import WeatherWizard.Configurations.WeatherBitConfig;
 
-public abstract class WeatherBitRequest {
-    protected WeatherBitConfig config;
+public class WeatherBitRequest extends Request {
+    private WeatherBitConfig config;
     private String urlRequest;
+    private String city;
 
-    protected WeatherBitRequest() {
+
+    public WeatherBitRequest(String city) {
         this.config = ConfigFactory.create(WeatherBitConfig.class);
         this.urlRequest = config.url();
+        this.city = city;
     }
 
-    protected String getUrl() {
+    private void configureUrl() {
+        setUrl(getUrl() + "?" + config.locationTag() + "=" + city);
+    }
+
+    private String getUrl() {
         return urlRequest;
     }
 
-    protected void setUrl(String url) {
+    private void setUrl(String url) {
         this.urlRequest = url;
     }
 
-    protected abstract void configureUrl();
-
+    @Override
     public HttpRequest create() {
         configureUrl();
         return HttpRequest.create(getUrl() + "&" + config.keyTag() + "=" + config.key());

@@ -5,14 +5,14 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 
 /**
- * This class describes a response from WeatherBitRequester when queried with a Current Weather request.
+ * This class describes a response from ApixuRequester when queried with a Current Weather request.
  * Currently, it only stores:
  *  - Coordinates (longitude, latitude)
  *  - Temperature
  */
-@JsonIgnoreProperties({"count", "rh", "pod", "press", "timezone", "weather", "country_code", "clouds", "vis", "wind_spd", "wind_cdir_full", "app_temp", "state_code", "ts", "elev_angle", "h_angle", "dewpt", "ob_time", "uv", "sunset", "sunrise", "city_name", "precip", "station", "dhi", "datetime", "wind_dir", "slp", "wind_cdir"})
-public class WeatherBitCurrentWeatherResponse {
+public class ApixuResponse {
     
+    @JsonIgnoreProperties({"name", "region", "country", "tz_id", "localtime_epoch", "localtime"})
     public class Coordinates {
         public Double lon;
         public Double lat;
@@ -23,22 +23,23 @@ public class WeatherBitCurrentWeatherResponse {
         }
     }
 
+    @JsonIgnoreProperties({"last_updated_epoch", "last_updated", "temp_f", "is_day", "condition", "wind_mph", "wind_kph", "wind_degree", "wind_dir", "pressure_mb", "pressure_in", "precip_mm", "precip_in", "humidity", "cloud", "feelslike_c", "feelslike_f", "vis_km", "vis_miles"})
     public class Current {
-        public Double temp;
+        public Double temp_c;
     }
 
 
     private Double temperature;
     private Coordinates location;
 
+    @JsonSetter("location")
     public void setLocation(Coordinates location) {
         this.location = location;
-        System.out.println("location set");
     }
 
+    @JsonSetter("current")
     public void setTemperature(Current current) {
-        this.temperature = current.temp;
-        System.out.println("temperature set");
+        this.temperature = current.temp_c;
     }
 
 

@@ -1,11 +1,7 @@
 package WeatherWizard;
 
 
-import WeatherWizard.Requesters.OpenWeatherMapRequester;
-import WeatherWizard.Requesters.WeatherBitRequester;
-import WeatherWizard.Requests.Location;
-import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherRequest;
-import WeatherWizard.Requests.WeatherBitCurrentWeatherRequest;
+import WeatherWizard.Requesters.RequestDispacher;
 
 import akka.NotUsed;
 import akka.actor.ActorRef;
@@ -35,23 +31,9 @@ public class App
         Http http = Http.get(system);
         Materializer materializer = ActorMaterializer.create(system);
 
-        // launch actors
-//        ActorRef ApixuApiRef = system.actorOf(ApixuRequester.props(httpGate, materializer), ApixuRequester.name);
-//        
-//        ApixuApiRef.tell(new ApixuCurrentWeatherRequest("Grenoble"),
-//                                  ActorRef.noSender());
-//
-        ActorRef openWeatherMapApiRef = system.actorOf(OpenWeatherMapRequester.props(http, materializer), OpenWeatherMapRequester.name);
+        ActorRef requesterRef = system.actorOf(RequestDispacher.props(http, materializer), RequestDispacher.name);
 
-        openWeatherMapApiRef.tell(new OpenWeatherMapCurrentWeatherRequest(new Location("Grenoble", "fr")),
-                                  ActorRef.noSender());
-
-        ActorRef WeatherBitApiRef = system.actorOf(WeatherBitRequester.props(http, materializer), WeatherBitRequester.name);
-
-        WeatherBitApiRef.tell(new WeatherBitCurrentWeatherRequest("Grenoble"),
-                                  ActorRef.noSender());
-
-        HttpServer server = new HttpServer(openWeatherMapApiRef);
+        HttpServer server = new HttpServer(requesterRef);
 
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = server.createRoute().flow(system, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(routeFlow,
@@ -62,7 +44,5 @@ public class App
 
         binding.thenCompose(ServerBinding::unbind)
                 .thenAccept(unbound -> system.terminate());
-
-        // system.terminate();
     }
 }

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
  *  - Temperature
  */
 @JsonIgnoreProperties({"weather", "base", "visibility", "wind", "clouds", "dt", "sys", "id", "name", "cod"})
-public class OpenWeatherMapCurrentWeatherResponse {
+public class OpenWeatherMapResponse extends Response {
     public class Coordinates {
         public Double lon;
         public Double lat;
@@ -26,7 +26,6 @@ public class OpenWeatherMapCurrentWeatherResponse {
     public class Main {
         public Double temp;
     }
-
 
     private Double temperature;
     private Coordinates coord;
