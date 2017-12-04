@@ -1,6 +1,10 @@
 package WeatherWizard;
 
+import WeatherWizard.Requesters.ApixuRequester;
+import WeatherWizard.Requesters.WeatherBitRequester;
 import WeatherWizard.Requesters.OpenWeatherMapRequester;
+import WeatherWizard.Requests.ApixuCurrentWeatherRequest;
+import WeatherWizard.Requests.WeatherBitCurrentWeatherRequest;
 import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherRequest;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -21,9 +25,20 @@ public class App
         Http httpGate = Http.get(system);
         Materializer materializer = ActorMaterializer.create(system);
 
-        ActorRef openWeatherMapApiRef = system.actorOf(OpenWeatherMapRequester.props(httpGate, materializer), OpenWeatherMapRequester.name);
+        // launch actors
+//        ActorRef ApixuApiRef = system.actorOf(ApixuRequester.props(httpGate, materializer), ApixuRequester.name);
+//        
+//        ApixuApiRef.tell(new ApixuCurrentWeatherRequest("Grenoble"),
+//                                  ActorRef.noSender());
+//
+//        ActorRef openWeatherMapApiRef = system.actorOf(OpenWeatherMapRequester.props(httpGate, materializer), OpenWeatherMapRequester.name);
+//
+//        openWeatherMapApiRef.tell(new OpenWeatherMapCurrentWeatherRequest("Grenoble", "fr"),
+//                                  ActorRef.noSender());
 
-        openWeatherMapApiRef.tell(new OpenWeatherMapCurrentWeatherRequest("Roma", "it"),
+        ActorRef WeatherBitApiRef = system.actorOf(WeatherBitRequester.props(httpGate, materializer), WeatherBitRequester.name);
+
+        WeatherBitApiRef.tell(new WeatherBitCurrentWeatherRequest("Grenoble"),
                                   ActorRef.noSender());
 
         // system.terminate();
