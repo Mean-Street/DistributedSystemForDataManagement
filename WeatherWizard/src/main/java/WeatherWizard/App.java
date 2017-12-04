@@ -1,7 +1,6 @@
 package WeatherWizard;
 
 
-
 import WeatherWizard.Requesters.RequestDispacher;
 
 import akka.NotUsed;

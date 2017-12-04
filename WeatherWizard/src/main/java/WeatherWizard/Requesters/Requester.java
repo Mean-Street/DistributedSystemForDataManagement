@@ -19,7 +19,6 @@ import java.util.concurrent.CompletionStage;
 
 public class Requester<RequestClass extends Request, ResponseClass extends Response> extends AbstractActor {
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
-
     private Http httpGate;
     private Materializer materializer;
     private Class<RequestClass> requestClass;
@@ -43,7 +42,6 @@ public class Requester<RequestClass extends Request, ResponseClass extends Respo
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-
                 .match(requestClass, request -> {
                     target = getSender();
                     requestCurrentWeather(request)

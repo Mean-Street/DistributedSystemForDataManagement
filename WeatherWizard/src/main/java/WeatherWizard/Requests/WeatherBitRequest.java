@@ -31,7 +31,6 @@ public class WeatherBitRequest extends Request {
     @Override
     public HttpRequest create() {
         configureUrl();
-        System.out.println("Url : " + getUrl() + "&" + config.keyTag() + "=" + config.key());
         return HttpRequest.create(getUrl() + "&" + config.keyTag() + "=" + config.key());
     }
 }
