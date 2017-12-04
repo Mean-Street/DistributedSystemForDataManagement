@@ -1,5 +1,6 @@
 package WeatherWizard.Requesters;
 
+import WeatherWizard.Requests.Location;
 import WeatherWizard.Requests.OpenWeatherMapCurrentWeatherRequest;
 import WeatherWizard.Responses.OpenWeatherMapCurrentWeatherResponse;
 import akka.actor.ActorRef;
@@ -37,7 +38,7 @@ class OpenWeatherMapRequesterTest {
             final Materializer materializer = ActorMaterializer.create(system);
             final ActorRef openWeatherActorRef = system.actorOf(OpenWeatherMapRequester.props(httpGate, materializer));
 
-            OpenWeatherMapCurrentWeatherRequest request = new OpenWeatherMapCurrentWeatherRequest( "Roma", "it");
+            OpenWeatherMapCurrentWeatherRequest request = new OpenWeatherMapCurrentWeatherRequest(new Location("Roma", "it"));
 
             openWeatherActorRef.tell(request, getRef());
             expectMsgClass(OpenWeatherMapCurrentWeatherResponse.class);
@@ -54,7 +55,7 @@ class OpenWeatherMapRequesterTest {
             final Materializer materializer = ActorMaterializer.create(system);
             final ActorRef openWeatherActorRef = system.actorOf(OpenWeatherMapRequester.props(httpGate, materializer));
 
-            OpenWeatherMapCurrentWeatherRequest request = new OpenWeatherMapCurrentWeatherRequest( "Roma", "fr");
+            OpenWeatherMapCurrentWeatherRequest request = new OpenWeatherMapCurrentWeatherRequest(new Location("Roma", "fr"));
 
             openWeatherActorRef.tell(request, getRef());
             expectNoMsg();
