@@ -9,6 +9,11 @@ object DataCleaning {
 
     val sc = new SparkContext(new SparkConf())
 
+    val lines = sc.textFile("data.txt")
+    val lineLengths = lines.map(s => s.length)
+    val totalLength = lineLengths.reduce((a, b) => a + b)
+    println("OUTPUT:", totalLength)
+
     // # Store RDD in Cassandra (to be continued)
     // val rdd1 = sc.parallelize(Seq(
     //   (1, "New York", 22),
@@ -23,8 +28,8 @@ object DataCleaning {
 
     // # Load RDD from Cassandra
     // (created with cassandra/createData.cql)
-    val rdd2 = sc.cassandraTable("sdtd", "weatherFromCQL")
-    rdd2.collect().foreach(println)
+    // val rdd2 = sc.cassandraTable("sdtd", "weatherFromCQL")
+    // rdd2.collect().foreach(println)
   }
 }
 
