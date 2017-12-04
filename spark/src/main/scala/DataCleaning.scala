@@ -1,19 +1,13 @@
-
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 
 import com.datastax.spark.connector._
 import org.apache.spark.sql.cassandra._
 
-object Main {
+object DataCleaning {
   def main(args: Array[String]) {
 
-    val conf = new SparkConf(true)
-      .setAppName("Main").setMaster("local[2]")
-      .set("spark.cassandra.connection.host", "localhost")
-      .set("spark.cassandra.auth.username", "cassandra")            
-      .set("spark.cassandra.auth.password", "cassandra")
-    val sc = new SparkContext(conf)
+    val sc = new SparkContext(new SparkConf())
 
     // # Store RDD in Cassandra (to be continued)
     // val rdd1 = sc.parallelize(Seq(
@@ -32,6 +26,5 @@ object Main {
     val rdd2 = sc.cassandraTable("sdtd", "weatherFromCQL")
     rdd2.collect().foreach(println)
   }
-
 }
 
