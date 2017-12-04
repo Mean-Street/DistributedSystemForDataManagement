@@ -10,7 +10,7 @@ class OpenWeatherMapCurrentWeatherRequestTest {
     @Test
     public void whenCreatingCurrentWeatherRequest() {
         OpenWeatherMapCurrentWeatherRequest request
-                = new OpenWeatherMapCurrentWeatherRequest( "Roma", "it");
+                = new OpenWeatherMapCurrentWeatherRequest(new Location("Roma", "it"));
         HttpRequest httpRequest = request.create();
 
         assertEquals(httpRequest.getUri().scheme(), "http");

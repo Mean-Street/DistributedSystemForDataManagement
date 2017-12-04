@@ -1,18 +1,18 @@
 package WeatherWizard.Requests;
 
 public class OpenWeatherMapCurrentWeatherRequest extends OpenWeatherMapRequest {
-    private String city;
-    private String country;
+    private Location location;
 
-
-    public OpenWeatherMapCurrentWeatherRequest(String city, String country) {
-        this.city = city;
-        this.country = country;
+    public OpenWeatherMapCurrentWeatherRequest(Location location) {
+        this.location = location;
     }
 
     @Override
-    protected void configureUrl() {
-        setUrl(getUrl() + config.weatherTag());
-        setUrl(getUrl() + "?" + config.locationTag() + "=" + city + "," + country);
+    protected String configureUrl(String baseUrl) {
+        String location_tag = "q";
+        String weather_tag = "weather";
+
+        baseUrl += weather_tag;
+        return baseUrl + "?" + location_tag + "=" + location.getCity() + "," + location.getCountry();
     }
 }
