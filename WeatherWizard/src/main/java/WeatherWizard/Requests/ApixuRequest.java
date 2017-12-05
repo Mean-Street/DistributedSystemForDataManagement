@@ -7,24 +7,29 @@ import WeatherWizard.Configurations.ApixuConfig;
 public class ApixuRequest extends Request{
     private ApixuConfig config;
     private String urlRequest;
-    private String city;
+    private Location location;
 
     
-    public ApixuRequest(String city) {
+    public ApixuRequest(Location location) {
         this.config = ConfigFactory.create(ApixuConfig.class);
         this.urlRequest = config.url();
-        this.city = city;
+        this.location = location;
     }
 
     private void configureUrl() {
-        setUrl(getUrl() + "?" + config.locationTag() + "=" + city);
+        setUrl(getUrl() + "?" + config.locationTag() + "=" + location.getCity());
     }
 
-    protected String getUrl() {
+    @Override
+    public Location getLocation() {
+        return location;
+    }
+
+    private String getUrl() {
         return urlRequest;
     }
 
-    protected void setUrl(String url) {
+    private void setUrl(String url) {
         this.urlRequest = url;
     }
 

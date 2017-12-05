@@ -1,4 +1,5 @@
 package WeatherWizard.Responses;
 
-public class Response {
+public abstract class Response {
+    public abstract Double getTemperature();
 }

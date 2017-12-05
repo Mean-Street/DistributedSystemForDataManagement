@@ -14,6 +14,11 @@ public class OpenWeatherMapRequest extends Request {
     }
 
     @Override
+    public Location getLocation() {
+        return location;
+    }
+
+    @Override
     public HttpRequest create() {
         String key_tag = "appid";
         String url = "http://api.openweathermap.org/data/2.5/";

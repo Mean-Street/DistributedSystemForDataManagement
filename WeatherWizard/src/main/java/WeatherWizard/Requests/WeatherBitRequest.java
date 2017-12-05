@@ -7,21 +7,26 @@ import WeatherWizard.Configurations.WeatherBitConfig;
 public class WeatherBitRequest extends Request {
     private WeatherBitConfig config;
     private String urlRequest;
-    private String city;
+    private Location location;
 
 
-    public WeatherBitRequest(String city) {
+    public WeatherBitRequest(Location location) {
         this.config = ConfigFactory.create(WeatherBitConfig.class);
         this.urlRequest = config.url();
-        this.city = city;
+        this.location = location;
     }
 
     private void configureUrl() {
-        setUrl(getUrl() + "?" + config.locationTag() + "=" + city);
+        setUrl(getUrl() + "?" + config.locationTag() + "=" + location.getCity());
     }
 
     private String getUrl() {
         return urlRequest;
+    }
+
+    @Override
+    public Location getLocation() {
+        return null;
     }
 
     private void setUrl(String url) {

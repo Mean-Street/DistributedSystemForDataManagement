@@ -13,30 +13,31 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.http.javadsl.Http;
 import akka.stream.Materializer;
+import org.apache.kafka.clients.producer.KafkaProducer;
 
-public class RequestDispacher extends AbstractActor {
+public class RequestDispatcher extends AbstractActor {
 
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
     final private ActorRef openWeatherMapActorRef;
     final private ActorRef weatherBitApiRef;
     final private ActorRef apixuApiRef;
 
-    public static String name = "request-dispacher";
+    public static String name = "request-dispatcher";
 
-    public static Props props(Http http, Materializer materializer) {
-        return Props.create(RequestDispacher.class, () -> new RequestDispacher(http, materializer));
+    public static Props props(Http http, Materializer materializer, KafkaProducer<String, Double> producer) {
+        return Props.create(RequestDispatcher.class, () -> new RequestDispatcher(http, materializer, producer));
     }
 
-    private RequestDispacher(Http http, Materializer materializer) {
+    private RequestDispatcher(Http http, Materializer materializer, KafkaProducer<String, Double> producer) {
         this.openWeatherMapActorRef = getContext().actorOf(
                 Requester.props(http, materializer, OpenWeatherMapRequest.class,
-                                OpenWeatherMapResponse.class));
-        this.weatherBitApiRef = getContext().actorOf(
-                Requester.props(http, materializer, WeatherBitRequest.class,
-                                WeatherBitResponse.class));
-        this.apixuApiRef = getContext().actorOf(
-                Requester.props(http, materializer, ApixuRequest.class,
-                                ApixuResponse.class));
+                                OpenWeatherMapResponse.class, producer));
+
+        this.weatherBitApiRef = getContext().actorOf(Requester.props(http, materializer, WeatherBitRequest.class,
+                                                     WeatherBitResponse.class, producer));
+
+        this.apixuApiRef = getContext().actorOf(Requester.props(http, materializer, ApixuRequest.class,
+                                                ApixuResponse.class, producer));
     }
 
     @Override

@@ -40,12 +40,12 @@ public class OpenWeatherMapResponse extends Response {
         this.temperature = main.temp;
     }
 
-
+    @Override
     public Double getTemperature() {
         return temperature;
     }
 
-    public Coordinates getCoord() { return coord; }
+    Coordinates getCoord() { return coord; }
 
     public String toString() {
         return getTemperature() + "K, at: " + getCoord();

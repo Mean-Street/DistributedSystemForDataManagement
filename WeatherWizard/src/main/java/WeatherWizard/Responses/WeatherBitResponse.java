@@ -19,8 +19,13 @@ public class WeatherBitResponse extends Response {
     private List<Coordinate> coordinates;
 
     public WeatherBitResponse() {
-        temperatures = new ArrayList<Double>();
-        coordinates = new ArrayList<Coordinate>();
+        temperatures = new ArrayList<>();
+        coordinates = new ArrayList<>();
+    }
+
+    @Override
+    public Double getTemperature() {
+        return temperatures.get(0);
     }
 
     @JsonSetter("data")
@@ -42,7 +47,7 @@ public class WeatherBitResponse extends Response {
         public Double lon;
         public Double lat;
 
-        public Coordinate(double lat, double lon) {
+        Coordinate(double lat, double lon) {
             this.lat = lat;
             this.lon = lon;
         }
@@ -53,11 +58,11 @@ public class WeatherBitResponse extends Response {
         }
     }
 
-    public List<Double> getTemperatures() {
+    List<Double> getTemperatures() {
         return temperatures;
     }
 
-    public List<Coordinate> getCoordinates() {
+    List<Coordinate> getCoordinates() {
         return coordinates;
     }
 }

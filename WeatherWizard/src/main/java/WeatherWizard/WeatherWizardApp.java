@@ -1,19 +1,14 @@
 package WeatherWizard;
 
 
-import WeatherWizard.Requesters.RequestDispacher;
-import WeatherWizard.Requesters.Requester;
+import WeatherWizard.Configurations.KafkaConfig;
+import WeatherWizard.Requesters.RequestDispatcher;
 import WeatherWizard.Requests.ApixuRequest;
-import WeatherWizard.Requests.Location;
-import WeatherWizard.Requests.OpenWeatherMapRequest;
-import WeatherWizard.Requests.Request;
-import WeatherWizard.Responses.ApixuResponse;
-import WeatherWizard.Responses.OpenWeatherMapResponse;
 
+import WeatherWizard.Requests.Location;
 import akka.NotUsed;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import akka.actor.Cancellable;
 import akka.http.javadsl.ConnectHttp;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.ServerBinding;
@@ -24,13 +19,27 @@ import akka.stream.Materializer;
 import akka.stream.javadsl.Flow;
 
 import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
+
+import org.apache.kafka.clients.producer.KafkaProducer;
 import scala.concurrent.duration.Duration;
 
-public class App
+public class WeatherWizardApp
 {
-    public App() {
+    private static KafkaProducer<String, Double> initProducer(KafkaConfig config) {
+
+        Properties props = new Properties();
+        props.put("bootstrap.servers", config.toString());
+        props.put("acks", "all");
+        props.put("retries", 0);
+        props.put("batch.size", 16384);
+        props.put("linger.ms", 1);
+        props.put("buffer.memory", 33554432);
+        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        return new KafkaProducer<>(props);
     }
 
     public static void main(String[] args) throws IOException
@@ -40,16 +49,22 @@ public class App
         // http and materializer are needed to send and receive http requests
         Http http = Http.get(system);
         Materializer materializer = ActorMaterializer.create(system);
-        
-        // ******** REQUEST WITH TIMER : each minute **********
-        ActorRef OWMTickActor = system.actorOf(RequestDispacher.props(http, materializer));
-        ApixuRequest request = new ApixuRequest("Grenoble");
-        system.scheduler().schedule(Duration.Zero(),Duration.create(60, TimeUnit.SECONDS), OWMTickActor, request, system.dispatcher(), null);
-        // ********** End TIMER **********
-        
-        ActorRef requesterRef = system.actorOf(RequestDispacher.props(http, materializer), RequestDispacher.name);
 
-        HttpServer server = new HttpServer(requesterRef);
+
+        Integer[] host = {127, 0, 0, 0};
+        KafkaConfig config = new KafkaConfig(host, 5555);
+        KafkaProducer<String, Double> producer = initProducer(config);
+
+
+        // ******** REQUEST WITH TIMER : each minute **********
+        ActorRef ApixuTickActor = system.actorOf(RequestDispatcher.props(http, materializer, producer));
+        ApixuRequest request = new ApixuRequest(new Location("Grenoble", "fr"));
+        system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
+                                    ApixuTickActor, request, system.dispatcher(), ActorRef.noSender());
+
+        // ********** End TIMER **********
+
+        HttpServer server = new HttpServer(ApixuTickActor);
 
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = server.createRoute().flow(system, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(routeFlow,
