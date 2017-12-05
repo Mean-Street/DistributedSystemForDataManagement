@@ -42,10 +42,9 @@ public class App
         Materializer materializer = ActorMaterializer.create(system);
         
         // ******** REQUEST WITH TIMER : each minute **********
-        ActorRef tickActor = system.actorOf(Requester.props(http, materializer, OpenWeatherMapRequest.class, OpenWeatherMapResponse.class));
-        
-        Cancellable cancellable = system.scheduler().schedule(Duration.Zero(),Duration.create(60, TimeUnit.SECONDS), tickActor, "Tick", system.dispatcher(), null);
-        
+        ActorRef OWMTickActor = system.actorOf(RequestDispacher.props(http, materializer));
+        ApixuRequest request = new ApixuRequest("Grenoble");
+        system.scheduler().schedule(Duration.Zero(),Duration.create(60, TimeUnit.SECONDS), OWMTickActor, request, system.dispatcher(), null);
         // ********** End TIMER **********
         
         ActorRef requesterRef = system.actorOf(RequestDispacher.props(http, materializer), RequestDispacher.name);

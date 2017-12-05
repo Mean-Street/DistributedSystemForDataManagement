@@ -4,13 +4,20 @@ import akka.http.javadsl.model.HttpRequest;
 import org.aeonbits.owner.ConfigFactory;
 import WeatherWizard.Configurations.ApixuConfig;
 
-public abstract class ApixuRequest {
-    protected ApixuConfig config;
+public class ApixuRequest extends Request{
+    private ApixuConfig config;
     private String urlRequest;
+    private String city;
 
-    protected ApixuRequest() {
+    
+    public ApixuRequest(String city) {
         this.config = ConfigFactory.create(ApixuConfig.class);
         this.urlRequest = config.url();
+        this.city = city;
+    }
+
+    private void configureUrl() {
+        setUrl(getUrl() + "?" + config.locationTag() + "=" + city);
     }
 
     protected String getUrl() {
@@ -20,8 +27,6 @@ public abstract class ApixuRequest {
     protected void setUrl(String url) {
         this.urlRequest = url;
     }
-
-    protected abstract void configureUrl();
 
     public HttpRequest create() {
         setUrl(getUrl() + "?" + config.keyTag() + "=" + config.key());
