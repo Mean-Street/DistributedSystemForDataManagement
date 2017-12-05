@@ -1,4 +1,4 @@
-name := "Simple Project"
+name := "SDTD"
 
 version := "1.0"
 
@@ -8,4 +8,3 @@ libraryDependencies ++= Seq(
 	"org.apache.spark" %% "spark-sql" % "2.2.0",
 	"com.datastax.spark" %% "spark-cassandra-connector" % "2.0.6"
 )
-
