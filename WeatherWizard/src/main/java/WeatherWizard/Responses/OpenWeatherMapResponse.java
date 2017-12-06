@@ -2,6 +2,7 @@ package WeatherWizard.Responses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
+//import java.time.LocalDateTime;
 
 
 /**
@@ -29,6 +30,7 @@ public class OpenWeatherMapResponse extends Response {
 
     private Double temperature;
     private Coordinates coord;
+//    private LocalDateTime date;
 
     @JsonSetter("coord")
     public void setCoord(Coordinates coord) {
@@ -44,6 +46,12 @@ public class OpenWeatherMapResponse extends Response {
     public Double getTemperature() {
         return temperature;
     }
+
+//    @Override
+//    public LocalDateTime getDate() {
+//        return LocalDateTime.now();
+//    }
+
 
     Coordinates getCoord() { return coord; }
 

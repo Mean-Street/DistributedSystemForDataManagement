@@ -17,7 +17,7 @@ public class ApixuRequestTemperature extends RequestTemperature {
     }
 
     private void configureUrl() {
-        setUrl(getUrl() + "?" + config.locationTag() + "=" + location.getCity());
+        setUrl(getUrl() + "&" + config.locationTag() + "=" + location.getCity());
     }
 
     @Override

@@ -2,6 +2,7 @@ package WeatherWizard.Responses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
+//import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class WeatherBitResponse extends Response {
     private List<Double> temperatures;
     private List<Coordinate> coordinates;
+//    private LocalDateTime date;
 
     public WeatherBitResponse() {
         temperatures = new ArrayList<>();
@@ -61,6 +63,11 @@ public class WeatherBitResponse extends Response {
     List<Double> getTemperatures() {
         return temperatures;
     }
+
+//    @Override
+//    public LocalDateTime getDate() {
+//        return LocalDateTime.now();
+//    }
 
     List<Coordinate> getCoordinates() {
         return coordinates;
