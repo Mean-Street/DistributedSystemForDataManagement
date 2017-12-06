@@ -1,0 +1,41 @@
+package WeatherFinder.Requests;
+
+import akka.http.javadsl.model.HttpRequest;
+import org.aeonbits.owner.ConfigFactory;
+import WeatherFinder.Configurations.WeatherBitConfig;
+
+public class WeatherBitRequestTemperature extends RequestTemperature {
+    private WeatherBitConfig config;
+    private String urlRequest;
+    private Location location;
+
+
+    public WeatherBitRequestTemperature(Location location) {
+        this.config = ConfigFactory.create(WeatherBitConfig.class);
+        this.urlRequest = config.url();
+        this.location = location;
+    }
+
+    private void configureUrl() {
+        setUrl(getUrl() + "?" + config.locationTag() + "=" + location.getCity());
+    }
+
+    private String getUrl() {
+        return urlRequest;
+    }
+
+    @Override
+    public Location getLocation() {
+        return null;
+    }
+
+    private void setUrl(String url) {
+        this.urlRequest = url;
+    }
+
+    @Override
+    public HttpRequest create() {
+        configureUrl();
+        return HttpRequest.create(getUrl() + "&" + config.keyTag() + "=" + config.key());
+    }
+}
