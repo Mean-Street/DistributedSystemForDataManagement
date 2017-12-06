@@ -43,7 +43,7 @@ public class WeatherBitResponse extends Response {
         public Double lon;
     }
 
-    public class Coordinate {
+    public static class Coordinate {
         public Double lon;
         public Double lat;
 

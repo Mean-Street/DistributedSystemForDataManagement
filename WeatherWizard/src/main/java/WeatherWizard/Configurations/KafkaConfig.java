@@ -19,4 +19,18 @@ public class KafkaConfig {
                                                .collect(Collectors.joining(".")))
                 + ":" + port;
     }
+
+    public enum Topic {
+        TEMPERATURE ("temperatures");
+
+        private String name = "";
+        Topic(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
 }

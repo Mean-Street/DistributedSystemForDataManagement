@@ -1,7 +1,7 @@
 package WeatherWizard;
 
 import WeatherWizard.Requests.Location;
-import WeatherWizard.Requests.OpenWeatherMapRequest;
+import WeatherWizard.Requests.OpenWeatherMapRequestTemperature;
 import akka.actor.ActorRef;
 import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.server.AllDirectives;
@@ -21,7 +21,7 @@ class HttpServer extends AllDirectives {
                 pathPrefix("temperature", () ->
                     path("openWeatherMap", () ->
                         entity(Jackson.unmarshaller(Location.class), location -> {
-                            requestDispacher.tell(new OpenWeatherMapRequest(location), ActorRef.noSender());
+                            requestDispacher.tell(new OpenWeatherMapRequestTemperature(location), ActorRef.noSender());
                             return complete("Got a request for: " + location.toString());
                         })
                     )

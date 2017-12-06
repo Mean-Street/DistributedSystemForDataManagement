@@ -2,16 +2,16 @@ package WeatherWizard.Requests;
 
 import akka.http.javadsl.model.HttpRequest;
 import org.aeonbits.owner.ConfigFactory;
-import WeatherWizard.Configurations.WeatherBitConfig;
+import WeatherWizard.Configurations.ApixuConfig;
 
-public class WeatherBitRequest extends Request {
-    private WeatherBitConfig config;
+public class ApixuRequestTemperature extends RequestTemperature {
+    private ApixuConfig config;
     private String urlRequest;
     private Location location;
 
-
-    public WeatherBitRequest(Location location) {
-        this.config = ConfigFactory.create(WeatherBitConfig.class);
+    
+    public ApixuRequestTemperature(Location location) {
+        this.config = ConfigFactory.create(ApixuConfig.class);
         this.urlRequest = config.url();
         this.location = location;
     }
@@ -20,22 +20,23 @@ public class WeatherBitRequest extends Request {
         setUrl(getUrl() + "?" + config.locationTag() + "=" + location.getCity());
     }
 
-    private String getUrl() {
-        return urlRequest;
-    }
-
     @Override
     public Location getLocation() {
-        return null;
+        return location;
+    }
+
+    private String getUrl() {
+        return urlRequest;
     }
 
     private void setUrl(String url) {
         this.urlRequest = url;
     }
 
-    @Override
     public HttpRequest create() {
+        setUrl(getUrl() + "?" + config.keyTag() + "=" + config.key());
         configureUrl();
-        return HttpRequest.create(getUrl() + "&" + config.keyTag() + "=" + config.key());
+        System.out.println(getUrl());
+        return HttpRequest.create(getUrl());
     }
 }

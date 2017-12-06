@@ -1,8 +1,8 @@
 package WeatherWizard.Requesters;
 
-import WeatherWizard.Requests.ApixuRequest;
-import WeatherWizard.Requests.OpenWeatherMapRequest;
-import WeatherWizard.Requests.WeatherBitRequest;
+import WeatherWizard.Requests.ApixuRequestTemperature;
+import WeatherWizard.Requests.OpenWeatherMapRequestTemperature;
+import WeatherWizard.Requests.WeatherBitRequestTemperature;
 import WeatherWizard.Responses.ApixuResponse;
 import WeatherWizard.Responses.OpenWeatherMapResponse;
 import WeatherWizard.Responses.WeatherBitResponse;
@@ -30,28 +30,28 @@ public class RequestDispatcher extends AbstractActor {
 
     private RequestDispatcher(Http http, Materializer materializer, KafkaProducer<String, Double> producer) {
         this.openWeatherMapActorRef = getContext().actorOf(
-                Requester.props(http, materializer, OpenWeatherMapRequest.class,
+                Requester.props(http, materializer, OpenWeatherMapRequestTemperature.class,
                                 OpenWeatherMapResponse.class, producer));
 
-        this.weatherBitApiRef = getContext().actorOf(Requester.props(http, materializer, WeatherBitRequest.class,
+        this.weatherBitApiRef = getContext().actorOf(Requester.props(http, materializer, WeatherBitRequestTemperature.class,
                                                      WeatherBitResponse.class, producer));
 
-        this.apixuApiRef = getContext().actorOf(Requester.props(http, materializer, ApixuRequest.class,
+        this.apixuApiRef = getContext().actorOf(Requester.props(http, materializer, ApixuRequestTemperature.class,
                                                 ApixuResponse.class, producer));
     }
 
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match(OpenWeatherMapRequest.class, request -> {
+                .match(OpenWeatherMapRequestTemperature.class, request -> {
                     log.info("Forwarding a request to OpenWeatherMap");
                     openWeatherMapActorRef.forward(request, getContext());
                 })
-                .match(WeatherBitRequest.class, request -> {
+                .match(WeatherBitRequestTemperature.class, request -> {
                     log.info("Forwarding a request to WeatherBit");
                     weatherBitApiRef.forward(request, getContext());
                 })
-                .match(ApixuRequest.class, request -> {
+                .match(ApixuRequestTemperature.class, request -> {
                     log.info("Forwarding a request to Apixu");
                     apixuApiRef.forward(request, getContext());
                 })

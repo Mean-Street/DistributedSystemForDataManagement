@@ -1,7 +1,7 @@
 package WeatherWizard.Requesters;
 
 
-import WeatherWizard.Requests.Request;
+import WeatherWizard.Requests.RequestTemperature;
 import WeatherWizard.Responses.Response;
 import akka.actor.AbstractActor;
 import akka.actor.Props;
@@ -19,7 +19,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.util.concurrent.CompletionStage;
 
-public class Requester<RequestClass extends Request, ResponseClass extends Response> extends AbstractActor {
+public class Requester<RequestClass extends RequestTemperature, ResponseClass extends Response> extends AbstractActor {
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
     private Http httpGate;
     private Materializer materializer;
@@ -36,8 +36,7 @@ public class Requester<RequestClass extends Request, ResponseClass extends Respo
         this.producer = producer;
     }
 
-    // ATTENTION? passé en public pour le TIMER
-    static <ReqType extends Request, RespType extends Response> Props props(
+    static <ReqType extends RequestTemperature, RespType extends Response> Props props(
             Http httpGate, Materializer materializer, Class<ReqType> reqClass, Class<RespType> respClass,
             KafkaProducer<String, Double> producer) {
         return Props.create(Requester.class, () -> new Requester<>(httpGate, materializer, reqClass, respClass,
@@ -50,7 +49,7 @@ public class Requester<RequestClass extends Request, ResponseClass extends Respo
                 .match(requestClass, request -> {
                     requestCurrentWeather(request).thenAccept(resp -> {
                         ProducerRecord<String, Double> newRecord = new ProducerRecord<>(
-                               "temperatures", request.getLocation().getCity(), resp.getTemperature());
+                               request.getTopic().toString(), request.getLocation().getCity(), resp.getTemperature());
                         log.info("Got a response from: " + request.getLocation().getCity());
                         producer.send(newRecord);
                     });

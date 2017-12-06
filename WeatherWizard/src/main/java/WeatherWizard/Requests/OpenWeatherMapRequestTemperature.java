@@ -4,11 +4,11 @@ import WeatherWizard.Configurations.OpenWeatherMapConfig;
 import akka.http.javadsl.model.HttpRequest;
 import org.aeonbits.owner.ConfigFactory;
 
-public class OpenWeatherMapRequest extends Request {
+public class OpenWeatherMapRequestTemperature extends RequestTemperature {
     private Location location;
     private OpenWeatherMapConfig config;
 
-    public OpenWeatherMapRequest(Location location) {
+    public OpenWeatherMapRequestTemperature(Location location) {
         this.config = ConfigFactory.create(OpenWeatherMapConfig.class);
         this.location = location;
     }
