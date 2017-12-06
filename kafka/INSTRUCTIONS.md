@@ -1,5 +1,9 @@
 # KAFKA instructions
 
+## Setup the configuration files
+If using the default .yml, change the KAFKA\_ADVERTISED\_HOST\_NAME to the docker host IP.
+Set the zookeeper variable to the KAFKA host IP.
+
 ## Start kafka docker
 sudo dockerd
 sudo docker-compose -f docker-compose-single-broker.yml up
