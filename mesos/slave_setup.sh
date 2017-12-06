@@ -3,20 +3,6 @@
 SALVE_IP=10.0.0.200
 MASTER_IP=10.0.0.100
 
-#Install docker
-sudo apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
-sudo apt-get update
-sudo apt-get install -y docker-ce
-
 #Install mesosphere
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
 DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
@@ -39,3 +25,4 @@ echo "cgroups/cpu,cgroups/mem" | sudo tee /etc/mesos-slave/isolation
 
 #Start
 sudo service mesos-slave restart
+
