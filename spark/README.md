@@ -3,7 +3,9 @@
 ## Deployment on AWS
 
 * Follow the instructions in `../kafka/README.md`
+* Follow the instructions in `../cassandra/README.md`
 * Create an EC2 instance (Ubuntu, micro is sufficient)
+* (TODO: to be done on Cassandra's machine?) For Cassandra, open the port `4040` in the security group of the instance
 * Connect through SSH and run:
 
 ```bash
@@ -13,14 +15,17 @@ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89
 sudo apt-get update
 sudo apt-get install -y docker.io default-jre sbt
 
+git clone https://github.com/Mean-Street/DistributedSystemForDataManagement sdtd
+cd sdtd/spark
+```
 
-# Configure Cassandra IP address in conf/spark-defaults.conf (can be local IP)
-Ligne: spark.cassandra.connection.host 172.17.0.2
+* Edit `conf/spark-defaults.conf`:
 
-# Configure port 4040 for TCP on AWS
+```
+spark.cassandra.connection.host <CASSANDRA_IP>
+```
 
+```bash
 # Run data preprocessing
-sudo ./run_data_preprocessing.sh <ZOOKEEPER_IP>:2181
-# Or, maybe:
 sudo ./run_data_preprocessing.sh <KAFKA_IP>:9092
 ```
