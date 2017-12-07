@@ -9,13 +9,13 @@
 
 ```bash
 sudo apt-get update
-sudo apt-get install docker.io
+sudo apt-get install -y docker.io
 
 git clone https://github.com/Mean-Street/DistributedSystemForDataManagement sdtd
 cd sdtd/kafka
 ```
 
-* Edit the following line in server.properties: `zookeeper.connect=<ZOOKEEPER_IP>:2181`
+* Edit the following line in `server.properties`: `zookeeper.connect=<ZOOKEEPER_IP>:2181`
 
 * Run Kafka
 
