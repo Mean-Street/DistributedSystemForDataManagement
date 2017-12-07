@@ -16,8 +16,8 @@ public class WeatherBitRequestTemperature extends RequestTemperature {
         this.location = location;
     }
 
-    private void configureUrl() {
-        setUrl(getUrl() + "?" + config.locationTag() + "=" + location.getCity());
+    private String configureUrl() {
+        return getUrl() + "?" + config.locationTag() + "=" + location.getCity();
     }
 
     private String getUrl() {
@@ -29,13 +29,8 @@ public class WeatherBitRequestTemperature extends RequestTemperature {
         return null;
     }
 
-    private void setUrl(String url) {
-        this.urlRequest = url;
-    }
-
     @Override
     public HttpRequest create() {
-        configureUrl();
-        return HttpRequest.create(getUrl() + "&" + config.keyTag() + "=" + config.key());
+        return HttpRequest.create(configureUrl() + "&" + config.keyTag() + "=" + config.key());
     }
 }

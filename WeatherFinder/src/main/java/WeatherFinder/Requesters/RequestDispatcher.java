@@ -18,17 +18,17 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 public class RequestDispatcher extends AbstractActor {
 
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
-    final private ActorRef openWeatherMapActorRef;
-    final private ActorRef weatherBitApiRef;
-    final private ActorRef apixuApiRef;
+    private final ActorRef openWeatherMapActorRef;
+    private final ActorRef weatherBitApiRef;
+    private final ActorRef apixuApiRef;
 
-    public static String name = "request-dispatcher";
+    public final static String name = "request-dispatcher";
 
-    public static Props props(Http http, Materializer materializer, KafkaProducer<String, Double> producer) {
+    public static Props props(Http http, Materializer materializer, KafkaProducer<String, String> producer) {
         return Props.create(RequestDispatcher.class, () -> new RequestDispatcher(http, materializer, producer));
     }
 
-    private RequestDispatcher(Http http, Materializer materializer, KafkaProducer<String, Double> producer) {
+    private RequestDispatcher(Http http, Materializer materializer, KafkaProducer<String, String> producer) {
         this.openWeatherMapActorRef = getContext().actorOf(
                 Requester.props(http, materializer, OpenWeatherMapRequestTemperature.class,
                                 OpenWeatherMapResponse.class, producer));
