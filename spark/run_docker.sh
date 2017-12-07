@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [[ -z "$1" ]]
 then
@@ -15,4 +15,4 @@ fi
 
 class="$1"
 shift
-docker run --name sparkContainer -it -p 4040:4040 -v $(pwd)/target/scala-2.11/SDTD-assembly-1.0.jar:/sdtd.jar -v $(pwd)/data/lines.txt:/data.txt -v $(pwd)/conf:/conf epahomov/docker-spark:lightweighted /spark/bin/spark-submit --class "$class" --properties-file /conf/spark-defaults.conf /sdtd.jar $@
+docker run --name spark --rm -it -p 4040:4040 -v $(pwd)/target/scala-2.11/SDTD-assembly-1.0.jar:/sdtd.jar -v $(pwd)/data/lines.txt:/data.txt -v $(pwd)/conf:/conf epahomov/docker-spark:lightweighted /spark/bin/spark-submit --class "$class" --properties-file /conf/spark-defaults.conf /sdtd.jar $@
