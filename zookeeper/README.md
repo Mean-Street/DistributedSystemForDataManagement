@@ -2,7 +2,7 @@
 
 ## Deployment on AWS
 
-* Create an EC2 instance (micro is sufficient)
+* Create an EC2 instance (Ubuntu, micro is sufficient)
 * Open the port `2181` in the security group of the instance
 * Connect through SSH and run:
 

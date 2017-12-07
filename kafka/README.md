@@ -3,7 +3,7 @@
 ## Deployment on AWS
 
 * Deploy Zookeeper (see `../zookeeper/README.md`)
-* Create an EC2 instance (at least small, micro is not sufficient)
+* Create an EC2 instance (Ubuntu, at least small, micro is not sufficient)
 * Open the port `9092` in the security group of the instance
 * Connect through SSH and run:
 
