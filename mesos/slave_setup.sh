@@ -23,6 +23,9 @@ echo zk://${MASTER_IP}:2181/mesos | sudo tee /etc/mesos/zk
 echo ${SALVE_IP} | sudo tee /etc/mesos-slave/hostname
 echo "cgroups/cpu,cgroups/mem" | sudo tee /etc/mesos-slave/isolation
 
+echo 'docker,mesos' | sudo tee /etc/mesos-slave/containerizers
+echo '10mins' | sudo tee /etc/mesos-slave/executor_registration_timeout
+
 #Start
 sudo service mesos-slave restart
 
