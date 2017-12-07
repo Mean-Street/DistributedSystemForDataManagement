@@ -17,7 +17,7 @@ sudo ufw disable # TODO: something cleaner
 # firewall-cmd --zone=trusted --add-interface=docker0
 ```
 
-* Create an EC2 instance for Kafka
+* Create an EC2 instance for Kafka (at least 2go of RAM)
 * Open the port `9092` in the security group of the instance
 * Connect through SSH and run:
 
