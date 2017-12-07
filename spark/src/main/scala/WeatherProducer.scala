@@ -6,6 +6,7 @@ import org.apache.spark.SparkConf
 import org.apache.spark.sql.cassandra._
 
 //Usage WeatherProducer "topics" "@broker1,@broker2"
+    /*
 object WeatherProducer extends App {
   def main(args: Array[String]) {
     val topic = args(0)
@@ -35,3 +36,4 @@ object WeatherProducer extends App {
     producer.close()
   }
 }
+    */

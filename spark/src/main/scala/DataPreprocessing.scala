@@ -23,7 +23,7 @@ object DataPreprocessing {
 
     val sconf = new SparkConf()
     val ssc = new StreamingContext(sconf, Seconds(period.toLong))
-    val sc = new SparkContext(sconf)
+    //val sc = new SparkContext(sconf)
     ssc.checkpoint("checkpoint")
 
     val topicsSet = topics.split(",").toSet
@@ -31,16 +31,18 @@ object DataPreprocessing {
     val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
       ssc, kafkaParams, topicsSet)
 
+    /*
     messages.foreachRDD {
 	rdd => rdd.foreach {
             msg => storeJson(msg._2, sc)
         }
     }
+    */
 
-    // val lines = messages.map(_._2)
-    // val words = lines.flatMap(_.split(" "))
-    // val wordCounts = words.map(x => (x, 1L)).reduceByKey(_ + _)
-    // wordCounts.print()
+    val lines = messages.map(_._2)
+    val words = lines.flatMap(_.split(" "))
+    val wordCounts = words.map(x => (x, 1L)).reduceByKey(_ + _)
+    wordCounts.print()
 
     ssc.start()
     ssc.awaitTermination()
