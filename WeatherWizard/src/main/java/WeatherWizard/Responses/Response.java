@@ -4,5 +4,5 @@ import java.time.LocalDateTime;
 
 public abstract class Response {
     public abstract Double getTemperature();
-//    public abstract LocalDateTime getDate();
+    public abstract LocalDateTime getDate();
 }

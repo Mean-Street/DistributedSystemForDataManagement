@@ -6,6 +6,7 @@ import WeatherWizard.Requesters.RequestDispatcher;
 import WeatherWizard.Requests.ApixuRequestTemperature;
 
 import WeatherWizard.Requests.Location;
+import WeatherWizard.Responses.Response;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.http.javadsl.Http;
@@ -21,7 +22,7 @@ import scala.concurrent.duration.Duration;
 
 public class WeatherWizardApp
 {
-    private static KafkaProducer<String, Double> initProducer(KafkaConfig config) {
+    private static KafkaProducer<String, Response> initProducer(KafkaConfig config) {
 
         Properties props = new Properties();
         props.put("bootstrap.servers", config.toString());
@@ -45,7 +46,7 @@ public class WeatherWizardApp
 
         Integer[] host = {127, 0, 0, 0};
         KafkaConfig config = new KafkaConfig(host, 5555);
-        KafkaProducer<String, Double> producer = initProducer(config);
+        KafkaProducer<String, Response> producer = initProducer(config);
 
         // ******** REQUEST WITH TIMER : each minute **********
         ActorRef ApixuTickActor = system.actorOf(RequestDispatcher.props(http, materializer, producer));

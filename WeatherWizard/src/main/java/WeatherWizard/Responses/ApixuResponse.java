@@ -43,7 +43,6 @@ public class ApixuResponse extends Response {
 
     @JsonSetter("current")
     public void setTemperature(Current current) {
-        System.out.println("date: " + current.last_updated);
         this.temperature = current.temp_c;
         this.date = current.last_updated;
     }
@@ -54,7 +53,8 @@ public class ApixuResponse extends Response {
     }
 
     public Coordinates getLocation() { return location; }
-
+    
+    @Override
     public LocalDateTime getDate() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime = LocalDateTime.parse(date, formatter);

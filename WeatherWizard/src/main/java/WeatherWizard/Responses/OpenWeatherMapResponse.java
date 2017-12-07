@@ -2,7 +2,7 @@ package WeatherWizard.Responses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
-//import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 
 
 /**
@@ -47,10 +47,10 @@ public class OpenWeatherMapResponse extends Response {
         return temperature;
     }
 
-//    @Override
-//    public LocalDateTime getDate() {
-//        return LocalDateTime.now();
-//    }
+    @Override
+    public LocalDateTime getDate() {
+        return LocalDateTime.now();
+    }
 
 
     Coordinates getCoord() { return coord; }

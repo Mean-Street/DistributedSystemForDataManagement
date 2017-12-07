@@ -16,8 +16,12 @@ public class ApixuRequestTemperature extends RequestTemperature {
         this.location = location;
     }
 
-    private void configureUrl() {
-        setUrl(getUrl() + "&" + config.locationTag() + "=" + location.getCity());
+    private String urlAddLocation(String url) {
+        return url + "&" + config.locationTag() + "=" + location.getCity();
+    }
+
+    private String urlAddKey(String url) {
+        return url + "?" + config.keyTag() + "=" + config.key();
     }
 
     @Override
@@ -29,14 +33,9 @@ public class ApixuRequestTemperature extends RequestTemperature {
         return urlRequest;
     }
 
-    private void setUrl(String url) {
-        this.urlRequest = url;
-    }
-
     public HttpRequest create() {
-        setUrl(getUrl() + "?" + config.keyTag() + "=" + config.key());
-        configureUrl();
-        System.out.println(getUrl());
-        return HttpRequest.create(getUrl());
+        String url = urlAddKey(getUrl());
+        url = urlAddLocation(url);
+        return HttpRequest.create(url);
     }
 }

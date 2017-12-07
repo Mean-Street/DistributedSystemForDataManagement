@@ -2,7 +2,7 @@ package WeatherWizard.Responses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
-//import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,10 +64,10 @@ public class WeatherBitResponse extends Response {
         return temperatures;
     }
 
-//    @Override
-//    public LocalDateTime getDate() {
-//        return LocalDateTime.now();
-//    }
+    @Override
+    public LocalDateTime getDate() {
+        return LocalDateTime.now();
+    }
 
     List<Coordinate> getCoordinates() {
         return coordinates;

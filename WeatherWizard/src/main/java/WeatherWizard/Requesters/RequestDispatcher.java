@@ -5,6 +5,7 @@ import WeatherWizard.Requests.OpenWeatherMapRequestTemperature;
 import WeatherWizard.Requests.WeatherBitRequestTemperature;
 import WeatherWizard.Responses.ApixuResponse;
 import WeatherWizard.Responses.OpenWeatherMapResponse;
+import WeatherWizard.Responses.Response;
 import WeatherWizard.Responses.WeatherBitResponse;
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
@@ -24,11 +25,11 @@ public class RequestDispatcher extends AbstractActor {
 
     public static String name = "request-dispatcher";
 
-    public static Props props(Http http, Materializer materializer, KafkaProducer<String, Double> producer) {
+    public static Props props(Http http, Materializer materializer, KafkaProducer<String, Response> producer) {
         return Props.create(RequestDispatcher.class, () -> new RequestDispatcher(http, materializer, producer));
     }
 
-    private RequestDispatcher(Http http, Materializer materializer, KafkaProducer<String, Double> producer) {
+    private RequestDispatcher(Http http, Materializer materializer, KafkaProducer<String, Response> producer) {
         this.openWeatherMapActorRef = getContext().actorOf(
                 Requester.props(http, materializer, OpenWeatherMapRequestTemperature.class,
                                 OpenWeatherMapResponse.class, producer));

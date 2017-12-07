@@ -25,10 +25,10 @@ public class Requester<RequestClass extends RequestTemperature, ResponseClass ex
     private Materializer materializer;
     private Class<RequestClass> requestClass;
     private Class<ResponseClass> responseClass;
-    private Producer<String, Double> producer;
+    private Producer<String, Response> producer;
 
     private Requester(Http httpGate, Materializer materializer, Class<RequestClass> reqClass,
-                      Class<ResponseClass> respClass, KafkaProducer<String, Double> producer) {
+                      Class<ResponseClass> respClass, KafkaProducer<String, Response> producer) {
         this.requestClass = reqClass;
         this.responseClass = respClass;
         this.httpGate = httpGate;
@@ -38,7 +38,7 @@ public class Requester<RequestClass extends RequestTemperature, ResponseClass ex
 
     static <ReqType extends RequestTemperature, RespType extends Response> Props props(
             Http httpGate, Materializer materializer, Class<ReqType> reqClass, Class<RespType> respClass,
-            KafkaProducer<String, Double> producer) {
+            KafkaProducer<String, Response> producer) {
         return Props.create(Requester.class, () -> new Requester<>(httpGate, materializer, reqClass, respClass,
                                                                    producer));
     }
@@ -48,8 +48,8 @@ public class Requester<RequestClass extends RequestTemperature, ResponseClass ex
         return receiveBuilder()
                 .match(requestClass, request -> {
                     requestCurrentWeather(request).thenAccept(resp -> {
-                        ProducerRecord<String, Double> newRecord = new ProducerRecord<>(
-                               request.getTopic().toString(), request.getLocation().getCity(), resp.getTemperature());
+                        ProducerRecord<String, Response> newRecord = new ProducerRecord<>(
+                               request.getTopic().toString(), request.getLocation().getCity(), resp);
                         log.info("Got a response from: " + request.getLocation().getCity());
                         producer.send(newRecord);
                     });
