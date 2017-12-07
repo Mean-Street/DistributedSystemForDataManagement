@@ -10,10 +10,8 @@
 sudo apt-get update
 sudo apt-get install -y docker.io
 
-# Open port 2181 in the firewall
+# Open ports in the firewall
 sudo ufw disable # TODO: something cleaner
-# On CentOS:
-# firewall-cmd --zone=trusted --add-interface=docker0
 
 git clone https://github.com/Mean-Street/DistributedSystemForDataManagement sdtd
 cd sdtd/zookeeper
@@ -32,3 +30,11 @@ nmap -p 2181 -Pn <ZOOKEEPER_IP>
 # PORT     STATE SERVICE
 # 2181/tcp open  unknown
 ```
+
+If the port `2181` is filtered, you need to add it to the security group in AWS:
+`Type="Custom TCP"`, `Port Range=2181`, `Source="Anywhere"`, `Description="zookeeper"`
+
+If it is closed, it can be for at least two reasons:
+
+* The Docker container is not running
+* The firewall forbids inbound traffic on this port
