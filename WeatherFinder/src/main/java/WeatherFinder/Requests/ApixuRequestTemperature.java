@@ -6,18 +6,21 @@ import WeatherFinder.Configurations.ApixuConfig;
 
 public class ApixuRequestTemperature extends RequestTemperature {
     private ApixuConfig config;
-    private String urlRequest;
     private Location location;
+    private final String url = "http://api.apixu.com/v1/current.json";
 
     
     public ApixuRequestTemperature(Location location) {
         this.config = ConfigFactory.create(ApixuConfig.class);
-        this.urlRequest = config.url();
         this.location = location;
     }
 
-    private void configureUrl() {
-        setUrl(getUrl() + "?" + config.locationTag() + "=" + location.getCity());
+    private String urlAddLocation(String url) {
+        return url + "&q=" + location.getCity();
+    }
+
+    private String urlAddKey(String url) {
+        return url + "?key=" + config.key();
     }
 
     @Override
@@ -26,17 +29,12 @@ public class ApixuRequestTemperature extends RequestTemperature {
     }
 
     private String getUrl() {
-        return urlRequest;
-    }
-
-    private void setUrl(String url) {
-        this.urlRequest = url;
+        return url;
     }
 
     public HttpRequest create() {
-        setUrl(getUrl() + "?" + config.keyTag() + "=" + config.key());
-        configureUrl();
-        System.out.println(getUrl());
-        return HttpRequest.create(getUrl());
+        String url = urlAddKey(getUrl());
+        url = urlAddLocation(url);
+        return HttpRequest.create(url);
     }
 }

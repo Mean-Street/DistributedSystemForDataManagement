@@ -21,7 +21,7 @@ import scala.concurrent.duration.Duration;
 
 public class WeatherFinderApp
 {
-    private static KafkaProducer<String, Double> initProducer(KafkaConfig config) {
+    private static KafkaProducer<String, String> initProducer(KafkaConfig config) {
 
         Properties props = new Properties();
         props.put("bootstrap.servers", config.toString());
@@ -45,7 +45,7 @@ public class WeatherFinderApp
 
         Integer[] host = {127, 0, 0, 0};
         KafkaConfig config = new KafkaConfig(host, 5555);
-        KafkaProducer<String, Double> producer = initProducer(config);
+        KafkaProducer<String, String> producer = initProducer(config);
 
         // ******** REQUEST WITH TIMER : each minute **********
         ActorRef ApixuTickActor = system.actorOf(RequestDispatcher.props(http, materializer, producer));
