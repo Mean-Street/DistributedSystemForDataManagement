@@ -3,7 +3,7 @@
 ## Deployment on AWS
 
 * Create an EC2 instance for Zookeeper
-* Open the ports `2181`, `2888` and `3888` in the security group of the instance
+* Open the port `2181` in the security group of the instance
 * Connect through SSH and run:
 
 ```bash
