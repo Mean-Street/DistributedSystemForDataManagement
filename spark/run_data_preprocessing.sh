@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Launch Zookeep (TODO: from Docker)
 # bin/zookeeper-server-start.sh config/zookeeper.properties
