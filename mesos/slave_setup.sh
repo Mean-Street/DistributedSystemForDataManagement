@@ -1,7 +1,7 @@
 #! /bin/sh
 
-SALVE_IP=10.0.0.200
-MASTER_IP=10.0.0.100
+SALVE_IP=10.0.0.201
+MASTER_IP=10.0.0.101
 
 #Install mesosphere
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
