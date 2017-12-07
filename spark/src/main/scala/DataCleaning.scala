@@ -2,6 +2,7 @@ import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 
 import com.datastax.spark.connector._
+import com.datastax.driver.core.utils.UUIDs
 import org.apache.spark.sql.cassandra._
 
 object DataCleaning {
@@ -26,10 +27,36 @@ object DataCleaning {
     // )
     // rdd1.saveToCassandra("sdtd", "weatherFromJSON", SomeColumns("id", "city", "temperature"))
 
+
+    println("OK 1");
+    val c1 = sc.parallelize(Seq((UUIDs.timeBased(), "lundi", 13.3)))
+    c1.saveToCassandra("sdtd", "temperatures", SomeColumns("id", "date", "temperature"))
+    val c2 = sc.parallelize(Seq((UUIDs.timeBased(), "mardi", -3.8)))
+    c2.saveToCassandra("sdtd", "temperatures", SomeColumns("id", "date", "temperature"))
+    println("OK 2");
+    /*
+    val c3 = sc.parallelize(Seq(("mercredi", 1.32)))
+    c3.saveToCassandra("sdtd", "temperatures", SomeColumns("date", "temperature"))
+    println("OK 3");
+    val c4 = sc.parallelize(Seq(("jeudi", 16.411)))
+    c4.saveToCassandra("sdtd", "temperatures", SomeColumns("date", "temperature"))
+    println("OK 4");
+    val c5 = sc.parallelize(Seq(("vendredi", 6)))
+    c5.saveToCassandra("sdtd", "temperatures", SomeColumns("date", "temperature"))
+    println("OK 5");
+    val c6 = sc.parallelize(Seq(("samedi", 0)))
+    c6.saveToCassandra("sdtd", "temperatures", SomeColumns("date", "temperature"))
+    println("OK 6");
+    val c7 = sc.parallelize(Seq(("dimanche", 4.08)))
+    c7.saveToCassandra("sdtd", "temperatures", SomeColumns("date", "temperature"))
+    println("OK 7");
+    */
+
+
     // # Load RDD from Cassandra
     // (created with cassandra/createData.cql)
-    val rdd2 = sc.cassandraTable("sdtd", "weatherfromcql")
-    rdd2.collect().foreach(println)
+    // val rdd2 = sc.cassandraTable("sdtd", "weatherfromcql")
+    // rdd2.collect().foreach(println)
   }
 }
 
