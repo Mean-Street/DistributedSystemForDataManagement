@@ -1,6 +1,9 @@
 import java.util.Properties
 
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkConf
+import org.apache.spark.sql.cassandra._
 
 //Usage WeatherProducer "topics" "@broker1,@broker2"
 object WeatherProducer extends App {
@@ -15,10 +18,15 @@ object WeatherProducer extends App {
 
     val producer = new KafkaProducer[String, Double](props)
     
-    //TODO
     //Get Data from BD
-    val date : String = "07/12/17";
-    val temp : Double = 5.2;
+    val sconf = new SparkConf()
+    val sc = new SparkContext(sconf)
+
+    //TODO
+    val firstRow = sc.cassandraTable("sdtd", "temperatures").first()
+
+    val date : String = firstRow.get(0); //.select("date")
+    val temp : Double = firstRow.get(1);
 
     //Send to brokers
     val data = new ProducerRecord[String, Double](topic, date, temp)
