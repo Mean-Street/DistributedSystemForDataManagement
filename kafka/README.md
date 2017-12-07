@@ -18,8 +18,12 @@ git clone https://github.com/Mean-Street/DistributedSystemForDataManagement sdtd
 cd sdtd/kafka
 ```
 
-* Edit the following line in `server.properties`: `zookeeper.connect=<ZOOKEEPER_IP>:2181`
-* Edit the following line in `server.properties`: `advertised.listeners=PLAINTEXT://<KAFKA_IP>:9092`
+* Edit the following lines in `server.properties`:
+
+```
+advertised.listeners=PLAINTEXT://<KAFKA_IP>:9092
+zookeeper.connect=<ZOOKEEPER_IP>:2181
+```
 
 * Run Kafka
 
