@@ -4,33 +4,21 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class KafkaConfig {
-    private Integer[] host;
-    private int port;
+    private String host;
+    private Integer port;
+    private String topic;
 
-    public KafkaConfig(Integer[] host, int port) {
+    public KafkaConfig(String host, Integer port, String topic) {
         this.host = host;
         this.port = port;
+        this.topic = topic;
     }
 
-    @Override
-    public String toString() {
-        return String.join(".", Arrays.stream(host)
-                                               .map(Object::toString)
-                                               .collect(Collectors.joining(".")))
-                + ":" + port;
+    public String getTopic() {
+        return topic;
     }
 
-    public enum Topic {
-        TEMPERATURE ("temperatures");
-
-        private String name = "";
-        Topic(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
+    public String getBroker() {
+        return host + ":" + port.toString();
     }
 }

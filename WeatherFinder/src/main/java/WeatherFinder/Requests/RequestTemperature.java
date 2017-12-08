@@ -1,12 +1,10 @@
 package WeatherFinder.Requests;
 
-import WeatherFinder.Configurations.KafkaConfig;
-
 public abstract class RequestTemperature extends Request {
-    final private KafkaConfig.Topic topic = KafkaConfig.Topic.TEMPERATURE;
+    final private String topic = "temperature";
 
     @Override
-    public KafkaConfig.Topic getTopic() {
+    public String getTopic() {
         return topic;
     }
 }
