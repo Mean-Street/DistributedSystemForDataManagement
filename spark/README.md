@@ -5,7 +5,6 @@
 * Follow the instructions in `../kafka/README.md`
 * Follow the instructions in `../cassandra/README.md`
 * Create an EC2 instance (Ubuntu, micro is sufficient)
-* (TODO: to be done on Cassandra's machine?) For Cassandra, open the port `4040` in the security group of the instance
 * Connect through SSH and run:
 
 ```bash
