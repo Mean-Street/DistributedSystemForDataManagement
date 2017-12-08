@@ -16,7 +16,5 @@ cd sdtd/WeatherFinder
 ```
 - Run WeatherFinder
 ```bash
-docker pull maven
-docker run -it --rm --name akka-server -v "$PWD":/usr/src/akka_server -w /usr/src/akka_server maven mvn compile
-docker run -it --rm --name akka-server -v "$PWD":/usr/src/akka_server -w /usr/src/akka_server maven mvn exec:java -Dexec.args="<KAFKA_IP> <KAFKA_PORT> <TOPIC>"
+sudo ./run_weatherwizard.sh <KAFKA_IP> <KAFKA_PORT> <TOPIC>
 ```
