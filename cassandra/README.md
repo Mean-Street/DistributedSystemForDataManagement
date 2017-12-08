@@ -7,10 +7,9 @@
 * Connect through SSH and run:
 
 ```bash
-sudo apt-get update
-sudo apt-get install docker.io
-
-# Start Cassandra
+git clone https://github.com/Mean-Street/DistributedSystemForDataManagement sdtd
+cd sdtd/cassandra
+./init-ec2.sh
 sudo ./run_docker.sh
 
 # Initialize table
