@@ -26,6 +26,7 @@ echo 1 | sudo tee /etc/zookeeper/conf/myid
 #Start
 sudo service zookeeper restart
 sudo service mesos-master restart
+MASTER_IP=10.0.0.100
 marathon --master zk://${MASTER_IP}:2181/mesos --zk zk://${MASTER_IP}:2181/marathon
 
 #Zookeeper
