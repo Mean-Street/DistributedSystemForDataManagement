@@ -13,8 +13,11 @@ function tags {
    echo "--tag-specifications ResourceType=instance,Tags=[{Key=Name,Value=$1}]"
 }
 
-function user_data {
-    echo "$CLONE_REPO_CMD ; cd $REPO_FOLDER/$1 ; $INIT_CMD"
+function generate_user_data {
+    echo "#!/bin/bash" > $USER_DATA_FILE
+    echo $CLONE_REPO_CMD >> $USER_DATA_FILE
+    echo cd "$REPO_FOLDER/$1" >> $USER_DATA_FILE
+    echo $INIT_CMD >> $USER_DATA_FILE
 }
 
 function security_group {
@@ -22,5 +25,5 @@ function security_group {
 }
 
 # TODO: user data not executed
-echo $(user_data zookeeper) > $USER_DATA_FILE
+generate_user_data zookeeper
 aws ec2 run-instances $COMMON_ARGS --instance-type t2.micro $(tags zookeeper) $(security_group zookeeper) --user-data "file://$USER_DATA_FILE"
