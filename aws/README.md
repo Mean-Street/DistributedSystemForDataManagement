@@ -25,13 +25,11 @@ aws configure
 aws ec2 describe-regions --output table
 
 # Configure
-source env.sh
 ./configure.sh
 ```
 
 ## Launch the machines
 
 ```bash
-source env.sh
 ./launch-instances.sh
 ```

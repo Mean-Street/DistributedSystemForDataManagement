@@ -6,4 +6,6 @@ export KEY_PAIR=smack
 export ZOOKEEPER_PORT=2181
 
 # Security groups
-export ZOOKEEPER_SECU_GROUP=zookeeper
+declare -A SECURITY_GROUPS
+SECURITY_GROUPS[zookeeper]=zookeeper
+export SECURITY_GROUPS

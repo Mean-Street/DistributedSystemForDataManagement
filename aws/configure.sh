@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. ./env.sh
+
 # Create a key pair for ssh
 key_path="../$KEY_PAIR.pem"
 rm -f $key_path
