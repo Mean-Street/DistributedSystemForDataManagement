@@ -1,23 +1,13 @@
 {
   "id": "akka-server",
-  "cpus": 0.5,
+  "cpus": 0.2,
   "mem": 64.0,
   "instances": 1,
   "networks": [ { "mode": "container/bridge" } ],
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "168ca2733994"
+      "image": "akka_server:latest"
     }
-  },
-  "healthChecks": [
-    {
-      "protocol": "HTTP",
-      "portIndex": 0,
-      "path": "/",
-      "gracePeriodSeconds": 5,
-      "intervalSeconds": 20,
-      "maxConsecutiveFailures": 3
-    }
-  ]
+  }
 }
