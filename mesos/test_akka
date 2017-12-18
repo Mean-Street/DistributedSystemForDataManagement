@@ -1,13 +1,13 @@
 {
-  "id": "akka-server",
-  "cpus": 0.2,
+  "id": "akka_server",
+  "cpus": 0.5,
   "mem": 64.0,
   "instances": 1,
   "networks": [ { "mode": "container/bridge" } ],
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "akka_server:latest"
+      "image": "sdtdensimag/test_akka:latest"
     }
   }
 }
