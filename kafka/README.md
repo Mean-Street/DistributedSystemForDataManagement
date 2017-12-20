@@ -19,6 +19,7 @@ cd sdtd/kafka
 advertised.listeners=PLAINTEXT://<KAFKA_IP>:9092
 zookeeper.connect=<ZOOKEEPER_IP>:2181
 ```
+>>>>>>> a5a4b715c1cff13327558e46aba604f375a33df2
 
 * Run Kafka
 
