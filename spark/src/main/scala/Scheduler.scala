@@ -7,6 +7,7 @@ import akka.stream.ActorMaterializer;
 
 object ProducerScheduler {
 	def main(args: Array[String]) {
+          /*
 		val actorSystem = ActorSystem()
 		val scheduler = actorSystem.scheduler
 		val task = new Runnable { def run() = WeatherProducer.main(Array("topics", "@broker")) }
@@ -16,6 +17,7 @@ object ProducerScheduler {
 		  initialDelay = Duration.Zero(),
 		  interval = Duration(60, TimeUnit.SECONDS),
 		  runnable = task)
+*/
 	}
 }
 */
