@@ -10,7 +10,7 @@
 git clone https://github.com/Mean-Street/DistributedSystemForDataManagement sdtd
 cd sdtd/zookeeper
 ./init-ec2.sh
-. ../config.sh
+. ./config.sh
 make run
 ```
 
