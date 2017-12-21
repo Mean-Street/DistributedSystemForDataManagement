@@ -13,18 +13,11 @@ cd sdtd/kafka
 ./init-ec2.sh
 ```
 
-* Edit the following lines in `server.properties`:
-
-```
-advertised.listeners=PLAINTEXT://<KAFKA_IP>:9092
-zookeeper.connect=<ZOOKEEPER_IP>:2181
-```
->>>>>>> a5a4b715c1cff13327558e46aba604f375a33df2
-
 * Run Kafka
 
 ```bash
-sudo ./run_kafka.sh <KAFKA_IP> 9092 <ZOOKEEPER_IP> 2181 test:1:1
+. ./config.sh
+make run
 ```
 
 * Check if it is running:
