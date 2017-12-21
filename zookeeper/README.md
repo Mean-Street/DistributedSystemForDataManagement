@@ -10,7 +10,8 @@
 git clone https://github.com/Mean-Street/DistributedSystemForDataManagement sdtd
 cd sdtd/zookeeper
 ./init-ec2.sh
-sudo ./run_zookeeper.sh 2181
+. ../config.sh
+make run
 ```
 
 * Check if Zookeeper is running:
