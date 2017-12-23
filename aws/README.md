@@ -6,7 +6,7 @@ All the commands are to be executed on the user's machine, not on AWS.
 
 ```bash
 # Can be launched in a virtualenv
-pip install awscli
+pip install boto3
 ```
 
 ## Configure
@@ -25,7 +25,7 @@ aws configure
 aws ec2 describe-regions --output table
 
 # Configure
-./configure.sh
+python configure.py
 ```
 
 ## Launch the machines
