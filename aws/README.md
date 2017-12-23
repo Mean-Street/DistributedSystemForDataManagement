@@ -28,12 +28,30 @@ aws ec2 describe-regions --output table
 python configure.py
 ```
 
-## Start/stop the machines
+## Manage the machines
+
+### Launch all instances
 
 ```bash
 python launch_instances.py
 ```
 
+### Terminate all instances
+
 ```bash
 python terminate_instances.py
+```
+
+### List all instances
+
+```bash
+python get_instances.py
+```
+
+Or, in a Python script:
+
+```python
+from get_instances import get_instances
+running_instances = get_instances()
+terminated_instances = get_instances('terminated')
 ```
