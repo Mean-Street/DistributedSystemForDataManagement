@@ -28,8 +28,12 @@ aws ec2 describe-regions --output table
 python configure.py
 ```
 
-## Launch the machines
+## Start/stop the machines
 
 ```bash
-python launch-instances.py
+python launch_instances.py
+```
+
+```bash
+python terminate_instances.py
 ```

@@ -10,3 +10,5 @@ KAFKA_SECURITY_GROUP = "kafka"
 CASSANDRA_SECURITY_GROUP = "cassandra"
 
 UBUNTU_IMAGE_ID = "ami-fcc4db98"
+PROJECT_TAG_KEY = 'Project'
+PROJECT_TAG_VALUE = 'smack'

@@ -21,8 +21,8 @@ def run_instance(name, type_, security_groups):
                     'Value': name
                 },
                 {
-                    'Key': 'Project',
-                    'Value': 'smack'
+                    'Key': cfg.PROJECT_TAG_KEY,
+                    'Value': cfg.PROJECT_TAG_VALUE
                 },
             ]
         }]
