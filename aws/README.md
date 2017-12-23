@@ -31,5 +31,5 @@ python configure.py
 ## Launch the machines
 
 ```bash
-./launch-instances.sh
+python launch-instances.py
 ```
