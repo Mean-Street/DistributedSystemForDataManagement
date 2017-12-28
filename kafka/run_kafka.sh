@@ -6,4 +6,4 @@ zookeeperhost=$3
 zookeeperport=$4
 topics=$5
 
-docker run --name smack-kafka -it --rm -e KAFKA_ZOOKEEPER_CONNECT=$zookeeperhost:$zookeeperport -e KAFKA_ADVERTISED_HOST_NAME=$kafkahost -e KAFKA_CREATE_TOPICS="$topics" -p $kafkaport:9092 -v $(pwd)/server.properties:/opt/kafka/config/server.properties sdtdensimag/kafka-docker
+docker run --name smack-kafka -it --rm -e KAFKA_ZOOKEEPER_CONNECT=$zookeeperhost:$zookeeperport -e KAFKA_ADVERTISED_HOST_NAME=$kafkahost -e KAFKA_CREATE_TOPICS="$topics" -p $kafkaport:9092 -v $(pwd)/server.properties:/opt/kafka/config/server.properties sdtdensimag/kafka
