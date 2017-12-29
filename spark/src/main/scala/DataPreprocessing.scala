@@ -53,9 +53,9 @@ object DataPreprocessing {
   }
 
   def jsonToRow(msg: String) : (String, String, Double) = {
-    val json = JSON.parseFull(msg).get.asInstanceOf[Map[String,String]]
+    val json = JSON.parseFull(msg).get.asInstanceOf[Map[String,Any]]
     val date = json("date")
-    val temperature = json("temperature").toDouble
-    return (com.datastax.driver.core.utils.UUIDs.timeBased().toString(), date, temperature)
+    val temperature = json("temperature")
+    return (com.datastax.driver.core.utils.UUIDs.timeBased().toString(), date.toString, temperature.asInstanceOf[Double])
   }
 }
