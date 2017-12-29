@@ -26,7 +26,34 @@ echo 1 | sudo tee /etc/zookeeper/conf/myid
 #Start
 sudo service zookeeper restart
 sudo service mesos-master restart
+MASTER_IP=10.0.0.100
 marathon --master zk://${MASTER_IP}:2181/mesos --zk zk://${MASTER_IP}:2181/marathon
+#marathon --master zk://10.0.0.100:2181/mesos --zk zk://10.0.0.100:2181/marathon
+
+#/lib/systemd/system/marathon.service
+# [Unit]
+# Description=Scheduler for Apache Mesos
+# Requires=network.target
+#
+# [Service]
+# Type=simple
+# WorkingDirectory=/usr/share/marathon
+# EnvironmentFile=/etc/default/marathon
+# ExecStart=/usr/share/marathon/bin/marathon --master zk://10.0.0.100:2181/mesos --zk zk://10.0.0.100:2181/marathon
+# ExecReload=/bin/kill -HUP $MAINPID
+# Restart=always
+# RestartSec=60
+# SuccessExitStatus=
+# User=marathon
+# ExecStartPre=/bin/mkdir -p /run/marathon
+# ExecStartPre=/bin/chown marathon:marathon /run/marathon
+# ExecStartPre=/bin/chmod 755 /run/marathon
+# PermissionsStartOnly=true
+# LimitNOFILE=1024
+#
+# [Install]
+# WantedBy=multi-user.target
+
 
 #Zookeeper
 #sudo docker run -d --net=host netflixoss/exhibitor:1.5.2
@@ -56,8 +83,3 @@ marathon --master zk://${MASTER_IP}:2181/mesos --zk zk://${MASTER_IP}:2181/marat
 #sudo docker run -d --net=host  \
 #  -p 8080:8080 \
 #  mesosphere/marathon --master zk://10.0.0.100:2181/mesos --zk zk://10.0.0.100:2181/marathon
-
-
-
-
-
