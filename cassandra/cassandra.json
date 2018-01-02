@@ -1,0 +1,16 @@
+{
+  "id": "cassandra",
+  "cpus": 0.5,
+  "mem": 512.0,
+  "instances": 1,
+  "networks": [ { "mode": "container/bridge" } ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "sdtdensimag/cassandra:latest"
+    },
+    "portMappings": [
+      { "containerPort": 9042, "hostPort": 0, "servicePort": 9042, "protocol": "tcp" }
+    ]
+  }
+}

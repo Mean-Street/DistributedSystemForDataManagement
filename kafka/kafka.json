@@ -1,0 +1,21 @@
+{
+  "id": "kafka",
+  "cpus": 0.5,
+  "mem": 512.0,
+  "instances": 1,
+  "networks": [ { "mode": "container/bridge" } ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "sdtdensimag/kafka:latest"
+    },
+    "portMappings": [
+      { "containerPort": 9092, "hostPort": 0, "servicePort": 9092, "protocol": "tcp" }
+    ]
+  },
+  "env": {
+    "KAFKA_ZOOKEEPER_CONNECT": "10.0.0.100:2182",
+    "KAFKA_ADVERTISED_HOST_NAME": "10.0.0.100",
+    "KAFKA_CREATE_TOPICS": "topic"
+  }
+}
