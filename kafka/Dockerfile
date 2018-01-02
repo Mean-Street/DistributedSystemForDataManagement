@@ -24,4 +24,4 @@ RUN apk add --update unzip wget curl docker jq coreutils \
 VOLUME ["/kafka"]
 
 # Use "exec" form so that it runs as PID 1 (useful for graceful shutdown)
-CMD ["start-kafka.sh"]
+CMD ["launch_kafka.sh"]
