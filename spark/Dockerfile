@@ -14,7 +14,8 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B
 RUN apt-get update
 RUN apt-get install -y git default-jre sbt
 
-RUN git clone https://github.com/Mean-Street/DistributedSystemForDataManagement $REPO
-RUN cp "$REPO/spark/docker-entrypoint.sh" /usr/bin/local
+RUN echo "git clone https://github.com/Mean-Street/DistributedSystemForDataManagement $REPO" > /usr/bin/docker-entrypoint.sh
+RUN echo "$REPO/spark/docker-entrypoint.sh" >> /usr/bin/docker-entrypoint.sh
+RUN chmod +x /usr/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
