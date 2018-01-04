@@ -8,6 +8,4 @@ then
     exit 1
 fi
 
-class="$1"
-shift
-docker run --name spark --rm -it -p 4040:4040 spark-smack /spark/bin/spark-submit --class "$class" --properties-file /conf/spark-defaults.conf /sdtd.jar $@
+docker run --rm -it -p 4040:4040 spark run-spark $@
