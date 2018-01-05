@@ -8,4 +8,4 @@ then
     exit 1
 fi
 
-docker run --rm -it -p 4040:4040 spark run-spark $@
+docker run --rm -it -p 4040:4040 sdtdensimag/spark run-spark $@
