@@ -1,14 +1,14 @@
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 
-object BasicTest {
+object Test {
   def main(args: Array[String]) {
+    println("ARGS:", args)
 
     val sc = new SparkContext(new SparkConf())
-    val lines = sc.textFile("data.txt")
+    val lines = sc.parallelize(Array("a", "bc", "def"))
     val lineLengths = lines.map(s => s.length)
     val totalLength = lineLengths.reduce((a, b) => a + b)
-    println("OUTPUT:", totalLength)
-
+    println("TOTAL LENGTH:", totalLength)
   }
 }

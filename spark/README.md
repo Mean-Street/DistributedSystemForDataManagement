@@ -21,6 +21,7 @@ When the code is updated, you need to rebuild the image:
 
 ```
 make build
+make test
 make push
 ```
 
