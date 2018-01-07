@@ -15,9 +15,13 @@ Just build & run the docker file with 3 arguments :
 * the address of the Spark machine
 * the port used by the Spark machine
 
-Exemple :
+Example :
 ```
-docker build --build-args serverPort=<port> --build-arg sparkAddress=<@> --build-arg sparkPort=<port>
+docker build --build-args --build-arg sparkAddress=<@> --build-arg sparkPort=<port>
+```
+Don't forget to bind the ports of the docker with the machine. The docker container uses the port 8080.
+```
+docker run -p <machinePort>:8080
 ```
 
 ## How to use
@@ -28,7 +32,7 @@ sbt run
 ```
 Then either enter the webserver address in a browser or use the command 
 ```
-curl http://<address>:<port>/weather
+curl http://<address>:<machinePort>/weather
 ```
 Available routes :
 * /weather to get all table entries
@@ -45,7 +49,7 @@ path("<a new path>") {
     }
 }
 ```
-Then add the <method to call> as a case into WeatherActor.scala following the GetWeather example :
+Then add the \<method to call\> as a case into WeatherActor.scala following the GetWeather example :
 ```
 case <method to call> =>
       val res = Compute.<a method>

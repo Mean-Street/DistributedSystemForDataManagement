@@ -18,7 +18,6 @@ object AkkaHttpServer extends App with Routes {
 
   //! pas de tests pour les arguments !
   if (args.length == 2) {
-    GlobalVars.serverPort = args(0)
     GlobalVars.sparkAddress = args(1)
     GlobalVars.sparkPort = args(2)
   }
@@ -32,7 +31,7 @@ object AkkaHttpServer extends App with Routes {
 
   val routes = httpRoutes;
 
-  val serverBindingFuture: Future[ServerBinding] = Http().bindAndHandle(routes, "localhost", GlobalVars.serverPort.toInt)
+  val serverBindingFuture: Future[ServerBinding] = Http().bindAndHandle(routes, "localhost", 8080)
 
   println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
 

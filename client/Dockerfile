@@ -3,7 +3,6 @@
 FROM openjdk:8u151
 
 #Arguments
-ARG serverPort=8080
 ARG sparkAddress=127.0.0.1
 ARG sparkPort=4040
 
@@ -49,4 +48,4 @@ RUN \
 RUN \
 	cd src/client \
 	sbt compile \
-	sbt "run $serverPort $sparkAddress $sparkPort"
+	sbt "run $sparkAddress $sparkPort"
