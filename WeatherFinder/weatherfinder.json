@@ -1,0 +1,13 @@
+{
+  "id": "weatherfinder",
+  "cpus": 0.5,
+  "mem": 256.0,
+  "instances": 1,
+  "networks": [ { "mode": "container/bridge" } ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "sdtdensimag/weatherfinder:latest"
+    }
+  }
+}

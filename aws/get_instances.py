@@ -22,5 +22,23 @@ def get_instances(state='running'):
     return instances
 
 
+def get_private_ip(instance):
+    return instance['PrivateIpAddress']
+
+
+def get_public_ip(instance):
+    return instance['PublicIpAddress']
+
+
+def get_name(instance):
+    tags = instance['Tags']
+    for tag in tags:
+        if tag['Key'] == 'Name':
+            return tag['Value']
+    return None
+
+
 if __name__ == '__main__':
-    print(get_instances())
+    instances = get_instances()
+    print(instances, end='\n\n')
+    print('First instance name:', get_name(instances[0]))

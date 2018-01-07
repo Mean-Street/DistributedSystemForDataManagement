@@ -1,6 +1,19 @@
 # Cassandra
 
-## Deployment on AWS
+## Run Cassandra in a Docker
+make build
+make run
+
+## Connect a cqlsh prompt to this Docker
+make cqlsh
+
+## Delete the Docker
+make clean
+
+
+
+
+## Deployment on AWS - WARNING => MIGHT BE OUT-OF-DATE !!!!
 
 * Create an EC2 instance (Ubuntu, micro)
 * Open port `9042`

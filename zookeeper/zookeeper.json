@@ -1,0 +1,16 @@
+{
+  "id": "zookeeper",
+  "cpus": 0.2,
+  "mem": 64,
+  "instances": 1,
+  "networks": [ { "mode": "container/bridge" } ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "sdtdensimag/zookeeper:latest"
+    },
+    "portMappings": [
+      { "containerPort": 2181, "hostPort": 0, "servicePort": 2182, "protocol": "tcp" }
+    ]
+  }
+}

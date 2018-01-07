@@ -1,28 +1,9 @@
 # Kafka
 
-## Deployment on AWS
+**Warning:** do not use `localhost` for hosts but ip addresses.
 
-* Deploy Zookeeper (see `../zookeeper/README.md`)
-* Create an EC2 instance (Ubuntu, at least small, micro is not sufficient)
-* Open the port `9092` in the security group of the instance
-* Connect through SSH and run:
-
-```bash
-git clone https://github.com/Mean-Street/DistributedSystemForDataManagement sdtd
-cd sdtd/kafka
-./init-ec2.sh
 ```
-
-* Run Kafka
-
-```bash
-. ./config.sh
-make run
-```
-
-* Check if it is running:
-
-```bash
-# On another machine:
-./check.sh KAFKA_IP 9092
+./run.sh <KAFKA_HOST_IP> 9092 <ZOOKEEPER_IP> 2181 <TOPIC_NAME>:<N_PARTITIONS>:<N_REPLICAS>
+# Example:
+# ./run.sh 192.168.4.41 9092 192.168.4.41 2181 topik:1:1
 ```
