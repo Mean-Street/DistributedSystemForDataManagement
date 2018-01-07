@@ -34,4 +34,4 @@ sudo docker run -d \
 garland/mesosphere-docker-mesos-master:latest
 
 
-sudo docker run --net=host -e PORTS=9090 mesosphere/marathon-lb sse --group=* --marathon=http://10.0.0.100:8080
+sudo docker run -d --net=host -e PORTS=9090 mesosphere/marathon-lb sse --group=* --marathon=http://10.0.0.100:8080

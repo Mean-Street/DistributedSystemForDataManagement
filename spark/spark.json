@@ -1,0 +1,19 @@
+{
+  "id": "spark",
+  "cpus": 0.5,
+  "mem": 128.0,
+  "instances": 1,
+  "networks": [ { "mode": "container/bridge" } ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "sdtdensimag/spark:latest"
+    },
+    "portMappings": [
+      { "containerPort": 4040, "hostPort": 0, "servicePort": 4040, "protocol": "tcp" }
+    ]
+  },
+  "args": [
+            "DataPreprocessing", "localhost:9092", "group", "test", "1", "2"
+          ]
+}

@@ -14,8 +14,8 @@
     ]
   },
   "env": {
-    "KAFKA_ZOOKEEPER_CONNECT": "10.0.0.100:2182",
-    "KAFKA_ADVERTISED_HOST_NAME": "10.0.0.100",
-    "KAFKA_CREATE_TOPICS": "topic"
+    "KAFKA_ZOOKEEPER_CONNECT": "localhost:2182",
+    "KAFKA_ADVERTISED_HOST_NAME": "localhost",
+    "KAFKA_CREATE_TOPICS": "test"
   }
 }
