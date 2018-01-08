@@ -27,3 +27,36 @@
   ]
 }
 
+{
+  "id": "named-webapp",
+  "labels": {
+    "HAPROXY_GROUP":"external",
+    "HAPROXY_0_VHOST":"myapp.com"
+  },
+  "cmd": "python3 -m http.server 8080",
+  "cpus": 0.5,
+  "mem": 64.0,
+  "instances": 1,
+  "networks": [ { "mode": "container/bridge" } ],
+  "requirePorts": true,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "python:3"
+    },
+    "portMappings": [
+      { "containerPort": 8080, "hostPort": 0, "servicePort": 12345, "protocol": "tcp" },
+      { "containerPort": 161, "hostPort": 0, "protocol": "udp"}
+    ]
+  },
+  "healthChecks": [
+    {
+      "protocol": "HTTP",
+      "portIndex": 0,
+      "path": "/",
+      "gracePeriodSeconds": 5,
+      "intervalSeconds": 20,
+      "maxConsecutiveFailures": 3
+    }
+  ]
+}
