@@ -33,3 +33,23 @@ create keyspace sdtd with replication = {'class':'SimpleStrategy', 'replication_
 create table sdtd.temperatures (id timeuuid primary key, date text, temperature double);
 # Exit cqlsh
 ```
+
+# Data structure
+
+IDEA = ordered list of (key, value) tuples
+
+column = (name, value, timestamp)
+	name: up to 64Ko
+	value (optional, name can be considered as a value): up to 2Go
+	timestamp: used to find latest update
+line = set of columns / identified by a key
+column family = set of lines (table in CQL)
+keyspace = set of column families
+
+
+KEYSPACE: sdtd
+COLUMN FAMILY: sdtd.temperatures
+LINES: key = @cityName
+COLUMNS: (temperature, @value)
+
+
