@@ -14,8 +14,8 @@
     ]
   },
   "env": {
-    "KAFKA_ZOOKEEPER_CONNECT": "localhost:2182",
-    "KAFKA_ADVERTISED_HOST_NAME": "localhost",
-    "KAFKA_CREATE_TOPICS": "test"
+    "KAFKA_ZOOKEEPER_CONNECT": "172.17.0.1:2182",
+    "KAFKA_ADVERTISED_HOST_NAME": "172.17.0.1",
+    "KAFKA_CREATE_TOPICS": "test:1:1"
   }
 }
