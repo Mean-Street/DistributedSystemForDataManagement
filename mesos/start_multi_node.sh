@@ -1,7 +1,18 @@
 #! /bin/sh
 
-#Requires 3 Masters and 2 Slaves
-#TODO: automatic scaling, factorize functions
+#REQUIRES: 3 Masters and 2+ Slaves
+
+#This script starts Mesos-Master, ZooKeeper and Marathon on the 3 masters in separate containers, and Mesos-Slave on the 2 slaves
+#The slaves aren't started in containers since it would create docker containers inside another container when executing tasks
+#Additional slaves can be added by using the same code than the first 2 and just changing the ip address
+
+#This script needs the addresses of the masters. The address af slaves can be given each time a new slave is created in order to simplify scaling
+
+#TODO: automatize the creation of instances and automatically get all ip addresses instead of having them written in the file
+#TODO: factorize the functions by using parameters (if possible with ssh)
+
+#ISSUES: maybe Zookeeper needs to be started on all masters before starting other frameworks?
+
 
 M1_PUBLIC_IP=35.182.98.222
 M2_PUBLIC_IP=52.60.220.189
@@ -24,10 +35,10 @@ start_master_1()
     S1_PRIVATE_IP=10.0.0.228
     S2_PRIVATE_IP=10.0.0.37
 
-    #Install Docker
+    echo "Installing Docker"
     sudo apt-get install -y docker.io
 
-    #Start ZooKeeper
+    echo "Starting ZooKeeper"
     sudo docker run -d \
       --net="host" \
       -e SERVER_ID=1 \
@@ -36,7 +47,7 @@ start_master_1()
       -e ADDITIONAL_ZOOKEEPER_3=server.3=${M3_PRIVATE_IP}:2888:3888 \
       mesoscloud/zookeeper
 
-    #Start Mesos Master
+    echo "Starting Mesos-Master"
     sudo docker run --net="host" \
        -p 5050:5050 \
        -e "MESOS_HOSTNAME=${M1_PRIVATE_IP}" \
@@ -50,11 +61,13 @@ start_master_1()
        -d \
        mesosphere/mesos-master:1.3.2-rc1
 
-    #Start Marathon
+    echo "Starting Marathon"
     sudo docker run \
       -d \
       -p 8080:8080 \
       mesosphere/marathon:v1.4.9 --master zk://${M1_PRIVATE_IP}:2181,${M2_PRIVATE_IP}:2181,${M3_PRIVATE_IP}:2181/mesos --zk zk://${M1_PRIVATE_IP}:2181,${M2_PRIVATE_IP}:2181,${M3_PRIVATE_IP}:2181/marathon
+
+    echo "Closing Connection"
 }
 
 start_master_2()
@@ -65,10 +78,10 @@ start_master_2()
     S1_PRIVATE_IP=10.0.0.228
     S2_PRIVATE_IP=10.0.0.37
 
-    #Install Docker
+    echo "Installing Docker"
     sudo apt-get install -y docker.io
 
-    #Start ZooKeeper
+    echo "Starting ZooKeeper"
     sudo docker run -d \
       --net="host" \
       -e SERVER_ID=2 \
@@ -77,7 +90,7 @@ start_master_2()
       -e ADDITIONAL_ZOOKEEPER_3=server.3=${M3_PRIVATE_IP}:2888:3888 \
       garland/zookeeper
 
-    #Start Mesos Master
+    echo "Starting Mesos-Master"
     sudo docker run --net="host" \
        -p 5050:5050 \
        -e "MESOS_HOSTNAME=${M2_PRIVATE_IP}" \
@@ -91,12 +104,14 @@ start_master_2()
        -d \
        mesosphere/mesos-master:1.3.2-rc1
 
-    #Start Marathon
+    echo "Starting Marathon"
     sudo docker run \
       -d \
       --net="host" \
       -p 8080:8080 \
       mesosphere/marathon:v1.4.9 --master zk://${M1_PRIVATE_IP}:2181,${M2_PRIVATE_IP}:2181,${M3_PRIVATE_IP}:2181/mesos --zk zk://${M1_PRIVATE_IP}:2181,${M2_PRIVATE_IP}:2181,${M3_PRIVATE_IP}:2181/marathon
+
+    echo "Closing Connection"
 }
 
 start_master_3()
@@ -107,10 +122,10 @@ start_master_3()
     S1_PRIVATE_IP=10.0.0.228
     S2_PRIVATE_IP=10.0.0.37
 
-    #Install Docker
+    echo "Installing Docker"
     sudo apt-get install -y docker.io
 
-    #Start ZooKeeper
+    echo "Starting ZooKeeper"
     sudo docker run -d \
       --net="host" \
       -e SERVER_ID=3 \
@@ -119,7 +134,7 @@ start_master_3()
       -e ADDITIONAL_ZOOKEEPER_3=server.3=${M3_PRIVATE_IP}:2888:3888 \
       garland/zookeeper
 
-    #Start Mesos Master
+    echo "Starting Mesos-Master"
     sudo docker run --net="host" \
        -p 5050:5050 \
        -e "MESOS_HOSTNAME=${M3_PRIVATE_IP}" \
@@ -133,11 +148,13 @@ start_master_3()
        -d \
        mesosphere/mesos-master:1.3.2-rc1
 
-    #Start Marathon
+    echo "Starting Marathon"
     sudo docker run \
       -d \
       -p 8080:8080 \
       mesosphere/marathon:v1.4.9 --master zk://${M1_PRIVATE_IP}:2181,${M2_PRIVATE_IP}:2181,${M3_PRIVATE_IP}:2181/mesos --zk zk://${M1_PRIVATE_IP}:2181,${M2_PRIVATE_IP}:2181,${M3_PRIVATE_IP}:2181/marathon
+
+    echo "Closing Connection"
 }
 
 
