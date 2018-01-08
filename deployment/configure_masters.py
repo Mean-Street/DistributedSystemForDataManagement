@@ -50,7 +50,7 @@ def print_header(text):
 if __name__ == "__main__":
     private_ips = [get_private_ip(instance) for instance in get_instances(is_slave=False)]
 
-    print_header("Installing paquets...")
+    print_header("Installing packages...")
     processes = []
     for instance in get_instances(is_slave=False):
         processes.append(init_master(get_public_ip(instance)))

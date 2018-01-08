@@ -11,6 +11,10 @@ def is_smack_instance(instance):
     return False
 
 
-def ssh(ip, cmd):
-    p = sp.Popen(["ssh", "-i", cfg.KEY_PAIR_PATH, "-o", "StrictHostKeyChecking=no", cfg.UBUNTU_USER + "@" + ip] + cmd.split())
+def ssh(ip, cmd, shell=False):
+    cmd = "ssh -i " + cfg.KEY_PAIR_PATH + " -o StrictHostKeyChecking=no " + cfg.UBUNTU_USER + "@" + ip + " " + cmd
+    if not shell:
+        p = sp.Popen(cmd.split())
+    else:
+        p = sp.Popen(cmd, shell=True)
     return p
