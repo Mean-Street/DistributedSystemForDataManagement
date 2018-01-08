@@ -9,13 +9,15 @@ def has_state(instance, state):
     return instance['State']['Name'] == state
 
 
-def get_instances(state='running'):
+def get_instances(state='running', is_slave=None):
     instances = []
     
     resp = ec2.describe_instances()
     reservations = resp['Reservations']
     for reservation in reservations:
         for instance in reservation['Instances']:
+            if is_master is not None and is_master(instance) == is_slave:
+                continue
             if is_smack_instance(instance) and has_state(instance, state):
                 instances.append(instance)
 

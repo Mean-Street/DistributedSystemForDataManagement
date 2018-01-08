@@ -11,7 +11,7 @@ def get_image_id():
 
 
 def run_instance(name, type_, is_master, security_groups):
-    print('Running {0}'.format(name))
+    print('Launching {0}...'.format(name))
     ec2.run_instances(
         ImageId=get_image_id(),
         InstanceType=type_,

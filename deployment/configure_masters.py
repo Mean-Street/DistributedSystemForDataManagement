@@ -4,8 +4,7 @@ from tools import ssh
 
 
 def init_master(ip):
-    ssh(ip, "sudo apt-get update")
-    ssh(ip, "sudo apt-get install -y docker.io")
+    return ssh(ip, "sudo apt-get update; sudo apt-get install -y docker.io")
 
 
 def start_zookeeper(pub_ip, id_, master_ips):
@@ -14,7 +13,7 @@ def start_zookeeper(pub_ip, id_, master_ips):
         index = str(i+1) 
         cmd += ' -e ADDITIONAL_ZOOKEEPER_' + index + '=server.' + index + '=' + ip + ':2888:3888'
     cmd += ' mesoscloud/zookeeper'
-    return ssh(pub_ip, cmd, False)
+    return ssh(pub_ip, cmd)
 
 
 def start_mesos(pub_ip, priv_ip, master_ips):
@@ -26,7 +25,7 @@ def start_mesos(pub_ip, priv_ip, master_ips):
     cmd += '/mesos" -e "MESOS_PORT=5050" -e "MESOS_LOG_DIR=/var/log/mesos" -e "MESOS_QUORUM=2"'
     cmd += ' -e "MESOS_REGISTRY=in_memory" -e "MESOS_WORK_DIR=/var/lib/mesos" -d'
     cmd += ' mesosphere/mesos-master:1.3.2-rc1'
-    return ssh(pub_ip, cmd, False)
+    return ssh(pub_ip, cmd)
 
 
 def start_marathon(pub_ip, master_ips):
@@ -37,19 +36,44 @@ def start_marathon(pub_ip, master_ips):
     zk = zk[:-1]
     cmd += zk + '/mesos --zk zk://'
     cmd += zk + '/marathon'
-    return ssh(pub_ip, cmd, False)
+    return ssh(pub_ip, cmd)
+
+
+def print_header(text):
+    print("\n\n")
+    print("-------------------")
+    print(text)
+    print("-------------------")
+    print("\n\n")
 
 
 if __name__ == "__main__":
-    private_ips = [get_private_ip(instance) for instance in get_instances() if is_master(instance)]
+    private_ips = [get_private_ip(instance) for instance in get_instances(is_slave=False)]
 
-    for i, instance in enumerate(get_instances()):
-        if not is_master(instance):
-            continue
+    print_header("Installing paquets...")
+    processes = []
+    for instance in get_instances(is_slave=False):
+        processes.append(init_master(get_public_ip(instance)))
+    for p in processes:
+        p.wait()
 
-        priv_ip = get_private_ip(instance)
-        pub_ip = get_public_ip(instance)
-        init_master(pub_ip)
-        start_zookeeper(pub_ip, i+1, private_ips)
-        start_mesos(pub_ip, priv_ip, private_ips)
-        start_marathon(pub_ip, private_ips)
+    print_header("Starting Zookeeper...")
+    processes = []
+    for i, instance in enumerate(get_instances(is_slave=False)):
+        processes.append(start_zookeeper(get_public_ip(instance), i+1, private_ips))
+    for p in processes:
+        p.wait()
+
+    print_header("Starting Mesos...")
+    processes = []
+    for instance in get_instances(is_slave=False):
+        processes.append(start_mesos(get_public_ip(instance), get_private_ip(instance), private_ips))
+    for p in processes:
+        p.wait()
+
+    print_header("Starting Marathon...")
+    processes = []
+    for instance in get_instances(is_slave=False):
+        processes.append(start_marathon(get_public_ip(instance), private_ips))
+    for p in processes:
+        p.wait()

@@ -11,6 +11,10 @@ def create_key_pair(name, path):
     except ClientError as e:
         print(e)
         return
+    try:
+        os.remove(path)
+    except OSError:
+        pass
     with open(path, "w") as f:
         f.write(key_pair["KeyMaterial"])
     os.chmod(path, 0o400)

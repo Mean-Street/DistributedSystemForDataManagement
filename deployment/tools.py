@@ -11,8 +11,6 @@ def is_smack_instance(instance):
     return False
 
 
-def ssh(ip, cmd, blocking=True):
+def ssh(ip, cmd):
     p = sp.Popen(["ssh", "-i", cfg.KEY_PAIR_PATH, "-o", "StrictHostKeyChecking=no", cfg.UBUNTU_USER + "@" + ip] + cmd.split())
-    if blocking:
-        p.wait()
     return p
