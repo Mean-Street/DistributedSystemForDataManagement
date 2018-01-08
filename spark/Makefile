@@ -1,6 +1,9 @@
 build:
 	docker build . -t sdtdensimag/spark --no-cache
 
+build_dev:
+	docker build . -f Dockerfile_dev -t sdtdensimag/spark --no-cache
+
 push:
 	docker login -u=sdtdensimag
 	docker push sdtdensimag/spark

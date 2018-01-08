@@ -17,11 +17,17 @@ make data_preprocessing
 
 ## On code update
 
-When the code is updated, you need to rebuild the image:
+When the code is updated, you need to rebuild the image to test the code:
+
+```
+make build_dev
+make test
+```
+
+Once the code is tested, build the production image and push it:
 
 ```
 make build
-make test
 make push
 ```
 
