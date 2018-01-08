@@ -10,7 +10,7 @@ build:
 	sudo docker build . -t ${DOCKER_ID_USER}/${APP_NAME}
 
 run:
-	sudo docker run --name ${DOCKER_NAME} -p 9042:9042 ${DOCKER_ID_USER}/${APP_NAME}
+	sudo docker run --name ${DOCKER_NAME} -p 9042:9042 ${DOCKER_ID_USER}/${APP_NAME} --rm
 
 login:
 	# Login to Docker Hub. Need to enter the password.
