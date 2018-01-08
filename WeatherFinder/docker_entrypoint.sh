@@ -2,4 +2,4 @@
 
 #===--- Stazrt script for the docker container ---===
 
-mvn exec:java -Dexec.args="10.0.0.200 1234 randomstring"
+mvn exec:java -Dexec.args="172.17.0.1 9092 test"

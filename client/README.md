@@ -17,11 +17,11 @@ Just build & run the docker file with 3 arguments :
 
 Example :
 ```
-docker build --build-args --build-arg sparkAddress=<@> --build-arg sparkPort=<port>
+docker build . --build-args --build-arg sparkAddress=<@> --build-arg sparkPort=<port> -t <nom>
 ```
-Don't forget to bind the ports of the docker with the machine. The docker container uses the port 8080.
+Don't forget to bind the ports of the docker with the machine. The webserver uses the port 8080.
 ```
-docker run -p <machinePort>:8080
+docker run -p <machinePort>:8080 <nom>
 ```
 
 ## How to use
@@ -36,6 +36,7 @@ curl http://<address>:<machinePort>/weather
 ```
 Available routes :
 * /weather to get all table entries
+* /example to test the connection to the server
 
 ## How to expand
 All the routes are in the file "Routes.scala". To add a new route, just add the following example after the weather route :

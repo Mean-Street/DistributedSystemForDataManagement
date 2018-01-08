@@ -6,6 +6,10 @@ All the commands are to be executed on the user's machine, not on AWS.
 
 ```bash
 # Can be launched in a virtualenv
+# virtualenv venv
+# source venv/bin/activate
+# With Python 3
+pip install awscli
 pip install boto3
 ```
 
