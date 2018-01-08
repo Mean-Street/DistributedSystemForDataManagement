@@ -33,7 +33,7 @@ object AkkaHttpServer extends App with Routes {
 
   val serverBindingFuture: Future[ServerBinding] = Http().bindAndHandle(routes, "0.0.0.0", 8080)
 
-  println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
+  println(s"Server online at http://0.0.0.0:8080/\nPress RETURN to stop...")
 
   StdIn.readLine()
 
