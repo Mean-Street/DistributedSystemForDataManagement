@@ -16,6 +16,6 @@ object TwitterPreprocessing {
     val sc = new SparkContext(sconf)
 
     val rdd = sc.cassandraTable("sdtd", "tweet")
-    rdd.toArray.foreach(println)
+    rdd.collect.toArray.foreach(println)
   }
 }
