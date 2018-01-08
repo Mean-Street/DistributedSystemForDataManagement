@@ -10,3 +10,6 @@ test:
 
 data_preprocessing:
 	./run_docker.sh DataPreprocessing $(KAFKA_HOST):$(KAFKA_PORT) $(KAFKA_CONSUMER_GROUP) $(KAFKA_TOPICS) $(KAFKA_NUM_THREADS) $(SPARK_PULLING_PERIOD)
+
+twitter_preprocessing:
+	./run_docker.sh TwitterPreprocessing

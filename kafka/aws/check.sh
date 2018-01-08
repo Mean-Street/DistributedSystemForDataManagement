@@ -2,6 +2,7 @@
 
 KAFKA_IP=$1
 KAFKA_PORT=$2
+TOPIC=$3
 
 sudo apt-get install -y nmap
 nmap -p $KAFKA_PORT -Pn $KAFKA_IP
@@ -17,5 +18,5 @@ sudo apt-get install -y default-jre sbt
 # Run the producer
 cd ~/sdtd/kafka
 sbt package
-sbt "runMain Producer test $KAFKA_IP:$KAFKA_PORT"
-sbt "runMain Consumer test group-test $KAFKA_IP:$KAFKA_PORT"
+sbt "runMain Producer $TOPIC $KAFKA_IP:$KAFKA_PORT"
+sbt "runMain Consumer $TOPIC group-test $KAFKA_IP:$KAFKA_PORT"
