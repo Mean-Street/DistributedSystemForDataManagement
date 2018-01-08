@@ -36,6 +36,7 @@ curl http://<address>:<machinePort>/weather
 ```
 Available routes :
 * /weather to get all table entries
+* /example to test the connection to the server
 
 ## How to expand
 All the routes are in the file "Routes.scala". To add a new route, just add the following example after the weather route :
