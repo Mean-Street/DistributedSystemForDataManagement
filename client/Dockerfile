@@ -15,18 +15,18 @@ RUN touch /usr/lib/jvm/java-8-openjdk-amd64/release
 
 # Install Scala ## Piping curl directly in tar 
 RUN \
-  curl -fsL https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz | tar xfz - -C /root/ && \
-  echo >> /root/.bashrc && \
-  echo "export PATH=~/scala-$SCALA_VERSION/bin:$PATH" >> /root/.bashrc
+   curl -fsL https://downloads.typesafe.com/scala/$SCALA_VERSION/scala-$SCALA_VERSION.tgz | tar xfz - -C /root/ \
+&& echo >> /root/.bashrc \
+&& echo "export PATH=~/scala-$SCALA_VERSION/bin:$PATH" >> /root/.bashrc
 
 # Install sbt 
 RUN \
-  curl -L -o sbt-$SBT_VERSION.deb https://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb && \
-  dpkg -i sbt-$SBT_VERSION.deb && \
-  rm sbt-$SBT_VERSION.deb && \
-  apt-get update && \
-  apt-get install sbt && \
-  sbt sbtVersion
+   curl -L -o sbt-$SBT_VERSION.deb https://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb \
+&& dpkg -i sbt-$SBT_VERSION.deb \
+&& rm sbt-$SBT_VERSION.deb \
+&& apt-get update \
+&& apt-get install sbt \
+&& sbt sbtVersion
 
 # Define working directory 
 WORKDIR /root
@@ -34,11 +34,11 @@ WORKDIR /root
 # Sparse checkout git repo
 RUN \
 	git init src \
-	cd src \
-	git remote add -f origin https://github.com/Mean-Street/DistributedSystemForDataManagement \
-	git config core.sparseCheckout true \
-	echo "client" >> .git/info/sparse-checkout \
-	git pull origin master
+&&	cd src \
+&&	git remote add -f origin https://github.com/Mean-Street/DistributedSystemForDataManagement \
+&&	git config core.sparseCheckout true \
+&&	echo "client" >> .git/info/sparse-checkout \
+&&	git pull origin master
 
 # if sparse checkout not working
 # RUN \
@@ -47,5 +47,11 @@ RUN \
 # compile & run
 RUN \
 	cd src/client \
-	sbt compile \
-	sbt "run $sparkAddress $sparkPort"
+&&	sbt compile
+
+EXPOSE 8080
+
+WORKDIR /root/src/client
+
+CMD sbt "run $sparkAddress $sparkPort" 
+&&  tail -f /dev/null #keep the container running as it sometimes stop
