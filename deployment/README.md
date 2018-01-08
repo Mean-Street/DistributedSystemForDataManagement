@@ -28,34 +28,27 @@ aws configure
 # Test API request
 aws ec2 describe-regions --output table
 
-# Configure
+# Create SSH key-pair and security groups
+# Note: edit the bottom of the file to create more security groups
 python configure.py
 ```
 
 ## Manage the machines
 
-### Launch all instances
+### Start instances
 
 ```bash
+# Note: edit the bottom of the file to launch more instances
 python launch_instances.py
+
+# Wait a little for the instances to start...
+
+python configure_masters.py
+python configure_slaves.py
 ```
 
 ### Terminate all instances
 
 ```bash
 python terminate_instances.py
-```
-
-### List all instances
-
-```bash
-python get_instances.py
-```
-
-Or, in a Python script:
-
-```python
-from get_instances import get_instances
-running_instances = get_instances()
-terminated_instances = get_instances('terminated')
 ```
