@@ -38,6 +38,14 @@ def get_name(instance):
     return None
 
 
+def is_master(instance):
+    tags = instance['Tags']
+    for tag in tags:
+        if tag['Key'] == cfg.MASTER_TAG_KEY:
+            return tag['Value'] == cfg.MASTER_TAG_VALUE
+    return False
+
+
 if __name__ == '__main__':
     instances = get_instances()
     print(instances, end='\n\n')
