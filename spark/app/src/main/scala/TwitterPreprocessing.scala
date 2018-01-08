@@ -13,7 +13,7 @@ object TwitterPreprocessing {
     val sconf = new SparkConf()
     .set("spark.cassandra.connection.host", "172.31.18.12")
     .set("spark.cassandra.connection.native.port", "9142")
-    val scont = new SparkContext(sconf)
+    val sc = new SparkContext(sconf)
 
     val rdd = sc.cassandraTable("sdtd", "tweet")
     rdd.toArray.foreach(println)
