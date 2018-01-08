@@ -48,4 +48,4 @@ if __name__ == '__main__':
 
     create_security_group(cfg.ZOOKEEPER_SECURITY_GROUP, "Zookeeper", [2181])
     create_security_group(cfg.KAFKA_SECURITY_GROUP, "Kafka", [9092])
-    create_security_group(cfg.CASSANDRA_SECURITY_GROUP, "Cassandra", [9042])
+    create_security_group(cfg.CASSANDRA_SECURITY_GROUP, "Cassandra", [9042, 7000, 7001])
