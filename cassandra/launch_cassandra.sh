@@ -10,6 +10,9 @@ done
 # 3. Create tables in the database
 cqlsh -f "$1"
 
-# 4. Make sure script does not end (so that container keeps running)
+# 4. Signal Cassandra has been successfully launched
+echo "Cassandra successfully launched."
+
+# 5. Make sure script does not end (so that container keeps running)
 tail -f /dev/null
 
