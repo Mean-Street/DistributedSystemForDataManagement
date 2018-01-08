@@ -1,55 +1,60 @@
 package spark
 
+import com.datastax.spark.connector.CassandraRow
 import com.datastax.spark.connector._
-import org.apache.spark.sql.cassandra
 
-import com.datastax.driver.core.Cluster
-import com.datastax.driver.core.querybuilder.QueryBuilder
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
-import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
-
-import org.json4s.native.JsonMethods._
-import org.json4s.JsonDSL._
-import org.json4s._
+import org.apache.spark.SparkContext
 
 import server.GlobalVars
 
+
+/**
+ * All the computation is done here. It defines the following functions:
+ *  - ProcessMagic: for a given interval calculates the hourly temperatures and feelings averages
+ */
 object Compute {
-	def getAllWeather: String = {
-		/*===============Version test sans Spark===============
-		val cluster = Cluster.builder().addContactPoint("127.0.0.1").withPort(9042).build();
-		val session = cluster.connect();
-		//val statement = QueryBuilder.select().all().from("sdtd", "temperatures");
-		val statement = "SELECT JSON * FROM sdtd.temperatures"
-		val requestQuery = session.execute(statement);
-		val it = requestQuery.all().iterator();
-		var res : String = "";
-		while(it.hasNext()) {
-			//println(it.next().getString("city") + " : " + it.next().getDouble("temperature"))
+  case class DataEntry(hour: String, temperature: Double, feeling: Double) {
+    def +(that: DataEntry) = DataEntry(this.hour, this.temperature + that.temperature, this.feeling + that.feeling)
+    def /(div: Double) = DataEntry(this.hour, this.temperature / div, this.feeling / div)
+      override def toString: String = hour + " - " + temperature.toString + " - " + feeling.toString
+  }
 
-			//println(it.next().getString(0)) // == println(it.next().getString("[json]")) // == récupère ligne sous format JSon
-			res = res + it.next().getString(0) + "\n";
+  def getSlotId(date: String): Int = {
+    val calendar: Calendar = Calendar.getInstance()
+    calendar.setTime(new SimpleDateFormat("dd/mm/yyyy hh").parse(date))
+    (calendar.get(Calendar.YEAR).toString
+     + calendar.get(Calendar.MONTH).toString
+     + calendar.get(Calendar.DAY_OF_MONTH).toString
+     + calendar.get(Calendar.HOUR).toString).toInt
+  }
 
-		}
-		session.close();
-		cluster.close();
-		res; //retour
-		*///=====================================================
-		
-		//====================
-		val conf = new SparkConf().setAppName("test").setMaster("spark://" + GlobalVars.sparkAddress + ":" + GlobalVars.sparkPort) //setMaster("local[2]"); //setMaster("spark://@:port")
-		val sc: SparkContext = new SparkContext(conf);
+  def createKeyValue(entryString: CassandraRow): (Int, (DataEntry, Int)) = {
+    val hourSlotPattern = "(../../.... ..):..:..".r
+    val hourSlotPattern(slot) = entryString.getString("date")
+    (getSlotId(slot), (DataEntry(slot, entryString.getDouble("temperature"), entryString.getDouble("feeling")), 1))
+  }
 
-		val rdd = sc.cassandraTable("sdtd", "temperatures");
+ /**
+ * This function requires two inputs matching the following pattern: "dd/mm/yyyy hh" and returns
+ *  the hourly temperatures and feelings averages.
+ */
+  def processMagic(start: String, end: String): List[DataEntry] = {
+    val startId: Int = getSlotId(start)
+    val endId: Int = getSlotId(end)
 
-		sc.stop
+    val sc: SparkContext = new SparkContext(new SparkConf());
+    val rdd = sc.cassandraTable("test", "temperatures");
 
-		/*val resArray = rdd.collect.toArray
-		compact(render(resArray))*/ //Erreur d'importation des librairies : resArray n'est pas convertie en JValue
-		
-		rdd.toString
-		//======================
-	}
+    rdd.map(createKeyValue)
+        // Filters out the entries not included in the provided range
+        .filter(v => startId <= v._1 && v._1 <= endId)
+        .reduceByKey((v1, v2) => (v1._1 + v2._1, v1._2 + v2._2))
+        .map(v => v._2._1 / v._2._2)
+        .collect()
+        .toList
+  }
 }
-

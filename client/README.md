@@ -11,25 +11,26 @@
 
 ## Deployment
 
-Just build & run the docker file with 3 arguments : 
+Just build & run the docker file with 3 arguments :
 * the port for the webserver
 * the address of the Spark machine
 * the port used by the Spark machine
 
 Example :
+```sh
+make build
+make run cassandra_host=<host> cassandra_port=<port> main_class=<class>
 ```
-docker build . --build-arg sparkAddress=<@> --build-arg sparkPort=<port> -t <nom>
-```
-The ports of the docker need to be binded with the machine. The webserver uses the port 8080.
-Don't forget to open the machine's ports as necessary.
 
-```
-docker run --rm -p <machinePort>:8080 <nom>
-```
+## Notes on Cassandra
+Currently, it loads a table named: "test.temperatures" which contains three columns: ("date", "temperature", "feeling").
+Date is a string formatted: "dd/mm/yyyy hh:mm:ss" and "temperature" and "feeling" are doubles.
+
+The HTTP request is a post with JSON formatted like: {"begin": "dd/mm/yyyy hh", "end": "dd/mm/yyyy hh"}
 
 ## How to use
 Without docker :
-```
+```sh
 sbt compile
 sbt run
 ```
