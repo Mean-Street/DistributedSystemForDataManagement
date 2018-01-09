@@ -5,6 +5,13 @@ from botocore.exceptions import ClientError
 ec2 = boto3.client('ec2')
 
 
+def get_default_cidr_block():
+    vpcs = ec2.describe_vpcs()['Vpcs']
+    for vpc in vpcs:
+        if vpc['IsDefault']:
+            return vpc['CidrBlock']
+
+
 def create_key_pair(name, path):
     try:
         key_pair = ec2.create_key_pair(KeyName=name)
@@ -21,7 +28,7 @@ def create_key_pair(name, path):
     print("The key '{0}' was created and saved at {1}.".format(name, path))
 
 
-def create_security_group(name, description, ports):
+def create_security_group(name, description, ports, cidr):
     try:
         resp = ec2.create_security_group(GroupName=name, Description=description)
     except ClientError as e:
@@ -31,13 +38,24 @@ def create_security_group(name, description, ports):
     print("Security group '{0}' created.".format(name))
     group_id = resp['GroupId']
     ports = set(ports)
-    ports.add(22)
-    permissions = [{
+    permissions = []
+    for port in ports:
+        if isinstance(port, int):
+            from_port = to_port = port
+        else:
+            from_port, to_port = port
+        permissions.append({
+            'IpProtocol': 'tcp',
+            'FromPort': from_port,
+            'ToPort': to_port,
+            'IpRanges': [{'CidrIp': cidr}]
+        })
+    permissions.append({
         'IpProtocol': 'tcp',
-        'FromPort': port,
-        'ToPort': port,
+        'FromPort': 22,
+        'ToPort': 22,
         'IpRanges': [{'CidrIp': '0.0.0.0/0'}]
-    } for port in ports]
+    })
 
     try:
         ec2.authorize_security_group_ingress(GroupId=group_id, IpPermissions=permissions)
@@ -50,7 +68,7 @@ if __name__ == '__main__':
 
     create_key_pair(cfg.KEY_PAIR_NAME, cfg.KEY_PAIR_PATH)
 
-    create_security_group(cfg.ZOOKEEPER_SECURITY_GROUP, "Zookeeper", [2181, 2888, 3888])
-    create_security_group(cfg.KAFKA_SECURITY_GROUP, "Kafka", [9092])
-    create_security_group(cfg.CASSANDRA_SECURITY_GROUP, "Cassandra", [9042, 7000, 7199])
-    create_security_group(cfg.MESOS_MASTER_SECURITY_GROUP, "Mesos Master", [5050])
+    # We open all ports on the private network for Marathon to work
+    create_security_group(cfg.GLOBAL_SECURITY_GROUP, "Global", [(0, 65535)], get_default_cidr_block())
+    create_security_group(cfg.MESOS_SECURITY_GROUP, "Mesos", [5050], '0.0.0.0/0')
+    create_security_group(cfg.MARATHON_SECURITY_GROUP, "Marathon", [8080, 9090], '0.0.0.0/0')
