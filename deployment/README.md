@@ -5,12 +5,9 @@ All the commands are to be executed on the user's machine, not on AWS.
 ## Install
 
 ```bash
-# Can be launched in a virtualenv
-# virtualenv venv
+# virtualenv venv -p python3
 # source venv/bin/activate
-# With Python 3
-pip install awscli
-pip install boto3
+pip install awscli boto3 # With Python 3
 ```
 
 ## Configure
