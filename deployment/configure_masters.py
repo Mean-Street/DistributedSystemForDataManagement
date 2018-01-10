@@ -10,8 +10,11 @@ def init_master(ip):
 def start_zookeeper(pub_ip, id_, master_ips):
     cmd = 'sudo docker run -d --net="host" -e SERVER_ID=' + str(id_)
     for i, ip in enumerate(master_ips):
-        index = str(i+1) 
-        cmd += ' -e ADDITIONAL_ZOOKEEPER_' + index + '=server.' + index + '=' + ip + ':2888:3888'
+        index = str(i+1)
+        current = ip
+        if id_ == i+1:
+            current = "0.0.0.0"
+        cmd += ' -e ADDITIONAL_ZOOKEEPER_' + index + '=server.' + index + '=' + current + ':2888:3888'
     cmd += ' mesoscloud/zookeeper'
     return ssh(pub_ip, cmd)
 

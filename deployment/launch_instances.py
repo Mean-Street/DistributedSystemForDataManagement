@@ -40,7 +40,10 @@ def run_instance(name, type_, is_master, security_groups):
 
 
 if __name__ == '__main__':
-    run_instance('master 1', 't2.micro', True, [cfg.MESOS_MASTER_SECURITY_GROUP])
-    run_instance('master 2', 't2.micro', True, [cfg.MESOS_MASTER_SECURITY_GROUP])
-    run_instance('master 3', 't2.micro', True, [cfg.MESOS_MASTER_SECURITY_GROUP])
-    run_instance('slave 1', 't2.micro', False, [cfg.ZOOKEEPER_SECURITY_GROUP])
+    run_instance('master 1', 't2.micro', True, [cfg.TEST_SECURITY_GROUP])
+    run_instance('master 2', 't2.micro', True, [cfg.TEST_SECURITY_GROUP])
+    run_instance('master 3', 't2.micro', True, [cfg.TEST_SECURITY_GROUP])
+    run_instance('slave 1', 't2.micro', False, [cfg.TEST_SECURITY_GROUP])
+    run_instance('slave 2', 't2.micro', False, [cfg.TEST_SECURITY_GROUP])
+    run_instance('slave 3', 't2.small', False, [cfg.TEST_SECURITY_GROUP])
+    run_instance('slave 4', 't2.small', False, [cfg.TEST_SECURITY_GROUP])

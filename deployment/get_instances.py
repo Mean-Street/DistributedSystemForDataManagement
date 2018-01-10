@@ -50,5 +50,5 @@ def is_master(instance):
 
 if __name__ == '__main__':
     instances = get_instances()
-    print(instances, end='\n\n')
-    print('First instance name:', get_name(instances[0]))
+    for instance in instances:
+        print(get_name(instance), ' : ', get_public_ip(instance), ' ; ', get_private_ip(instance))
