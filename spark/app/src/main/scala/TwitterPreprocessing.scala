@@ -26,25 +26,25 @@ object TwitterPreprocessing {
 
     val topicsSet = Set(topic)
     val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers)
-    println("Test 0")
     val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
       ssc, kafkaParams, topicsSet)
-    println("Test 1")
     val rows = messages.map(msg => jsonToRow(msg._2))
-    println("Test 1")
+    rows.foreachRDD { rdd => if (!rdd.isEmpty) rdd.foreach(println) }
     //rows.saveToCassandra("sdtd", "temperatures", SomeColumns("id", "date", "temperature"))
 
     ssc.start()
-    println("Test 2")
     ssc.awaitTermination()
   }
 
-  def jsonToRow(msg: String) : (String, String, Double) = {
+  def jsonToRow(msg: String) : (String, String, String, Double) = {
     println(JSON.parseFull(msg))
     //val json = JSON.parseFull(msg).get.asInstanceOf[Map[String,Any]]
+    //val id = json("id")
     //val date = json("date")
-    //val temperature = json("temperature")
-    return (com.datastax.driver.core.utils.UUIDs.timeBased().toString(), "ABCDE", 2.0)
+    //val tweet = json("tweet")
+    //val sentiment = getSentiment(tweet)
     //return (com.datastax.driver.core.utils.UUIDs.timeBased().toString(), date.toString, temperature.asInstanceOf[Double])
+    //return (id, date, tweet, sentiment)
+    return ("1", "01/01/2018","Wow, il fait beau.", 1.0)
   }
 }
