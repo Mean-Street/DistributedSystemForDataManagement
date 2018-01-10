@@ -9,6 +9,9 @@ if __name__ == "__main__":
     from configure_slaves import configure_slaves
     from launch_instances import run_instance
     import config as cfg
+    from tools import init_logs
+
+    init_logs()
 
     print_title("Starting instances...")
     run_instance('master 1', 't2.micro', True, [cfg.GLOBAL_SECURITY_GROUP, cfg.MESOS_SECURITY_GROUP, cfg.MARATHON_SECURITY_GROUP])
