@@ -31,7 +31,7 @@ object TwitterPreprocessing {
       ssc, kafkaParams, topicsSet)
     val rows = messages.map(msg => jsonToRow(msg._2))
     rows.foreachRDD { rdd => if (!rdd.isEmpty) rdd.foreach(println) }
-    //rows.saveToCassandra("sdtd", "temperatures", SomeColumns("id", "date", "temperature"))
+    rows.saveToCassandra("sdtd", "tweet", SomeColumns("id", "tweet", "sentiment", "date"))
 
     ssc.start()
     ssc.awaitTermination()
@@ -42,11 +42,11 @@ object TwitterPreprocessing {
     val tweet = "Amazing!"
     //val json = JSON.parseFull(msg).get.asInstanceOf[Map[String,Any]]
     //val id = json("id")
-    //val date = json("date")
     //val tweet = json("tweet")
     //val sentiment = detectSentiment(tweet)
+    //val date = json("date")
     //return (com.datastax.driver.core.utils.UUIDs.timeBased().toString(), date.toString, temperature.asInstanceOf[Double])
     //return (id, date, tweet, sentiment)
-    return ("1", "01/01/2018", tweet, detectSentiment(tweet))
+    return ("1", tweet, detectSentiment(tweet), "01/01/2018")
   }
 }
