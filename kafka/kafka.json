@@ -1,7 +1,7 @@
 {
   "id": "kafka",
-  "cpus": 0.5,
-  "mem": 512.0,
+  "cpus": 0.3,
+  "mem": 450.0,
   "instances": 1,
   "networks": [ { "mode": "container/bridge" } ],
   "container": {
