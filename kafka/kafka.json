@@ -1,7 +1,7 @@
 {
   "id": "kafka",
-  "cpus": 0.5,
-  "mem": 512.0,
+  "cpus": 0.3,
+  "mem": 450.0,
   "instances": 1,
   "networks": [ { "mode": "container/bridge" } ],
   "container": {
@@ -16,6 +16,6 @@
   "env": {
     "KAFKA_ZOOKEEPER_CONNECT": "172.17.0.1:2182",
     "KAFKA_ADVERTISED_HOST_NAME": "172.17.0.1",
-    "KAFKA_CREATE_TOPICS": "test:1:1"
+    "KAFKA_CREATE_TOPICS": "temperature:1:1"
   }
 }

@@ -1,8 +1,8 @@
-build:
+build: compile
 	docker build . -t sdtdensimag/spark --no-cache
 
-build_dev:
-	docker build . -f Dockerfile_dev -t sdtdensimag/spark --no-cache
+compile:
+	cd app; sbt assembly
 
 push:
 	docker login -u=sdtdensimag

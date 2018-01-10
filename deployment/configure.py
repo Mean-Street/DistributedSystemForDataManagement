@@ -72,4 +72,3 @@ if __name__ == '__main__':
     create_security_group(cfg.GLOBAL_SECURITY_GROUP, "Global", [(0, 65535)], get_default_cidr_block())
     create_security_group(cfg.MESOS_SECURITY_GROUP, "Mesos", [5050], '0.0.0.0/0')
     create_security_group(cfg.MARATHON_SECURITY_GROUP, "Marathon", [8080, 9090], '0.0.0.0/0')
-    create_security_group(cfg.TEST_SECURITY_GROUP, "Test", [(0, 65535)], '0.0.0.0/0')

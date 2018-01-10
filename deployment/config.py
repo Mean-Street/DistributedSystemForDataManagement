@@ -8,7 +8,9 @@ KEY_PAIR_PATH = os.path.join(ROOT, KEY_PAIR_NAME + ".pem")
 GLOBAL_SECURITY_GROUP = "global"
 MESOS_SECURITY_GROUP = "mesos"
 MARATHON_SECURITY_GROUP = "marathon"
-TEST_SECURITY_GROUP = "test"
+
+# The time for EC2 instances to start
+EC2_STARTING_DURATION = 60
 
 UBUNTU_USER = "ubuntu"
 UBUNTU_IMAGE_NAME = "ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20171121.1"
