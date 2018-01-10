@@ -9,5 +9,10 @@
     "docker": {
       "image": "sdtdensimag/weatherfinder:latest"
     }
+  },
+  "env": {
+    "KAFKA_IP": "172.17.0.1",
+    "KAFKA_PORT": "9092",
+    "KAFKA_TOPICS": "temperature,tweet"
   }
 }
