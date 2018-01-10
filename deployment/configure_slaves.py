@@ -43,7 +43,7 @@ def configure_mesos(pub_ip, script_path):
 
 
 def start_slave(pub_ip):
-    return ssh(pub_ip, 'sudo service mesos-slave start')
+    return ssh(pub_ip, 'sudo service mesos-slave restart')
 
 
 def print_header(text):

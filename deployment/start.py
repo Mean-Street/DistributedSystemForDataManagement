@@ -19,8 +19,8 @@ if __name__ == "__main__":
     run_instance('master 3', 't2.micro', True, [cfg.GLOBAL_SECURITY_GROUP, cfg.MESOS_SECURITY_GROUP, cfg.MARATHON_SECURITY_GROUP])
     run_instance('slave 1', 't2.micro', False, [cfg.GLOBAL_SECURITY_GROUP])
     run_instance('slave 2', 't2.micro', False, [cfg.GLOBAL_SECURITY_GROUP])
-    run_instance('slave 3', 't2.small', False, [cfg.GLOBAL_SECURITY_GROUP])
-    run_instance('slave 4', 't2.small', False, [cfg.GLOBAL_SECURITY_GROUP])
+    run_instance('slave 3', 't2.micro', False, [cfg.GLOBAL_SECURITY_GROUP])
+    run_instance('slave 4', 't2.micro', False, [cfg.GLOBAL_SECURITY_GROUP])
 
     print_title("Waiting {0}s for instances to start...".format(cfg.EC2_STARTING_DURATION))
     time.sleep(cfg.EC2_STARTING_DURATION)
