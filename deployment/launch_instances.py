@@ -5,9 +5,15 @@ import config as cfg
 ec2 = boto3.client('ec2')
 
 
-def run_instance(name, type_, security_groups):
+def get_image_id():
+    images = ec2.describe_images(Filters=[{'Name': 'name', 'Values': [cfg.UBUNTU_IMAGE_NAME]}])
+    return images['Images'][0]['ImageId']
+
+
+def run_instance(name, type_, is_master, security_groups):
+    print('Launching {0}...'.format(name))
     ec2.run_instances(
-        ImageId=cfg.UBUNTU_IMAGE_ID,
+        ImageId=get_image_id(),
         InstanceType=type_,
         KeyName=cfg.KEY_PAIR_NAME,
         MinCount=1,
@@ -24,10 +30,10 @@ def run_instance(name, type_, security_groups):
                     'Key': cfg.PROJECT_TAG_KEY,
                     'Value': cfg.PROJECT_TAG_VALUE
                 },
+                {
+                    'Key': cfg.MASTER_TAG_KEY,
+                    'Value': cfg.MASTER_TAG_VALUE if is_master else cfg.SLAVE_TAG_VALUE
+                },
             ]
         }]
     )
-
-
-if __name__ == '__main__':
-    run_instance('zookeeper', 't2.micro', [cfg.ZOOKEEPER_SECURITY_GROUP])

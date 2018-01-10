@@ -32,10 +32,9 @@ start_master_1()
     M1_PRIVATE_IP=10.0.0.212
     M2_PRIVATE_IP=10.0.0.233
     M3_PRIVATE_IP=10.0.0.192
-    S1_PRIVATE_IP=10.0.0.228
-    S2_PRIVATE_IP=10.0.0.37
 
     echo "Installing Docker"
+    sudo apt-get -y update
     sudo apt-get install -y docker.io
 
     echo "Starting ZooKeeper"
@@ -75,10 +74,9 @@ start_master_2()
     M1_PRIVATE_IP=10.0.0.212
     M2_PRIVATE_IP=10.0.0.233
     M3_PRIVATE_IP=10.0.0.192
-    S1_PRIVATE_IP=10.0.0.228
-    S2_PRIVATE_IP=10.0.0.37
 
     echo "Installing Docker"
+    sudo apt-get -y update
     sudo apt-get install -y docker.io
 
     echo "Starting ZooKeeper"
@@ -88,7 +86,7 @@ start_master_2()
       -e ADDITIONAL_ZOOKEEPER_1=server.1=${M1_PRIVATE_IP}:2888:3888 \
       -e ADDITIONAL_ZOOKEEPER_2=server.2=${M2_PRIVATE_IP}:2888:3888 \
       -e ADDITIONAL_ZOOKEEPER_3=server.3=${M3_PRIVATE_IP}:2888:3888 \
-      garland/zookeeper
+      mesoscloud/zookeeper
 
     echo "Starting Mesos-Master"
     sudo docker run --net="host" \
@@ -119,10 +117,9 @@ start_master_3()
     M1_PRIVATE_IP=10.0.0.212
     M2_PRIVATE_IP=10.0.0.233
     M3_PRIVATE_IP=10.0.0.192
-    S1_PRIVATE_IP=10.0.0.228
-    S2_PRIVATE_IP=10.0.0.37
 
     echo "Installing Docker"
+    sudo apt-get -y update
     sudo apt-get install -y docker.io
 
     echo "Starting ZooKeeper"
@@ -132,7 +129,7 @@ start_master_3()
       -e ADDITIONAL_ZOOKEEPER_1=server.1=${M1_PRIVATE_IP}:2888:3888 \
       -e ADDITIONAL_ZOOKEEPER_2=server.2=${M2_PRIVATE_IP}:2888:3888 \
       -e ADDITIONAL_ZOOKEEPER_3=server.3=${M3_PRIVATE_IP}:2888:3888 \
-      garland/zookeeper
+      mesoscloud/zookeeper
 
     echo "Starting Mesos-Master"
     sudo docker run --net="host" \
@@ -164,7 +161,6 @@ start_slave_1()
     M2_PRIVATE_IP=10.0.0.233
     M3_PRIVATE_IP=10.0.0.192
     S1_PRIVATE_IP=10.0.0.228
-    S2_PRIVATE_IP=10.0.0.37
 
     
     echo "Installing Mesosphere"
@@ -208,7 +204,6 @@ start_slave_2()
     M1_PRIVATE_IP=10.0.0.212
     M2_PRIVATE_IP=10.0.0.233
     M3_PRIVATE_IP=10.0.0.192
-    S1_PRIVATE_IP=10.0.0.228
     S2_PRIVATE_IP=10.0.0.37
 
     
@@ -273,3 +268,5 @@ ssh -i "smack.pem" -o StrictHostKeyChecking=no ubuntu@${S1_PUBLIC_IP} "$(typeset
 
 echo "Connecting to Slave 2 @ ${S2_PUBLIC_IP}"
 ssh -i "smack.pem" -o StrictHostKeyChecking=no ubuntu@${S2_PUBLIC_IP} "$(typeset -f); start_slave_2"
+
+firefox "${S1_PUBLIC_IP}:5050"

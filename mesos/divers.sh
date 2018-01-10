@@ -38,3 +38,6 @@ sudo docker run -d --net=host -e PORTS=9090 mesosphere/marathon-lb sse --group=*
 
 
 sudo docker run --name smack-kafka -it --rm -e KAFKA_ZOOKEEPER_CONNECT=172.17.0.1:2182 -e KAFKA_ADVERTISED_HOST_NAME=172.17.0.1 -e KAFKA_ADVERTISED_PORT=9092 -e KAFKA_CREATE_TOPICS="topic:1:1" -p 9092:9092 sdtdensimag/kafka^
+
+sudo docker run -e 9042:9042 sdtdensimag/cassandra
+sudo docker exec -it 4b01c33bd798 cqlsh

@@ -24,7 +24,6 @@ object WeatherProducer extends App {
 
     //TODO
     val firstRow = sc.cassandraTable("sdtd", "temperatures").first()
-
     val date : String = firstRow.getString("date");
     val temp : Double = firstRow.getDouble("temperature");
     

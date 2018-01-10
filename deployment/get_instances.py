@@ -9,13 +9,15 @@ def has_state(instance, state):
     return instance['State']['Name'] == state
 
 
-def get_instances(state='running'):
+def get_instances(state='running', is_slave=None):
     instances = []
     
     resp = ec2.describe_instances()
     reservations = resp['Reservations']
     for reservation in reservations:
         for instance in reservation['Instances']:
+            if is_master is not None and is_master(instance) == is_slave:
+                continue
             if is_smack_instance(instance) and has_state(instance, state):
                 instances.append(instance)
 
@@ -38,7 +40,15 @@ def get_name(instance):
     return None
 
 
+def is_master(instance):
+    tags = instance['Tags']
+    for tag in tags:
+        if tag['Key'] == cfg.MASTER_TAG_KEY:
+            return tag['Value'] == cfg.MASTER_TAG_VALUE
+    return False
+
+
 if __name__ == '__main__':
     instances = get_instances()
-    print(instances, end='\n\n')
-    print('First instance name:', get_name(instances[0]))
+    for instance in instances:
+        print(get_name(instance), ' : ', get_public_ip(instance), ' ; ', get_private_ip(instance))
