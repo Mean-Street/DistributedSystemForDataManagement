@@ -21,3 +21,6 @@ TODO
 ```bash
 export SBT_OPTS="-Xms512M -Xmx3536M -Xss1M  -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC -XX:MaxPermSize=724M"
 ```
+
+## GitHub ref of the sentiment analysis code
+https://github.com/vspiewak/twitter-sentiment-analysis
