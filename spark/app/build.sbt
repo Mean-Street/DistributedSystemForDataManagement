@@ -10,6 +10,8 @@ libraryDependencies ++= Seq(
     "org.apache.spark" %% "spark-streaming" % "2.2.0" % "provided",
     "org.apache.spark" %% "spark-streaming-kafka-0-8" % "2.2.0",
     "com.datastax.spark" %% "spark-cassandra-connector" % "2.0.6",
+	"edu.stanford.nlp" % "stanford-corenlp" % "3.5.1",
+	"edu.stanford.nlp" % "stanford-corenlp" % "3.5.1" classifier "models",
 
   // Akka HTTP
   //"com.typesafe.akka" %% "akka-http" % "10.0.11",

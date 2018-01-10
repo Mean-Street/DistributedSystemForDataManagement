@@ -54,4 +54,4 @@ EXPOSE 8080
 WORKDIR /root/src/client
 
 CMD sbt "run $sparkAddress $sparkPort" \
-&&  tail -f /dev/null #keep the container running as it sometimes stop
+#&&  tail -f /dev/null #keep the container running as it sometimes stop

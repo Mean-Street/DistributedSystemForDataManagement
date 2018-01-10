@@ -35,6 +35,7 @@ object AkkaHttpServer extends App with Routes {
 
   println(s"Server online at http://0.0.0.0:8080/\nPress RETURN to stop...")
 
+  /*  //=============readLine not blocking when deployed on AWS===================
   StdIn.readLine()
 
   serverBindingFuture
@@ -43,4 +44,5 @@ object AkkaHttpServer extends App with Routes {
       actorSystem.stop(weatherActor)
       actorSystem.shutdown
     }
+  */
 }
