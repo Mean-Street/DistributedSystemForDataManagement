@@ -2,4 +2,4 @@
 
 #===--- Stazrt script for the docker container ---===
 
-mvn exec:java -Dexec.args="172.17.0.1 9092 test"
+mvn exec:java -Dexec.args="${KAFKA_IP} ${KAFKA_PORT} ${KAFKA_TOPIC}"
