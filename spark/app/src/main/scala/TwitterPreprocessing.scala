@@ -37,7 +37,7 @@ object TwitterPreprocessing {
     ssc.awaitTermination()
   }
 
-  def jsonToRow(msg: String) : (String, String, String, SENTIMENT_TYPE) = {
+  def jsonToRow(msg: String) : (String, String, String, String) = {
     println(JSON.parseFull(msg))
     val tweet = "Amazing!"
     //val json = JSON.parseFull(msg).get.asInstanceOf[Map[String,Any]]
