@@ -1,10 +1,8 @@
-FROM sdtdensimag/spark-base
+FROM epahomov/docker-spark:lightweighted
 
-ENV CONF_DIR /smack/spark/app/conf
-ENV JAR_PATH /smack/spark/app/target/scala-2.11/SDTD-assembly-1.0.jar
+ENV CONF_DIR /conf
+ENV JAR_PATH /smack.jar
 
-RUN git clone https://github.com/Mean-Street/DistributedSystemForDataManagement /smack
-WORKDIR /smack/spark/app
-RUN sbt assembly
-WORKDIR /smack/spark
-RUN cp run-spark /usr/bin
+COPY ./app/conf /conf
+COPY ./app/target/scala-2.11/SDTD-assembly-1.0.jar /smack.jar
+COPY ./docker/run-spark /usr/bin/run-spark

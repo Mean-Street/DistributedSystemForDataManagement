@@ -20,13 +20,13 @@ object DataPreprocessing {
       System.exit(1)
     }
 
-    val Array(brokers, group, topics, numThreads, period) = args
+    val Array(brokers, topic, period) = args
 
     val sconf = new SparkConf()
     val ssc = new StreamingContext(sconf, Seconds(period.toLong))
     ssc.checkpoint("checkpoint")
 
-    val topicsSet = topics.split(",").toSet
+    val topicsSet = Set(topic)
     val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers)
     val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
       ssc, kafkaParams, topicsSet)
