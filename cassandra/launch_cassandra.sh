@@ -1,6 +1,6 @@
 
 # 1. Launch Cassandra
-/usr/local/bin/docker-entrypoint.sh cassandra -f &
+/usr/local/bin/docker-entrypoint.sh cassandra -f > /tmp/cassandra.log 2>&1 &
 
 # 2. Wait for Cassandra to be up
 while ! cqlsh -e "describe cluster" > /dev/null 2>&1; do
