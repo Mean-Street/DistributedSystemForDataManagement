@@ -32,20 +32,11 @@ python configure.py
 
 ## Manage the machines
 
-### Start instances
-
 ```bash
-# Note: edit the bottom of the file to launch more instances
-python launch_instances.py
-
-# Wait a little for the instances to start...
-
-python configure_masters.py
-python configure_slaves.py
+# Note: edit the file to launch more instances
+python start.py
 ```
 
-### Terminate all instances
-
 ```bash
-python terminate_instances.py
+python stop.py
 ```

@@ -50,7 +50,7 @@ def print_header(text):
     print("\n\n")
 
 
-if __name__ == "__main__":
+def configure_masters():
     private_ips = [get_private_ip(instance) for instance in get_instances(is_slave=False)]
 
     print_header("Installing packages...")
@@ -61,10 +61,8 @@ if __name__ == "__main__":
         p.wait()
 
     print_header("Starting Zookeeper...")
-    processes = []
     for i, instance in enumerate(get_instances(is_slave=False)):
-        processes.append(start_zookeeper(get_public_ip(instance), i+1, private_ips))
-    for p in processes:
+        p = start_zookeeper(get_public_ip(instance), i+1, private_ips)
         p.wait()
 
     print_header("Starting Mesos...")
@@ -80,3 +78,7 @@ if __name__ == "__main__":
         processes.append(start_marathon(get_public_ip(instance), private_ips))
     for p in processes:
         p.wait()
+
+
+if __name__ == "__main__":
+    configure_masters()

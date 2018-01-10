@@ -54,7 +54,7 @@ def print_header(text):
     print("\n\n")
 
 
-if __name__ == "__main__":
+def configure_slaves():
     master_ips = [get_private_ip(instance) for instance in get_instances(is_slave=False)]
 
     ZOOKEEPER_PATH = 'slave_zookeeper.sh'
@@ -86,3 +86,7 @@ if __name__ == "__main__":
 
     os.remove(ZOOKEEPER_PATH)
     os.remove(MESOS_PATH)
+
+
+if __name__ == "__main__":
+    configure_slaves()
