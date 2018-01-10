@@ -14,26 +14,28 @@ import com.datastax.spark.connector.streaming._
 
 object TwitterPreprocessing {
   def main(args: Array[String]) {
-    if (args.length < 5) {
+    if (args.length < 3) {
       println("Not enough arguments given.")
       System.exit(1)
     }
 
-    val Array(brokers, group, topics, numThreads, period) = args
-
+    val Array(brokers, topic, period) = args
     val sconf = new SparkConf()
     val ssc = new StreamingContext(sconf, Seconds(period.toLong))
     ssc.checkpoint("checkpoint")
 
-    val topicsSet = topics.split(",").toSet
+    val topicsSet = Set(topic)
     val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers)
+    println("Test 0")
     val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
       ssc, kafkaParams, topicsSet)
-
+    println("Test 1")
     val rows = messages.map(msg => jsonToRow(msg._2))
+    println("Test 1")
     //rows.saveToCassandra("sdtd", "temperatures", SomeColumns("id", "date", "temperature"))
 
     ssc.start()
+    println("Test 2")
     ssc.awaitTermination()
   }
 
