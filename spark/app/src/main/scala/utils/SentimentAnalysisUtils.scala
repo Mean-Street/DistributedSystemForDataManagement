@@ -18,7 +18,7 @@ object SentimentAnalysisUtils {
     props
   }
 
-  def detectSentiment(message: String): String = {
+  def detectSentiment(message: String): SENTIMENT_TYPE = {
 
     val pipeline = new StanfordCoreNLP(nlpProps)
 
@@ -73,23 +73,22 @@ object SentimentAnalysisUtils {
      4 -> very positive
      */
     weightedSentiment match {
-      case s if s <= 0.0 => "NOT_UNDERSTOOD"
-      case s if s < 1.0 => "VERY_NEGATIVE"
-      case s if s < 2.0 => "NEGATIVE"
-      case s if s < 3.0 => "NEUTRAL"
-      case s if s < 4.0 => "POSITIVE"
-      case s if s < 5.0 => "VERY_POSITIVE"
-      case s if s > 5.0 => "NOT_UNDERSTOOD"
+      case s if s <= 0.0 => NOT_UNDERSTOOD
+      case s if s < 1.0 => VERY_NEGATIVE
+      case s if s < 2.0 => NEGATIVE
+      case s if s < 3.0 => NEUTRAL
+      case s if s < 4.0 => POSITIVE
+      case s if s < 5.0 => VERY_POSITIVE
+      case s if s > 5.0 => NOT_UNDERSTOOD
     }
-
   }
 
-  // trait SENTIMENT_TYPE
-  // case object VERY_NEGATIVE extends SENTIMENT_TYPE
-  // case object NEGATIVE extends SENTIMENT_TYPE
-  // case object NEUTRAL extends SENTIMENT_TYPE
-  // case object POSITIVE extends SENTIMENT_TYPE
-  // case object VERY_POSITIVE extends SENTIMENT_TYPE
-  // case object NOT_UNDERSTOOD extends SENTIMENT_TYPE
+  trait SENTIMENT_TYPE
+  case object VERY_NEGATIVE extends SENTIMENT_TYPE
+  case object NEGATIVE extends SENTIMENT_TYPE
+  case object NEUTRAL extends SENTIMENT_TYPE
+  case object POSITIVE extends SENTIMENT_TYPE
+  case object VERY_POSITIVE extends SENTIMENT_TYPE
+  case object NOT_UNDERSTOOD extends SENTIMENT_TYPE
 
 }
