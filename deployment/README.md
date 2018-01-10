@@ -5,12 +5,9 @@ All the commands are to be executed on the user's machine, not on AWS.
 ## Install
 
 ```bash
-# Can be launched in a virtualenv
-# virtualenv venv
+# virtualenv venv -p python3
 # source venv/bin/activate
-# With Python 3
-pip install awscli
-pip install boto3
+pip install awscli boto3 # With Python 3
 ```
 
 ## Configure
@@ -35,20 +32,11 @@ python configure.py
 
 ## Manage the machines
 
-### Start instances
-
 ```bash
-# Note: edit the bottom of the file to launch more instances
-python launch_instances.py
-
-# Wait a little for the instances to start...
-
-python configure_masters.py
-python configure_slaves.py
+# Note: edit the file to launch more instances
+python start.py
 ```
 
-### Terminate all instances
-
 ```bash
-python terminate_instances.py
+python stop.py
 ```

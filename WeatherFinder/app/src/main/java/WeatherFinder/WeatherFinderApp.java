@@ -39,5 +39,33 @@ public class WeatherFinderApp
                                     ApixuTickActor, request, system.dispatcher(), ActorRef.noSender());
 
         // ********** End TIMER **********
+        
+        // ********** TWEETS *************
+        
+        //const request = require('request');
+
+        String CONSUMER_KEY = "kpsqFD5Y4Ic2DUiiUEi9F7sTR";
+        String CONSUMER_SECRET = "kqRwMjOJAvyXD5DNlyj7RK214OM1lvvMojl02Mn8ffxrgZYe98";
+        String ACCESS_TOKEN = "950812402299342848-Zu70xQKjmX0IXGBCJWI6vmEOy0hW8Ss";
+        String ACCESS_TOKEN_SECRET = "N1R436qN6lw2cHlYZgqRJwYgramgFLynTw9ulowJjQRMS";
+        
+        /*
+        const stream = request.post({
+            url: 'https://stream.twitter.com1/1.1/statuses/filter.json',
+            qs: {
+                track: 'angular'
+            },
+            oauth: {
+               consumer_key: CONSUMER_KEY,
+                consumer_secret: CONSUMER_SECRET,
+                token: ACCESS_TOKEN,
+                token_secret: ACCESS_TOKEN_SECRET
+            }
+        });
+        
+        stream.on('response', function(response) {
+            const connectionHash = response.headers['x-connection-hash'];
+        });
+        */
     }
 }
