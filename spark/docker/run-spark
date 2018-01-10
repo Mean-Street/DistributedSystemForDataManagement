@@ -1,0 +1,12 @@
+#!/bin/bash
+
+class="$1"
+shift
+
+cp "$CONF_DIR/spark-defaults.conf" "$CONF_DIR/spark.conf"
+echo "" >> "$CONF_DIR/spark.conf"
+echo "spark.cassandra.connection.host $CASSANDRA_HOST" >> "$CONF_DIR/spark.conf"
+echo "" >> "$CONF_DIR/spark.conf"
+echo "spark.cassandra.connection.port $CASSANDRA_PORT" >> "$CONF_DIR/spark.conf"
+
+/spark/bin/spark-submit --class "$class" --properties-file "$CONF_DIR/spark.conf" $JAR_PATH $@

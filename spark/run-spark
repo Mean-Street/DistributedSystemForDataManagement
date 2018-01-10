@@ -1,5 +1,0 @@
-#!/bin/bash
-
-class="$1"
-shift
-/spark/bin/spark-submit --class "$class" --properties-file "$CONF_DIR/spark-defaults.conf" $JAR_PATH $@
