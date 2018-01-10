@@ -1,0 +1,104 @@
+{
+  "id": "/sdtd",
+  "groups": [
+    {
+      "id": "/sdtd/akka_weatherfinder",
+      "cpus": 0.5,
+      "mem": 256.0,
+      "instances": 1,
+      "networks": [ { "mode": "container/bridge" } ],
+      "container": {
+        "type": "DOCKER",
+        "docker": {
+          "image": "sdtdensimag/weatherfinder:latest"
+        }
+      },
+      "env": {
+        "KAFKA_IP": "172.17.0.1",
+        "KAFKA_PORT": "9092",
+        "KAFKA_TOPIC": "temperature"
+      }
+    },
+    {
+      "id": "/sdtd/cassandra",
+      "cpus": 0.3,
+      "mem": 512.0,
+      "instances": 1,
+      "privileged": true,
+      "networks": [ { "mode": "host" } ],
+      "container": {
+        "type": "DOCKER",
+        "docker": {
+          "image": "sdtdensimag/cassandra:latest"
+        },
+        "portMappings": [
+          { "containerPort": 9042, "hostPort": 0, "servicePort": 9042, "protocol": "tcp" },
+          { "containerPort": 7000, "hostPort": 0, "servicePort": 7000, "protocol": "tcp" },
+          { "containerPort": 7001, "hostPort": 0, "servicePort": 7001, "protocol": "tcp" },
+          { "containerPort": 7199, "hostPort": 0, "servicePort": 7199, "protocol": "tcp" },
+          { "containerPort": 9160, "hostPort": 0, "servicePort": 9160, "protocol": "tcp" }
+        ]
+      },
+      "env": {
+        "MAX_HEAP_SIZE": "200M",
+        "HEAP_NEWSIZE": "50M"
+      }
+    },
+    {
+      "id": "kafka",
+      "cpus": 0.3,
+      "mem": 450.0,
+      "instances": 1,
+      "networks": [ { "mode": "container/bridge" } ],
+      "container": {
+        "type": "DOCKER",
+        "docker": {
+          "image": "sdtdensimag/kafka:latest"
+        },
+        "portMappings": [
+          { "containerPort": 9092, "hostPort": 0, "servicePort": 9092, "protocol": "tcp" }
+        ]
+      },
+      "env": {
+        "KAFKA_ZOOKEEPER_CONNECT": "172.17.0.1:2182",
+        "KAFKA_ADVERTISED_HOST_NAME": "172.17.0.1",
+        "KAFKA_CREATE_TOPICS": "temperature:1:1"
+      }
+    },
+    {
+      "id": "zookeeper",
+      "cpus": 0.2,
+      "mem": 64,
+      "instances": 1,
+      "networks": [ { "mode": "container/bridge" } ],
+      "container": {
+        "type": "DOCKER",
+        "docker": {
+          "image": "sdtdensimag/zookeeper:latest"
+        },
+        "portMappings": [
+          { "containerPort": 2181, "hostPort": 0, "servicePort": 2182, "protocol": "tcp" }
+        ]
+      }
+    },
+    {
+      "id": "spark",
+      "cpus": 0.3,
+      "mem": 128.0,
+      "instances": 1,
+      "networks": [ { "mode": "container/bridge" } ],
+      "container": {
+        "type": "DOCKER",
+        "docker": {
+          "image": "sdtdensimag/spark:latest"
+        },
+        "portMappings": [
+          { "containerPort": 4040, "hostPort": 0, "servicePort": 4040, "protocol": "tcp" }
+        ]
+      },
+      "args": [
+        "run-spark", "DataPreprocessing", "172.17.0.1:9092", "group", "test", "1", "2"
+      ]
+    }
+  ]
+}

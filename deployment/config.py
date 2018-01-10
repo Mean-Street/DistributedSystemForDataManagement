@@ -9,6 +9,9 @@ GLOBAL_SECURITY_GROUP = "global"
 MESOS_SECURITY_GROUP = "mesos"
 MARATHON_SECURITY_GROUP = "marathon"
 
+# The time for EC2 instances to start
+EC2_STARTING_DURATION = 60
+
 UBUNTU_USER = "ubuntu"
 UBUNTU_IMAGE_NAME = "ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20171121.1"
 PROJECT_TAG_KEY = 'Project'

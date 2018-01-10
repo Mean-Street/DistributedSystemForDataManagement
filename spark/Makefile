@@ -1,8 +1,8 @@
-build:
+build: compile
 	docker build . -t sdtdensimag/spark --no-cache
 
-build_dev:
-	docker build . -f Dockerfile_dev -t sdtdensimag/spark --no-cache
+compile:
+	cd app; sbt assembly
 
 push:
 	docker login -u=sdtdensimag
@@ -16,3 +16,6 @@ data_preprocessing:
 
 twitter_preprocessing:
 	./run_docker.sh TwitterPreprocessing
+
+local_twitter:
+	docker run -it -p 4040:4040 -v $(pwd)/app/target/scala-2.11/SDTD-assembly-1.0.jar:/SDTD-assembly-1.0.jar epahomov/docker-spark /spark/bin/spark-submit --class TwitterPreprocessing /SDTD-assembly-1.0.jar
