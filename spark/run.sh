@@ -9,7 +9,7 @@ fi
 
 cassandra_host=$1
 shift
-cassandra_port=$2
+cassandra_port=$1
 shift
 
 docker run --rm -it -p 4040:4040 -e CASSANDRA_HOST="$cassandra_host" -e CASSANDRA_PORT="$cassandra_port" sdtdensimag/spark run-spark $@
