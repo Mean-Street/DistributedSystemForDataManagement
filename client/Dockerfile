@@ -47,7 +47,7 @@ RUN \
 # compile & run
 RUN \
 	cd src/client \
-&&  git checkout test_client
+&&  git checkout test_client \
 &&	sbt compile
 
 EXPOSE 8080
