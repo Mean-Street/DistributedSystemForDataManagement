@@ -15,9 +15,9 @@ if __name__ == "__main__":
     init_logs()
 
     print_title("Starting instances...")
-    run_instance('master 1', 't2.micro', True, [cfg.GLOBAL_SECURITY_GROUP, cfg.MESOS_SECURITY_GROUP, cfg.MARATHON_SECURITY_GROUP])
-    run_instance('master 2', 't2.micro', True, [cfg.GLOBAL_SECURITY_GROUP, cfg.MESOS_SECURITY_GROUP, cfg.MARATHON_SECURITY_GROUP])
-    run_instance('master 3', 't2.micro', True, [cfg.GLOBAL_SECURITY_GROUP, cfg.MESOS_SECURITY_GROUP, cfg.MARATHON_SECURITY_GROUP])
+    run_instance('master 1', 't2.small', True, [cfg.GLOBAL_SECURITY_GROUP, cfg.MESOS_SECURITY_GROUP, cfg.MARATHON_SECURITY_GROUP])
+    run_instance('master 2', 't2.small', True, [cfg.GLOBAL_SECURITY_GROUP, cfg.MESOS_SECURITY_GROUP, cfg.MARATHON_SECURITY_GROUP])
+    run_instance('master 3', 't2.small', True, [cfg.GLOBAL_SECURITY_GROUP, cfg.MESOS_SECURITY_GROUP, cfg.MARATHON_SECURITY_GROUP])
     run_instance('slave 1', 't2.micro', False, [cfg.GLOBAL_SECURITY_GROUP])
     run_instance('slave 2', 't2.micro', False, [cfg.GLOBAL_SECURITY_GROUP])
     run_instance('slave 3', 't2.small', False, [cfg.GLOBAL_SECURITY_GROUP])
