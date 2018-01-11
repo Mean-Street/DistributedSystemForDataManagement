@@ -115,8 +115,9 @@ def configure_slaves():
     os.remove(MESOS_PATH)
 
     print_header("Starting MarathonLB")
+    processes = []
     for instance in get_instances(is_slave=True):
-        processes.append(start_marathonlb(get_public_ip(instance)))
+        processes.append(start_marathonlb(get_public_ip(instance), master_ips))
     for p in processes:
         p.wait()
 
