@@ -1,7 +1,7 @@
 {
-  "id": "spark",
+  "id": "spark2",
   "cpus": 0.3,
-  "mem": 128.0,
+  "mem": 256.0,
   "instances": 1,
   "networks": [ { "mode": "container/bridge" } ],
   "container": {
@@ -13,7 +13,12 @@
       { "containerPort": 4040, "hostPort": 0, "servicePort": 4040, "protocol": "tcp" }
     ]
   },
+  "env": {
+    "CASSANDRA_HOST": "172.17.0.1",
+    "CASSANDRA_PORT": "9042",
+    "KAFKA_TOPIC": "temperature"
+  },
   "args": [
-            "run-spark", "DataPreprocessing", "172.17.0.1:9092", "group", "test", "1", "2"
+            "run-spark", "DataPreprocessing", "172.17.0.1:9092", "temperature", "2"
           ]
 }
