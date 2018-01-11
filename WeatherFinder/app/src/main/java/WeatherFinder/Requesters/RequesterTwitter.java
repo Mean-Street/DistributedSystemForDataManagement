@@ -65,7 +65,7 @@ public class RequesterTwitter extends AbstractActor {
                                 
                                 //Send json to Kafka
                                 String responseSerialized = new ObjectMapper().writeValueAsString(response);
-                                ProducerRecord<String, String> newRecord = new ProducerRecord<>("tweet", responseSerialized);
+                                ProducerRecord<String, String> newRecord = new ProducerRecord<>(config.getTopic(), responseSerialized);
                                 log.info("response: " + newRecord);
                                 producer.send(newRecord);
                             } catch (IOException ex) {
