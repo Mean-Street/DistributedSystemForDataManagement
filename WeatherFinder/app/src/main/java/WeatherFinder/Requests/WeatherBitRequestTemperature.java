@@ -26,7 +26,7 @@ public class WeatherBitRequestTemperature extends RequestTemperature {
 
     @Override
     public Location getLocation() {
-        return null;
+        return location;
     }
 
     @Override

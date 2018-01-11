@@ -2,6 +2,7 @@ package WeatherFinder.Requesters;
 
 
 import WeatherFinder.Configurations.KafkaConfig;
+import WeatherFinder.Responses.TwitterResponse;
 
 import akka.actor.AbstractActor;
 import akka.actor.Props;
@@ -9,21 +10,27 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.http.javadsl.Http;
 import akka.stream.Materializer;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import twitter4j.FilterQuery;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
+import twitter4j.TwitterObjectFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
-import twitter4j.json.DataObjectFactory;
 
 public class RequesterTwitter extends AbstractActor {
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
@@ -51,9 +58,19 @@ public class RequesterTwitter extends AbstractActor {
         this.producer = initProducer(config);
         this.listener = new StatusListener(){
                         public void onStatus(Status status) {
-                            System.out.println(status);
-                            String json = DataObjectFactory.getRawJSON(status);         
-                            System.out.println(json);
+                            try {
+                                // Handle Json Object
+                                String json = TwitterObjectFactory.getRawJSON(status);
+                                TwitterResponse response = parseJson(json);
+                                
+                                //Send json to Kafka
+                                String responseSerialized = new ObjectMapper().writeValueAsString(response);
+                                ProducerRecord<String, String> newRecord = new ProducerRecord<>(config.getTopic(), responseSerialized);
+                                log.info("response: " + newRecord);
+                                producer.send(newRecord);
+                            } catch (IOException ex) {
+                                Logger.getLogger(RequesterTwitter.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
                         public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
                             System.out.println("onDeletionNotice");
@@ -80,25 +97,11 @@ public class RequesterTwitter extends AbstractActor {
 
     @Override
     public Receive createReceive() {
-        log.info("createReceive");
+//        log.info("createReceive");
         return receiveBuilder()
 
                 .matchEquals("start_twitter", request -> {
-//                    startTwitter(listener);
-                    
-//                    requestCurrentWeather(request).thenAccept(resp -> {
-//                        try {
-//                            String responseSerialized = new ObjectMapper().writeValueAsString(resp);
-//                            ProducerRecord<String, String> newRecord = new ProducerRecord<>(
-//                                    config.getTopic(), request.getLocation().getCity(), responseSerialized);
-//                            log.info("Got a response from: " + request.getLocation().getCity());
-//                            log.info("Writing response on: " + config.getTopic());
-//                            log.info("response: " + newRecord);
-//                            producer.send(newRecord);
-//                        } catch (JsonProcessingException e) {
-//                            log.error("Response encountered an error during serialization");
-//                        }
-//                    });
+                    startTwitter(listener);
                 })
                 .build();
     }
@@ -112,15 +115,13 @@ public class RequesterTwitter extends AbstractActor {
                     double[][] grenoble = { {5.6901,45.157}, {5.7498,45.201} };
                     double[][] new_york = { {-74,40}, {-73,41} };
 
-
-
-
                     ConfigurationBuilder cb = new ConfigurationBuilder();
                     cb.setDebugEnabled(true)
                             .setOAuthConsumerKey(CONSUMER_KEY)
                             .setOAuthConsumerSecret(CONSUMER_SECRET)
                             .setOAuthAccessToken(ACCESS_TOKEN)
-                            .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
+                            .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET)
+                            .setJSONStoreEnabled(true);
 
                     TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
             //        twitterStream.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
@@ -131,8 +132,10 @@ public class RequesterTwitter extends AbstractActor {
                     twitterStream.filter(filterQuery);
     }
 
-//    private CompletionStage<ResponseClass> requestCurrentWeather(Status status) {
-//        Unmarshaller<HttpEntity, ResponseClass> decoder = Jackson.unmarshaller(responseClass);
-//        return status.thenCompose(resp -> decoder.unmarshal(resp.entity(), this.materializer));
-//    }
+    private TwitterResponse parseJson(String json) throws IOException {
+        TwitterResponse response = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .readerFor(TwitterResponse.class)
+                .readValue(json);
+        return response;
+    }
 }
