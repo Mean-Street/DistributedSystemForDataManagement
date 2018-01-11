@@ -2,8 +2,7 @@ build: compile
 	docker build . -t sdtdensimag/spark --no-cache
 
 compile:
-	export SBT_OPTS="-Xms512M -Xmx3536M -Xss1M  -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC -XX:MaxPermSize=724M"
-	cd app; sbt assembly
+	export SBT_OPTS="-Xms512M -Xmx3536M -Xss1M  -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC -XX:MaxPermSize=724M"; cd app; sbt assembly
 
 push:
 	docker login -u=sdtdensimag
