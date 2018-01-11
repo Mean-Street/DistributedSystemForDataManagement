@@ -7,7 +7,7 @@ All the commands are to be executed on the user's machine, not on AWS.
 ```bash
 # virtualenv venv -p python3
 # source venv/bin/activate
-pip install awscli boto3 # With Python 3
+pip install awscli boto3 requests # With Python 3
 ```
 
 ## Configure

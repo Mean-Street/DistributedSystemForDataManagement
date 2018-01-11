@@ -12,7 +12,6 @@ def start_zookeeper(pub_ip, id_, master_ips):
     cmd += ' -e SERVERS='
     for i, ip in enumerate(master_ips):
         index = str(i+1)
-#        cmd += ' -e ADDITIONAL_ZOOKEEPER_' + index + '=server.' + index + '=' + ip + ':2888:3888'
         cmd += ip + ','
     cmd = cmd[:-1]
     cmd += ' mesoscloud/zookeeper'
@@ -41,12 +40,19 @@ def start_marathon(pub_ip, master_ips):
     return ssh(pub_ip, cmd)
 
 
+def start_cassandra(pub_ip, id_, master_ip):
+    cmd = 'sudo docker run --rm --network="host" -p 9042:9042 -p 7000:7000 -p 7001:7001 -e MAX_HEAP_SIZE="400M" -e HEAP_NEWSIZE="100M" -d sdtdensimag/cassandra'
+    if id_ != 1:
+        cmd += ' -e CASSANDRA_SEEDS=' + master_ip
+    return ssh(pub_ip, cmd)
+
+
 def print_header(text):
-    print("\n\n")
+    print("\n")
     print("-------------------")
     print(text)
     print("-------------------")
-    print("\n\n")
+    print("\n")
 
 
 def configure_masters():
@@ -76,6 +82,12 @@ def configure_masters():
     for instance in get_instances(is_slave=False):
         processes.append(start_marathon(get_public_ip(instance), private_ips))
     for p in processes:
+        p.wait()
+
+    print_header("Starting Cassandra...")
+    processes = []
+    for i, instance in enumerate(get_instances(is_slave=False)):
+        p = start_cassandra(get_public_ip(instance), i+1, private_ips[0])
         p.wait()
 
 

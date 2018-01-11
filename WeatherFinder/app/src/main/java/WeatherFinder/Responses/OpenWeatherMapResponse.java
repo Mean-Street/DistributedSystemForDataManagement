@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
  */
 @JsonIgnoreProperties({"weather", "base", "visibility", "wind", "clouds", "dt", "sys", "id", "name", "cod"})
 public class OpenWeatherMapResponse extends Response {
+    
+    private final static String source = "OpenWeatherMap";
+    
     public class Coordinates {
         public Double lon;
         public Double lat;
@@ -39,7 +42,7 @@ public class OpenWeatherMapResponse extends Response {
 
     @JsonSetter("main")
     public void setTemperature(Main main) {
-        this.temperature = main.temp;
+        this.temperature = main.temp - 273.15;
     }
 
     @Override
@@ -50,6 +53,11 @@ public class OpenWeatherMapResponse extends Response {
     @Override
     public LocalDateTime getDate() {
         return LocalDateTime.now();
+    }
+    
+    @Override
+    public String getSource() {
+        return source;
     }
 
 
