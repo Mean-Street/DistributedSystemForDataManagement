@@ -11,7 +11,7 @@ final case class Weather(temperature: Double, city: String, date: String) {
 
 object WeatherActor {
   //final case class Output(description: String)
-  final case class GetWeather(begin: String, end: String)
+  final case object GetWeather
 
   def props: Props = Props[WeatherActor]
 }
@@ -20,7 +20,9 @@ class WeatherActor extends Actor {
   import WeatherActor._
 
   def receive: Receive = {
-    case GetWeather(begin, end) =>
-      sender ! Compute.processMagic(begin, end)
+    case GetWeather =>
+      //récupérer ici ce qu'on veut envoyer. Exemple : val res = Weather(5.5, "Paris", "21/12/17")
+      val res = Compute.getAllWeather
+      sender() ! res  //== on envoie le contenu de res à l'objet sender()
   }
 }
