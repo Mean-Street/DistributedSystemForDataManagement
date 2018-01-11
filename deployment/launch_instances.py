@@ -12,7 +12,7 @@ def get_image_id():
 
 def run_instance(name, type_, is_master, security_groups):
     print('Launching {0}...'.format(name))
-    ec2.run_instances(
+    return ec2.run_instances(
         ImageId=get_image_id(),
         InstanceType=type_,
         KeyName=cfg.KEY_PAIR_NAME,
@@ -36,4 +36,4 @@ def run_instance(name, type_, is_master, security_groups):
                 },
             ]
         }]
-    )
+    )["Instances"][0]

@@ -40,3 +40,16 @@ python start.py
 ```bash
 python stop.py
 ```
+
+## Demo
+
+```bash
+# List running machines
+python get_instances.py
+
+# Kill a machine (fault tolerance)
+python kill_machine.py <instance-id>
+
+# Add a slave (scalability)
+python add_slave.py <name> t2.<size>
+```

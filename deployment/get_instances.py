@@ -24,12 +24,21 @@ def get_instances(state='running', is_slave=None):
     return instances
 
 
+def get_from_id(id_):
+    resp = ec2.describe_instances(InstanceIds=[id_])
+    return resp['Reservations'][0]['Instances'][0]
+
+
 def get_private_ip(instance):
     return instance['PrivateIpAddress']
 
 
 def get_public_ip(instance):
     return instance['PublicIpAddress']
+
+
+def get_id(instance):
+    return instance['InstanceId']
 
 
 def get_name(instance):
@@ -50,5 +59,7 @@ def is_master(instance):
 
 if __name__ == '__main__':
     instances = get_instances()
+    print("id | name | public_ip | private_ip")
+    print("----------------------------------------------------")
     for instance in instances:
-        print(get_name(instance), ' : ', get_public_ip(instance), ' ; ', get_private_ip(instance))
+        print(get_id(instance), get_name(instance), get_public_ip(instance), get_private_ip(instance), sep=" | ")
