@@ -3,7 +3,7 @@
 if [[ -z "$3" ]]
 then
     echo "Usage: ./run.sh cassandra_host cassandra_port scala_class [class-args]"
-    echo "Example: ./run.sh localhost 9042 Test arg0"
+    echo "Example: ./run.sh localhost 9042 server.AkkaHttpServer"
     exit 1
 fi
 
