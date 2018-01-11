@@ -24,6 +24,13 @@ def get_instances(state='running', is_slave=None):
     return instances
 
 
+def is_id_valid(id_):
+    for instance in get_instances():
+        if get_id(instance) == id_:
+            return True
+    return False
+
+
 def get_from_id(id_):
     resp = ec2.describe_instances(InstanceIds=[id_])
     return resp['Reservations'][0]['Instances'][0]

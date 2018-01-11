@@ -1,14 +1,7 @@
 import boto3
-from get_instances import get_instances, get_id
+from get_instances import get_instances, get_id, is_id_valid
 
 ec2 = boto3.client('ec2')
-
-
-def is_id_valid(id_):
-    for instance in get_instances():
-        if get_id(instance) == id_:
-            return True
-    return False
 
 
 def kill(id_):
