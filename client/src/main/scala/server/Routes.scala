@@ -37,7 +37,7 @@ trait Routes {
           case util.Success(value) => complete(200, value.toString)
           case util.Failure(ex) => complete(500, ex.toString)
         }*/
-        "hey\n"
+        complete {"hey\n"}
       }
     }
     path("example") {
