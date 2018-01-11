@@ -13,10 +13,9 @@ def init_slave(ip):
 
 
 def start_marathonlb(pub_ip, master_ips):
-    cmd = 'sudo docker run -d --net=host -e PORTS=9090 mesosphere/marathon-lb sse --group=* --marathon=http://'
+    cmd = 'sudo docker run -d --net=host -e PORTS=9090 mesosphere/marathon-lb sse --group=* -m'
     for ip in master_ips:
-        cmd += ip + ','
-    cmd = cmd[:-1] + ':8080'
+        cmd +=  ' http://' + ip + ':8080'
     return ssh(pub_ip, cmd)
 
 
@@ -78,6 +77,8 @@ def configure_slave(instance):
     p = configure_mesos(get_public_ip(instance), MESOS_PATH)
     p.wait()
     p = start_slave(get_public_ip(instance))
+    p.wait()
+    p = start_marathonlb(get_public_ip(instance))
     p.wait()
 
 
