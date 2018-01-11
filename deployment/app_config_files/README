@@ -1,0 +1,4 @@
+launch order:
+1 - zookeeper / cassandra
+2 - kafka
+3 - spark / akka_weatherfinder

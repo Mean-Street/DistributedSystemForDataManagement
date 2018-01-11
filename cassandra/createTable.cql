@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS sdtd.temperature (
 );
 
 CREATE TABLE IF NOT EXISTS sdtd.tweet (
-		id int,
+		id text,
 		tweet text,
-		sentiment double,
+		sentiment text,
 		date text,
 		PRIMARY KEY (id)
 );

@@ -13,8 +13,15 @@ import akka.stream.Materializer;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
 import scala.concurrent.duration.Duration;
+import twitter4j.FilterQuery;
+import twitter4j.StallWarning;
+import twitter4j.Status;
+import twitter4j.StatusDeletionNotice;
+import twitter4j.StatusListener;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
+import twitter4j.conf.ConfigurationBuilder;
 
 public class WeatherFinderApp
 {
@@ -44,28 +51,54 @@ public class WeatherFinderApp
         
         //const request = require('request');
 
-        String CONSUMER_KEY = "kpsqFD5Y4Ic2DUiiUEi9F7sTR";
-        String CONSUMER_SECRET = "kqRwMjOJAvyXD5DNlyj7RK214OM1lvvMojl02Mn8ffxrgZYe98";
-        String ACCESS_TOKEN = "950812402299342848-Zu70xQKjmX0IXGBCJWI6vmEOy0hW8Ss";
-        String ACCESS_TOKEN_SECRET = "N1R436qN6lw2cHlYZgqRJwYgramgFLynTw9ulowJjQRMS";
+        String CONSUMER_KEY = "AqE6FxhWmTpRMAE18JBjxldT9";
+        String CONSUMER_SECRET = "OwCW5bbBDLNbQQfFW1gErKxonXoYWIzkXmyRPqw0WoajuUcrzU";
+        String ACCESS_TOKEN = "950812402299342848-v3GoArUSUNFOrZhAAYU6AZgscK4uU32";
+        String ACCESS_TOKEN_SECRET = "QJmCBDTAmbBP79AiVNrbCaj8aqURoTBRwJ32UMEr5P9YZ";
         
-        /*
-        const stream = request.post({
-            url: 'https://stream.twitter.com1/1.1/statuses/filter.json',
-            qs: {
-                track: 'angular'
-            },
-            oauth: {
-               consumer_key: CONSUMER_KEY,
-                consumer_secret: CONSUMER_SECRET,
-                token: ACCESS_TOKEN,
-                token_secret: ACCESS_TOKEN_SECRET
+        double[][] locations = { {5.6901,45.157}, {5.7498,45.201} };
+
+                
+                
+       
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true)
+                .setOAuthConsumerKey(CONSUMER_KEY)
+                .setOAuthConsumerSecret(CONSUMER_SECRET)
+                .setOAuthAccessToken(ACCESS_TOKEN)
+                .setOAuthAccessTokenSecret(ACCESS_TOKEN_SECRET);
+       
+        StatusListener listener = new StatusListener(){
+            public void onStatus(Status status) {
+                System.out.println(status);
             }
-        });
+            public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
+                System.out.println("onDeletionNotice");
+            }
+            public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
+                System.out.println("onTrackLimitationNotice");
+            }
+            public void onException(Exception ex) {
+                System.out.println("onException");
+                ex.printStackTrace();
+            }
+            public void onScrubGeo(long l, long l1) {
+                System.out.println("onScrubGeo");
+            }
+            public void onStallWarning(StallWarning sw) {
+                System.out.println("onStallWarning");
+            }
+           
+        };
         
-        stream.on('response', function(response) {
-            const connectionHash = response.headers['x-connection-hash'];
-        });
-        */
+        TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
+//        twitterStream.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
+        twitterStream.addListener(listener);
+        FilterQuery filterQuery = new FilterQuery("botname");
+//        //filterQuery.track();
+        filterQuery.locations(locations);
+        twitterStream.filter(filterQuery);
+
+//        twitterStream.shutdown();
     }
 }

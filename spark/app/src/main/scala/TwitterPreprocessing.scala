@@ -1,26 +1,3 @@
-//import org.apache.spark.SparkContext
-//import org.apache.spark.SparkConf
-//import com.datastax.spark.connector._
-//import org.apache.spark.sql.cassandra._
-
-
-//object TwitterPreprocessing {
-  //def main(args: Array[String]) {
-    ////if (args.length < 2) {
-      ////System.exit(1)
-    ////}
-
-    //val sconf = new SparkConf()
-    //val sc = new SparkContext(sconf)
-
-    //val rdd = sc.cassandraTable("sdtd", "tweet")
-    //println("Start print")
-    //rdd.collect().foreach(println)
-  //}
-//}
-
-
-
 import kafka.serializer.StringDecoder
 
 import org.apache.spark.SparkContext
@@ -32,51 +9,44 @@ import scala.util.parsing.json._
 import com.datastax.spark.connector._
 import com.datastax.driver.core.utils.UUIDs
 import org.apache.spark.sql.cassandra._
+import utils.SentimentAnalysisUtils._
 import com.datastax.spark.connector.streaming._
 
 
 object TwitterPreprocessing {
   def main(args: Array[String]) {
-    if (args.length < 5) {
+    if (args.length < 3) {
+      println("Not enough arguments given.")
       System.exit(1)
     }
 
-    val Array(brokers, group, topics, numThreads, period) = args
-
+    val Array(brokers, topic, period) = args
     val sconf = new SparkConf()
     val ssc = new StreamingContext(sconf, Seconds(period.toLong))
     ssc.checkpoint("checkpoint")
 
-    val topicsSet = topics.split(",").toSet
+    val topicsSet = Set(topic)
     val kafkaParams = Map[String, String]("metadata.broker.list" -> brokers)
     val messages = KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](
       ssc, kafkaParams, topicsSet)
-
-    /*
-    messages.foreachRDD {
-	rdd => rdd.foreach {
-            msg => storeJson(msg._2, sc)
-        }
-    }
-    */
     val rows = messages.map(msg => jsonToRow(msg._2))
-    rows.saveToCassandra("sdtd", "temperatures", SomeColumns("id", "date", "temperature"))
-
-    /*
-    val lines = messages.map(_._2)
-    val words = lines.flatMap(_.split(" "))
-    val wordCounts = words.map(x => (x, 1L)).reduceByKey(_ + _)
-    wordCounts.print()
-    */
+    rows.foreachRDD { rdd => if (!rdd.isEmpty) rdd.foreach(println) }
+    rows.saveToCassandra("sdtd", "tweet", SomeColumns("id", "date", "sentiment", "tweet"))
 
     ssc.start()
     ssc.awaitTermination()
   }
 
-  def jsonToRow(msg: String) : (String, String, Double) = {
-    val json = JSON.parseFull(msg).get.asInstanceOf[Map[String,Any]]
-    val date = json("date")
-    val temperature = json("temperature")
-    return (com.datastax.driver.core.utils.UUIDs.timeBased().toString(), date.toString, temperature.asInstanceOf[Double])
+  def jsonToRow(msg: String) : (String, String, SENTIMENT_TYPE, String) = {
+    println(JSON.parseFull(msg))
+    val tweet = "Amazing!"
+    //val json = JSON.parseFull(msg).get.asInstanceOf[Map[String,Any]]
+    //val id = json("id")
+    //val tweet = json("tweet")
+    //val sentiment = detectSentiment(tweet)
+    //val date = json("date")
+    //return (com.datastax.driver.core.utils.UUIDs.timeBased().toString(), date.toString, temperature.asInstanceOf[Double])
+    //return (id, date, tweet, sentiment)
+    return ("1", "01/01/2018", detectSentiment(tweet), tweet)
   }
 }

@@ -7,26 +7,30 @@
 ## Prerequisites
 
 * Up and running Spark machine connected to Cassandra
+* At minimum a small machine (sbt needs RAM)
 
 ## Deployment
 
-Just build & run the docker file with 3 arguments : 
+Just build & run the docker file with 3 arguments :
 * the port for the webserver
 * the address of the Spark machine
 * the port used by the Spark machine
 
 Example :
+```sh
+make build
+make run cassandra_host=<host> cassandra_port=<port> main_class=<class>
 ```
-docker build . --build-args --build-arg sparkAddress=<@> --build-arg sparkPort=<port> -t <nom>
-```
-Don't forget to bind the ports of the docker with the machine. The webserver uses the port 8080.
-```
-docker run -p <machinePort>:8080 <nom>
-```
+
+## Notes on Cassandra
+Currently, it loads a table named: "test.temperatures" which contains three columns: ("date", "temperature", "feeling").
+Date is a string formatted: "dd/mm/yyyy hh:mm:ss" and "temperature" and "feeling" are doubles.
+
+The HTTP request is a post with JSON formatted like: {"begin": "dd/mm/yyyy hh", "end": "dd/mm/yyyy hh"}
 
 ## How to use
 Without docker :
-```
+```sh
 sbt compile
 sbt run
 ```
@@ -35,8 +39,8 @@ Then either enter the webserver address in a browser or use the command
 curl http://<address>:<machinePort>/weather
 ```
 Available routes :
-* /weather to get all table entries
 * /example to test the connection to the server
+* /weather to get all table entries
 
 ## How to expand
 All the routes are in the file "Routes.scala". To add a new route, just add the following example after the weather route :

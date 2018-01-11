@@ -111,5 +111,21 @@
             <artifactId>kafka-clients</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+	<!-- Twitter Core-->
+	<dependency>
+	  <groupId>org.twitter4j</groupId>
+	  <artifactId>twitter4j-core</artifactId>
+	  <version>4.0.6</version>
+	</dependency>
+
+	<!-- Twitter Stream -->
+	<dependency>
+	  <groupId>org.twitter4j</groupId>
+	  <artifactId>twitter4j-stream</artifactId>
+	  <version>4.0.6</version>
+	</dependency>
+
+
     </dependencies>
 </project>

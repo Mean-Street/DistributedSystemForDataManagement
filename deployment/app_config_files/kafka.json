@@ -1,5 +1,5 @@
 {
-  "id": "kafka",
+  "id": "sdtd/kafka",
   "cpus": 0.3,
   "mem": 450.0,
   "instances": 1,
