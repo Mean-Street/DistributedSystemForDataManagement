@@ -36,7 +36,7 @@ trait Routes {
         onComplete(weatherActor ? GetWeather) {
           case util.Success(value) => complete(200, value.toString)
           case util.Failure(ex) => complete(500, ex.toString)
-        }*
+        }
       }
     } ~
     path("example") {
