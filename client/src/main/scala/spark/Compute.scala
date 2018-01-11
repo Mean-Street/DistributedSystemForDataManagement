@@ -37,6 +37,6 @@ object Compute {
     }.count()
     println(s"Pi is roughly ${4.0 * count / NUM_SAMPLES}")
     */
-    "hey\n"
+    "hey hey\n"
   }
 }

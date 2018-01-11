@@ -33,11 +33,10 @@ trait Routes {
   lazy val httpRoutes: Route = {
     path("weather") {
       get {
-        /*onComplete(weatherActor ? GetWeather) {
+        onComplete(weatherActor ? GetWeather) {
           case util.Success(value) => complete(200, value.toString)
           case util.Failure(ex) => complete(500, ex.toString)
-        }*/
-        complete {"hey\n"}
+        }*
       }
     } ~
     path("example") {
