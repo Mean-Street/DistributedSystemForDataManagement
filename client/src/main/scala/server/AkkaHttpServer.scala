@@ -32,7 +32,7 @@ object AkkaHttpServer extends App with Routes {
 
   val serverBindingFuture: Future[ServerBinding] = Http().bindAndHandle(routes, "0.0.0.0", 8080)
 
-  println(s"Server online at http://0.0.0.0:8080/\nPress RETURN to stop...")
+  println("Server online at http://0.0.0.0:8080/\nPress RETURN to stop...")
 
   /*  //=============readLine not blocking when deployed on AWS===================
   StdIn.readLine()

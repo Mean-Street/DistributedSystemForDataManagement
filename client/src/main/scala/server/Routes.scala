@@ -42,7 +42,7 @@ trait Routes {
     path("example") {
       get {
         complete {
-          "test réussi"
+          "test réussi\n"
         }
       }
     }
