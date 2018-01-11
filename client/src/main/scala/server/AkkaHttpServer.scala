@@ -16,10 +16,10 @@ object GlobalVars {
 object AkkaHttpServer extends App with Routes {
 
   // ! pas de tests pour les arguments !
-   // if (args.length == 2) {
-   //   GlobalVars.sparkAddress = args(1)
-   //   GlobalVars.sparkPort = args(2)
-   // }
+  if (args.length == 2) {
+     GlobalVars.sparkAddress = args(1)
+     GlobalVars.sparkPort = args(2)
+  }
 
   // set up ActorSystem and other dependencies here
   implicit val actorSystem = ActorSystem("system")
