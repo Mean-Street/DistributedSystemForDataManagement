@@ -4,6 +4,8 @@ import WeatherFinder.Configurations.KafkaConfig;
 import WeatherFinder.Requesters.RequestDispatcher;
 import WeatherFinder.Requests.ApixuRequestTemperature;
 import WeatherFinder.Requests.Location;
+import WeatherFinder.Requests.OpenWeatherMapRequestTemperature;
+import WeatherFinder.Requests.WeatherBitRequestTemperature;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -16,14 +18,6 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import scala.concurrent.duration.Duration;
-import twitter4j.FilterQuery;
-import twitter4j.StallWarning;
-import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
-import twitter4j.StatusListener;
-import twitter4j.TwitterStream;
-import twitter4j.TwitterStreamFactory;
-import twitter4j.conf.ConfigurationBuilder;
 
 public class WeatherFinderApp
 {
@@ -54,38 +48,33 @@ public class WeatherFinderApp
         String topic = args[2];
         KafkaConfig config = new KafkaConfig(host, port, topic);
 
+        // creation of the actor in order to retrieve weather and tweets
+        ActorRef actor = system.actorOf(RequestDispatcher.props(http, materializer, config));
+
+        
         // ******** REQUEST WITH TIMER : each minute **********
         
         // ******** WeatherBit ********
-//        ActorRef WeatherBitTickActor = system.actorOf(RequestDispatcher.props(http, materializer, config));
-//        WeatherBitRequestTemperature WBRequest = new WeatherBitRequestTemperature(new Location("new+york", "USA"));
-//        system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
-//                                    WeatherBitTickActor, WBRequest, system.dispatcher(), ActorRef.noSender());
+        WeatherBitRequestTemperature WBRequest = new WeatherBitRequestTemperature(new Location("new+york", "USA"));
+        system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
+                                    actor, WBRequest, system.dispatcher(), ActorRef.noSender());
         
         // ******** OpenWeatherMap ********
         
-//        ActorRef OpenWeatherMapTickActor = system.actorOf(RequestDispatcher.props(http, materializer, config));
-//        OpenWeatherMapRequestTemperature OWMRequest = new OpenWeatherMapRequestTemperature(new Location("new+york", "USA"));
-//        system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
-//                                    OpenWeatherMapTickActor, OWMRequest, system.dispatcher(), ActorRef.noSender());
+        OpenWeatherMapRequestTemperature OWMRequest = new OpenWeatherMapRequestTemperature(new Location("new+york", "USA"));
+        system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
+                                    actor, OWMRequest, system.dispatcher(), ActorRef.noSender());
         
         // ******** Apixu ********
         
-        ActorRef actor = system.actorOf(RequestDispatcher.props(http, materializer, config));
         ApixuRequestTemperature apixuRequest = new ApixuRequestTemperature(new Location("new_york", "USA"));
         system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
                                     actor, apixuRequest, system.dispatcher(), ActorRef.noSender());
+
         
+        // ******** TWEETS STREAMING **********
+        
+        // trigger the tweet streaming (in new york)
         actor.tell("start_twitter", ActorRef.noSender());
-        
-
-        // ********** End TIMER **********
-        
-        // ********** TWEETS *************
-        
-        //const request = require('request');
-                    
-
-//        twitterStream.shutdown();
     }
 }

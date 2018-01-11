@@ -7,7 +7,6 @@ import WeatherFinder.Responses.ApixuResponse;
 import WeatherFinder.Responses.OpenWeatherMapResponse;
 import WeatherFinder.Responses.WeatherBitResponse;
 import WeatherFinder.Configurations.KafkaConfig;
-import WeatherFinder.Responses.TwitterResponse;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
@@ -16,14 +15,6 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.http.javadsl.Http;
 import akka.stream.Materializer;
-import twitter4j.FilterQuery;
-import twitter4j.StallWarning;
-import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
-import twitter4j.StatusListener;
-import twitter4j.TwitterStream;
-import twitter4j.TwitterStreamFactory;
-import twitter4j.conf.ConfigurationBuilder;
 
 public class RequestDispatcher extends AbstractActor {
 
