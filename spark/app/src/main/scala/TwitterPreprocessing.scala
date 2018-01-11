@@ -37,13 +37,13 @@ object TwitterPreprocessing {
     ssc.awaitTermination()
   }
 
-  def jsonToRow(msg: String) : (String, String, SENTIMENT_TYPE, String) = {
+  def jsonToRow(msg: String) : (String, String, String, String) = {
     //println(JSON.parseFull(msg))
     val json = JSON.parseFull(msg).get.asInstanceOf[Map[String,Any]]
-    val id = json("id")
-    val tweet = json("tweet")
-    val sentiment = detectSentiment(tweet)
-    val date = json("created_at")
-    return (id, date, detectSentiment(tweet), tweet)
+    val id = json("id").toString
+    val tweet = json("text").toString
+    val sentiment = detectSentiment(tweet).toString
+    val date = json("created_at").toString
+    return (id, date, sentiment, tweet)
   }
 }
