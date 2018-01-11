@@ -21,6 +21,7 @@ public class ResponseSerializer extends StdSerializer<Response> {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField("date", response.getDate().toString());
         jsonGenerator.writeNumberField("temperature", response.getTemperature());
+        jsonGenerator.writeStringField("source", response.getSource());
         jsonGenerator.writeEndObject();
     }
 }

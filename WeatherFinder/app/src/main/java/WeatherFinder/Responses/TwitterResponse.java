@@ -12,9 +12,9 @@ import java.time.format.DateTimeFormatter;
  *  - Coordinates (longitude, latitude)
  *  - Temperature
  */
-public class ApixuResponse extends Response {
+public class TwitterResponse extends Response {
     
-    private final static String source = "Apixu";
+    private final static String source = "Twitter";
     
     @JsonIgnoreProperties({"name", "region", "country", "tz_id", "localtime_epoch", "localtime"})
     public class Coordinates {

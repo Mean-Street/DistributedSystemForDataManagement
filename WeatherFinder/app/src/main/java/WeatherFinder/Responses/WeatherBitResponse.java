@@ -16,6 +16,9 @@ import java.util.List;
 
 @JsonIgnoreProperties({"count"})
 public class WeatherBitResponse extends Response {
+    
+    private final static String source = "WeatherBit";
+    
     private List<Double> temperatures;
     private List<Coordinate> coordinates;
 //    private LocalDateTime date;
@@ -27,7 +30,13 @@ public class WeatherBitResponse extends Response {
 
     @Override
     public Double getTemperature() {
+        System.out.println("getTemperature()");
         return temperatures.get(0);
+    }
+    
+    @Override
+    public String getSource() {
+        return source;
     }
 
     @JsonSetter("data")
