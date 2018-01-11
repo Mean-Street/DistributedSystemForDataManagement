@@ -56,14 +56,20 @@ def print_header(text):
 
 def configure_slave(instance):
     master_ips = [get_private_ip(inst) for inst in get_instances(is_slave=False)]
+
     ZOOKEEPER_PATH = 'slave_zookeeper.sh'
     MESOS_PATH = 'slave_mesos.sh'
     generate_zookeeper_script(ZOOKEEPER_PATH, master_ips)
-    init_slave(get_public_ip(instance))
-    configure_zookeeper(get_public_ip(instance), ZOOKEEPER_PATH)
     generate_mesos_script(MESOS_PATH, get_private_ip(instance))
-    configure_mesos(get_public_ip(instance), MESOS_PATH)
-    start_slave(get_public_ip(instance))
+    
+    p = init_slave(get_public_ip(instance))
+    p.wait()
+    p = configure_zookeeper(get_public_ip(instance), ZOOKEEPER_PATH)
+    p.wait()
+    p = configure_mesos(get_public_ip(instance), MESOS_PATH)
+    p.wait()
+    p = start_slave(get_public_ip(instance))
+    p.wait()
 
 
 def configure_slaves():
