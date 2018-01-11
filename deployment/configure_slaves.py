@@ -6,11 +6,18 @@ from get_instances import get_instances, get_private_ip, get_public_ip
 from tools import ssh
 
 
-# TODO
 # The following works in a shell:
 # ssh -i /home/vincent/Documents/ensimag/cours/3a/smack/DistributedSystemForDataManagement/smack.pem -o StrictHostKeyChecking=no ubuntu@52.47.104.11 'bash -s' < init_slave.sh
 def init_slave(ip):
     return ssh(ip, "'bash -s' < init_slave.sh", shell=True)
+
+
+def start_marathonlb(pub_ip, master_ips):
+    cmd = 'sudo docker run -d --net=host -e PORTS=9090 mesosphere/marathon-lb sse --group=* --marathon=http://'
+    for ip in master_ips:
+        cmd += ip + ','
+    cmd = cmd[:-1] + ':8080'
+    return ssh(pub_ip, cmd)
 
 
 def generate_zookeeper_script(fname, master_ips):
@@ -34,6 +41,8 @@ def generate_mesos_script(fname, priv_ip):
     cmd += '\necho ' + priv_ip + ' | sudo tee /etc/mesos-slave/ip > /dev/null'
     cmd += '\nsudo cp /etc/mesos-slave/ip /etc/mesos-slave/hostname'
     cmd += '\necho "cgroups/cpu,cgroups/mem" | sudo tee /etc/mesos-slave/isolation > /dev/null'
+    cmd += '\necho "docker,mesos" | sudo tee /etc/mesos-slave/containerizers'
+    cmd += '\necho "10mins" | sudo tee /etc/mesos-slave/executor_registration_timeout'
     with open(fname, 'w') as f:
         f.write(cmd)
 
@@ -47,11 +56,11 @@ def start_slave(pub_ip):
 
 
 def print_header(text):
-    print("\n\n")
+    print("\n")
     print("-------------------")
     print(text)
     print("-------------------")
-    print("\n\n")
+    print("\n")
 
 
 def configure_slave(instance):
@@ -93,7 +102,7 @@ def configure_slaves():
     for p in processes:
         p.wait()
 
-    print_header("Configuring Mesos...")
+    print_header("Starting Mesos...")
     for instance in get_instances(is_slave=True):
         generate_mesos_script(MESOS_PATH, get_private_ip(instance))
         # Cannot parallelize because we would override the file in which the script
@@ -104,6 +113,12 @@ def configure_slaves():
 
     os.remove(ZOOKEEPER_PATH)
     os.remove(MESOS_PATH)
+
+    print_header("Starting MarathonLB")
+    for instance in get_instances(is_slave=True):
+        processes.append(start_marathonlb(get_public_ip(instance)))
+    for p in processes:
+        p.wait()
 
 
 if __name__ == "__main__":
