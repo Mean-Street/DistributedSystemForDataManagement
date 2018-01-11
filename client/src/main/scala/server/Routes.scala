@@ -39,7 +39,7 @@ trait Routes {
         }*/
         complete {"hey\n"}
       }
-    }
+    } ~
     path("example") {
       get {
         complete {
