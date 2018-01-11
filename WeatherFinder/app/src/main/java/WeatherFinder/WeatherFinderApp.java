@@ -72,9 +72,9 @@ public class WeatherFinderApp
         // ******** Apixu ********
         
         ActorRef actor = system.actorOf(RequestDispatcher.props(http, materializer, config));
-        ApixuRequestTemperature apixuRequest = new ApixuRequestTemperature(new Location("new_york", "USA"));
-        system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
-                                    actor, apixuRequest, system.dispatcher(), ActorRef.noSender());
+//        ApixuRequestTemperature apixuRequest = new ApixuRequestTemperature(new Location("new_york", "USA"));
+//        system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
+//                                    actor, apixuRequest, system.dispatcher(), ActorRef.noSender());
         
         actor.tell("start_twitter", ActorRef.noSender());
         
