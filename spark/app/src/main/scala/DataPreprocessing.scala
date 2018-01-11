@@ -16,7 +16,7 @@ import com.datastax.spark.connector.streaming._
 
 object DataPreprocessing {
   def main(args: Array[String]) {
-    if (args.length < 5) {
+    if (args.length < 3) {
       System.exit(1)
     }
 
