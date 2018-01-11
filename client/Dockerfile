@@ -47,6 +47,7 @@ RUN \
 # compile & run
 RUN \
 	cd src/client \
+&&  git fetch \
 &&  git checkout test_client \
 &&	sbt compile
 
