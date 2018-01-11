@@ -36,6 +36,6 @@ object Compute {
         x*x + y*y < 1
       }.count()
     var tmp = 4.0 * count / 10
-    println("Pi is roughly " + tmp)
+    "Pi is roughly " + tmp
   }
 }
