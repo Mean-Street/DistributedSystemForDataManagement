@@ -65,21 +65,17 @@ public class Requester<RequestClass extends RequestTemperature, ResponseClass ex
 
     @Override
     public Receive createReceive() {
-        log.info("createReceive");
+//        log.info("createReceive");
         return receiveBuilder()
 
                 .match(requestClass, request -> {
-                    log.info("follow 1");
                     requestCurrentWeather(request).thenAccept(resp -> {
                         try {
-                            log.info("follow 2");
                             String responseSerialized = new ObjectMapper().writeValueAsString(resp);
-                            log.info("follow 3");
                             ProducerRecord<String, String> newRecord = new ProducerRecord<>(
                                     config.getTopic(), request.getLocation().getCity(), responseSerialized);
-                            log.info("follow 4");
-                            log.info("Got a response from: " + request.getLocation().getCity());
-                            log.info("Writing response on: " + config.getTopic());
+//                            log.info("Got a response from: " + request.getLocation().getCity());
+//                            log.info("Writing response on: " + config.getTopic());
                             log.info("response: " + newRecord);
                             producer.send(newRecord);
                         } catch (JsonProcessingException e) {

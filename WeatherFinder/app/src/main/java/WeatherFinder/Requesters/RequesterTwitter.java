@@ -9,9 +9,6 @@ import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.http.javadsl.Http;
-import akka.http.javadsl.marshallers.jackson.Jackson;
-import akka.http.javadsl.model.HttpEntity;
-import akka.http.javadsl.unmarshalling.Unmarshaller;
 import akka.stream.Materializer;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,7 +61,6 @@ public class RequesterTwitter extends AbstractActor {
                             try {
                                 // Handle Json Object
                                 String json = TwitterObjectFactory.getRawJSON(status);
-                                System.out.println(json);
                                 TwitterResponse response = parseJson(json);
                                 
                                 //Send json to Kafka
@@ -101,7 +97,7 @@ public class RequesterTwitter extends AbstractActor {
 
     @Override
     public Receive createReceive() {
-        log.info("createReceive");
+//        log.info("createReceive");
         return receiveBuilder()
 
                 .matchEquals("start_twitter", request -> {
