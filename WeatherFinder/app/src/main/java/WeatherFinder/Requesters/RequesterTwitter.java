@@ -62,7 +62,6 @@ public class RequesterTwitter extends AbstractActor {
                                 // Handle Json Object
                                 String json = TwitterObjectFactory.getRawJSON(status);
                                 TwitterResponse response = parseJson(json);
-                                
                                 //Send json to Kafka
                                 String responseSerialized = new ObjectMapper().writeValueAsString(response);
                                 ProducerRecord<String, String> newRecord = new ProducerRecord<>(config.getTopic(), responseSerialized);
