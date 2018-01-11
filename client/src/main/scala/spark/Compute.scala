@@ -9,10 +9,6 @@ import com.datastax.driver.core.querybuilder.QueryBuilder
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 
-import org.json4s.native.JsonMethods._
-import org.json4s.JsonDSL._
-import org.json4s._
-
 import server.GlobalVars
 
 object Compute {
