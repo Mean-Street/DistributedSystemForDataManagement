@@ -14,6 +14,8 @@ import java.time.format.DateTimeFormatter;
  */
 public class ApixuResponse extends Response {
     
+    private final static String source = "Apixu";
+    
     @JsonIgnoreProperties({"name", "region", "country", "tz_id", "localtime_epoch", "localtime"})
     public class Coordinates {
         public Double lon;
@@ -50,6 +52,11 @@ public class ApixuResponse extends Response {
     @Override
     public Double getTemperature() {
         return temperature;
+    }
+    
+    @Override
+    public String getSource() {
+        return source;
     }
 
     public Coordinates getLocation() { return location; }

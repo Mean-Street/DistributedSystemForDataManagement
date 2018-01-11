@@ -7,7 +7,7 @@ All the commands are to be executed on the user's machine, not on AWS.
 ```bash
 # virtualenv venv -p python3
 # source venv/bin/activate
-pip install awscli boto3 # With Python 3
+pip install awscli boto3 requests # With Python 3
 ```
 
 ## Configure
@@ -52,4 +52,10 @@ python kill_machine.py <instance-id>
 
 # Add a slave (scalability)
 python add_slave.py <name> t2.<size>
+
+# List containers
+python get_services.py <instance-id>
+
+# Kill container
+python kill_service.py <instance-id> <container-id>
 ```

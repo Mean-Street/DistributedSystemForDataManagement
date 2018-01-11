@@ -4,7 +4,7 @@
   "mem": 512.0,
   "instances": 1,
   "privileged": true,
-  "networks": [ { "mode": "host" } ],
+  "networks": [ { "mode": "container/bridge" } ],
   "container": {
     "type": "DOCKER",
     "docker": {

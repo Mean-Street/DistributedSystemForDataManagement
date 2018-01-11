@@ -14,8 +14,11 @@ import java.util.List;
  *  - Temperature
  */
 
-@JsonIgnoreProperties({"count"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WeatherBitResponse extends Response {
+    
+    private final static String source = "WeatherBit";
+    
     private List<Double> temperatures;
     private List<Coordinate> coordinates;
 //    private LocalDateTime date;
@@ -27,7 +30,13 @@ public class WeatherBitResponse extends Response {
 
     @Override
     public Double getTemperature() {
+        System.out.println("getTemperature()");
         return temperatures.get(0);
+    }
+    
+    @Override
+    public String getSource() {
+        return source;
     }
 
     @JsonSetter("data")
@@ -38,8 +47,8 @@ public class WeatherBitResponse extends Response {
         }
     }
 
-    @JsonIgnoreProperties({"rh","pod","pres","timezone","weather","code","description","country_code","clouds","vis","wind_spd","wind_cdir_full","app_temp","state_code","ts","elev_angle","h_angle","dewpt","ob_time","uv","sunset","sunrise","city_name","precip","station","dhi","datetime","wind_dir","slp","wind_cdir"})
-    public static class Entry {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public static class Entry {
         public Double temp;
         public Double lat;
         public Double lon;

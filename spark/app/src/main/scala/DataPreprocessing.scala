@@ -39,7 +39,7 @@ object DataPreprocessing {
     }
     */
     val rows = messages.map(msg => jsonToRow(msg._2))
-    rows.saveToCassandra("sdtd", "temperatures", SomeColumns("id", "date", "temperature"))
+    rows.saveToCassandra("sdtd", "temperature", SomeColumns("source", "date", "temperature"))
 
     /*
     val lines = messages.map(_._2)
@@ -54,8 +54,9 @@ object DataPreprocessing {
 
   def jsonToRow(msg: String) : (String, String, Double) = {
     val json = JSON.parseFull(msg).get.asInstanceOf[Map[String,Any]]
+    val source = json("source")
     val date = json("date")
     val temperature = json("temperature")
-    return (com.datastax.driver.core.utils.UUIDs.timeBased().toString(), date.toString, temperature.asInstanceOf[Double])
+    return (source.toString, date.toString, temperature.asInstanceOf[Double])
   }
 }

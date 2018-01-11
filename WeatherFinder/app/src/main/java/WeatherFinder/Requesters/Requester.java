@@ -65,6 +65,7 @@ public class Requester<RequestClass extends RequestTemperature, ResponseClass ex
 
     @Override
     public Receive createReceive() {
+//        log.info("createReceive");
         return receiveBuilder()
 
                 .match(requestClass, request -> {
@@ -73,8 +74,9 @@ public class Requester<RequestClass extends RequestTemperature, ResponseClass ex
                             String responseSerialized = new ObjectMapper().writeValueAsString(resp);
                             ProducerRecord<String, String> newRecord = new ProducerRecord<>(
                                     config.getTopic(), request.getLocation().getCity(), responseSerialized);
-                            log.info("Got a response from: " + request.getLocation().getCity());
-                            log.info("Writing response on: " + config.getTopic());
+//                            log.info("Got a response from: " + request.getLocation().getCity());
+//                            log.info("Writing response on: " + config.getTopic());
+                            log.info("response: " + newRecord);
                             producer.send(newRecord);
                         } catch (JsonProcessingException e) {
                             log.error("Response encountered an error during serialization");
