@@ -35,6 +35,7 @@ object Compute {
         val y = math.random
         x*x + y*y < 1
       }.count()
-    println("Pi is roughly ${4.0 * count / 10}")
+    var tmp = 4.0 * count / 10
+    println("Pi is roughly " + tmp)
   }
 }
