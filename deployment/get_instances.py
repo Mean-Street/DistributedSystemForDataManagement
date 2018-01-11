@@ -16,9 +16,9 @@ def get_instances(state='running', is_slave=None):
     reservations = resp['Reservations']
     for reservation in reservations:
         for instance in reservation['Instances']:
-            if is_master is not None and is_master(instance) == is_slave:
+            if not is_smack_instance(instance) or is_master is not None and is_master(instance) == is_slave:
                 continue
-            if is_smack_instance(instance) and has_state(instance, state):
+            if has_state(instance, state):
                 instances.append(instance)
 
     return instances
