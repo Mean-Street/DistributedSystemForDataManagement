@@ -60,7 +60,7 @@ public class RequestDispatcher extends AbstractActor {
                     apixuApiRef.forward(request, getContext());
                 })
                 .matchEquals("start_twitter", s -> {
-                    log.info("Forwarding a request to Apixu");
+                    log.info("Forwarding a request to Tweeter");
                     twitterRef.forward(s, getContext());
                 })
                 .build();
