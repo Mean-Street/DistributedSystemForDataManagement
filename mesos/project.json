@@ -1,6 +1,7 @@
+# marche pas atm
 {
   "id": "/sdtd",
-  "groups": [
+  "apps": [
     {
       "id": "/sdtd/akka_weatherfinder",
       "cpus": 0.5,

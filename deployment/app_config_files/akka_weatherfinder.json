@@ -1,5 +1,5 @@
 {
-  "id": "weatherfinder",
+  "id": "/sdtd/akka-temperature",
   "cpus": 0.5,
   "mem": 256.0,
   "instances": 1,

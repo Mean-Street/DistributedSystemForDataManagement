@@ -16,12 +16,24 @@ def get_instances(state='running', is_slave=None):
     reservations = resp['Reservations']
     for reservation in reservations:
         for instance in reservation['Instances']:
-            if is_master is not None and is_master(instance) == is_slave:
+            if not is_smack_instance(instance) or is_master is not None and is_master(instance) == is_slave:
                 continue
-            if is_smack_instance(instance) and has_state(instance, state):
+            if has_state(instance, state):
                 instances.append(instance)
 
     return instances
+
+
+def is_id_valid(id_):
+    for instance in get_instances():
+        if get_id(instance) == id_:
+            return True
+    return False
+
+
+def get_from_id(id_):
+    resp = ec2.describe_instances(InstanceIds=[id_])
+    return resp['Reservations'][0]['Instances'][0]
 
 
 def get_private_ip(instance):
@@ -30,6 +42,10 @@ def get_private_ip(instance):
 
 def get_public_ip(instance):
     return instance['PublicIpAddress']
+
+
+def get_id(instance):
+    return instance['InstanceId']
 
 
 def get_name(instance):
@@ -50,5 +66,7 @@ def is_master(instance):
 
 if __name__ == '__main__':
     instances = get_instances()
+    print("id | name | public_ip | private_ip")
+    print("----------------------------------------------------")
     for instance in instances:
-        print(get_name(instance), ' : ', get_public_ip(instance), ' ; ', get_private_ip(instance))
+        print(get_id(instance), get_name(instance), get_public_ip(instance), get_private_ip(instance), sep=" | ")

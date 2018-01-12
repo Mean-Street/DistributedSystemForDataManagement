@@ -16,7 +16,7 @@
 * Build the image and run the container with the following commands:
 ```sh
 make build
-make run cassandra_host=<host> cassandra_port=<port> main_class=server.AkkaHttpServer
+make run cassandra_host=<host> cassandra_port=<port>
 ```
 
 ## Deployment
@@ -29,7 +29,7 @@ Just build & run the docker file with 3 arguments :
 Example :
 ```sh
 make build
-make run cassandra_host=<host> cassandra_port=<port> main_class=<class>
+make run cassandra_host=<host> cassandra_port=<port>
 ```
 
 ## Notes on Cassandra

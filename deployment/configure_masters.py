@@ -8,27 +8,29 @@ def init_master(ip):
 
 
 def start_zookeeper(pub_ip, id_, master_ips):
-    cmd = 'sudo docker run -d -p 2181:2181 -p 2888:2888 -p 3888:3888 --net="host" -e SERVER_ID=' + str(id_)
+    cmd = 'sudo docker run -d --name="zookeeper" --net="host" --restart="always" -e MYID=' + str(id_)
+    cmd += ' -e SERVERS='
     for i, ip in enumerate(master_ips):
         index = str(i+1)
-        cmd += ' -e ADDITIONAL_ZOOKEEPER_' + index + '=server.' + index + '=' + ip + ':2888:3888'
+        cmd += ip + ','
+    cmd = cmd[:-1]
     cmd += ' mesoscloud/zookeeper'
     return ssh(pub_ip, cmd)
 
 
 def start_mesos(pub_ip, priv_ip, master_ips):
-    cmd = ('sudo docker run --net="host" -p 5050:5050 --restart="always" -e "MESOS_HOSTNAME=' + priv_ip + '" -e "MESOS_IP=' + priv_ip +'" -e "MESOS_ZK=zk://')
+    cmd = ('sudo docker run -d --name="mesos_master" --net="host" -e "MESOS_HOSTNAME=' + priv_ip + '" -e "MESOS_IP=' + priv_ip +'" -e "MESOS_ZK=zk://')
     for ip in master_ips:
         cmd += ip + ':2181,'
     cmd = cmd[:-1]
     cmd += '/mesos" -e "MESOS_PORT=5050" -e "MESOS_LOG_DIR=/var/log/mesos" -e "MESOS_QUORUM=2"'
-    cmd += ' -e "MESOS_REGISTRY=in_memory" -e "MESOS_WORK_DIR=/var/lib/mesos" -e "MESOS_CLUSTER=EnsiSMACK" -d'
+    cmd += ' -e "MESOS_REGISTRY=in_memory" -e "MESOS_WORK_DIR=/var/lib/mesos" -e "MESOS_CLUSTER=EnsiSMACK"'
     cmd += ' mesosphere/mesos-master:1.3.2-rc1'
     return ssh(pub_ip, cmd)
 
 
 def start_marathon(pub_ip, master_ips):
-    cmd = 'sudo docker run -d -p 8080:8080 -p 5051:5051 --restart="always" mesosphere/marathon:v1.4.9 --master zk://'
+    cmd = 'sudo docker run -d --name="marathonakka_weatherfinder" --net="host" --privileged mesosphere/marathon:v1.4.9 --master zk://'
     zk = ''
     for ip in master_ips:
         zk += ip + ':2181,'
@@ -38,12 +40,20 @@ def start_marathon(pub_ip, master_ips):
     return ssh(pub_ip, cmd)
 
 
+def start_cassandra(pub_ip, id_, master_ip):
+    cmd = 'sudo docker run --rm --network="host" -p 9042:9042 -p 7000:7000 -p 7001:7001 -e MAX_HEAP_SIZE="400M" -e HEAP_NEWSIZE="100M"'
+    if id_ != 1:
+        cmd += ' -e CASSANDRA_SEEDS=' + master_ip
+    cmd += ' -d sdtdensimag/cassandra'
+    return ssh(pub_ip, cmd)
+
+
 def print_header(text):
-    print("\n\n")
+    print("\n")
     print("-------------------")
     print(text)
     print("-------------------")
-    print("\n\n")
+    print("\n")
 
 
 def configure_masters():
@@ -73,6 +83,12 @@ def configure_masters():
     for instance in get_instances(is_slave=False):
         processes.append(start_marathon(get_public_ip(instance), private_ips))
     for p in processes:
+        p.wait()
+
+    print_header("Starting Cassandra...")
+    processes = []
+    for i, instance in enumerate(get_instances(is_slave=False)):
+        p = start_cassandra(get_public_ip(instance), i+1, private_ips[0])
         p.wait()
 
 

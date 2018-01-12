@@ -1,0 +1,26 @@
+{
+  "id": "sdtd/cassandra",
+  "cpus": 0.3,
+  "mem": 512.0,
+  "instances": 1,
+  "privileged": true,
+  "networks": [ { "mode": "container/bridge" } ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "sdtdensimag/cassandra:latest"
+    },
+    "portMappings": [
+      { "containerPort": 9042, "hostPort": 0, "servicePort": 9042, "protocol": "tcp" },
+      { "containerPort": 7000, "hostPort": 0, "servicePort": 7000, "protocol": "tcp" },
+      { "containerPort": 7001, "hostPort": 0, "servicePort": 7001, "protocol": "tcp" },
+      { "containerPort": 7199, "hostPort": 0, "servicePort": 7199, "protocol": "tcp" },
+      { "containerPort": 9160, "hostPort": 0, "servicePort": 9160, "protocol": "tcp" }
+    ]
+  },
+  "env": {
+    "MAX_HEAP_SIZE": "200M",
+    "HEAP_NEWSIZE": "50M",
+    "CASSANDRA_SEEDS": ""
+  }
+}

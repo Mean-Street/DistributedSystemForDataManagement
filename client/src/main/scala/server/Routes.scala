@@ -68,7 +68,7 @@ trait Routes extends JsonSupport {
             case util.Success(r) => 
                 val result = r.asInstanceOf[(Array[Compute.AveragePair], Double)]
                 complete(Response(result._1.toList, result._2))
-            case util.Failure(ex)     => complete(500, ex.toString)
+            case util.Failure(ex) => complete(500, ex.toString)
           }
         }
       }

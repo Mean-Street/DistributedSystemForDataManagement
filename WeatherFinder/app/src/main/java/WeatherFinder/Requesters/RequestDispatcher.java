@@ -22,6 +22,7 @@ public class RequestDispatcher extends AbstractActor {
     private final ActorRef openWeatherMapActorRef;
     private final ActorRef weatherBitApiRef;
     private final ActorRef apixuApiRef;
+    private final ActorRef twitterRef;
 
     public final static String name = "request-dispatcher";
 
@@ -39,6 +40,8 @@ public class RequestDispatcher extends AbstractActor {
 
         this.apixuApiRef = getContext().actorOf(Requester.props(http, materializer, ApixuRequestTemperature.class,
                                                 ApixuResponse.class, config));
+
+        this.twitterRef = getContext().actorOf(RequesterTwitter.props(http, materializer, config));
     }
 
     @Override
@@ -55,6 +58,10 @@ public class RequestDispatcher extends AbstractActor {
                 .match(ApixuRequestTemperature.class, request -> {
                     log.info("Forwarding a request to Apixu");
                     apixuApiRef.forward(request, getContext());
+                })
+                .matchEquals("start_twitter", s -> {
+                    log.info("Forwarding a request to Tweeter");
+                    twitterRef.forward(s, getContext());
                 })
                 .build();
     }
