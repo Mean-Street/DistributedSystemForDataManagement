@@ -19,6 +19,13 @@ make build
 make run cassandra_host=<host> cassandra_port=<port>
 ```
 
+Once the server up and running, and the user is ready to be flabbergasted, send a post request with `curl` or any other
+tool such as the following one:
+```sh
+curl -H "Content-Type: application/json" -X POST -d '{"begin":"01/01/2018 01","end":"01/01/2018 03"}' http://localhost:8080/weather
+```
+
+
 ## Deployment
 
 Just build & run the docker file with 3 arguments :
