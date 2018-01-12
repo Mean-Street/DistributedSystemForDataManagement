@@ -19,6 +19,6 @@
     "CASSANDRA_PORT": "9042"
   },
   "args": [
-            "run-spark", "TwitterPreprocessing", "172.17.0.1:9093", "tweet", "2"
+            "run-spark", "TwitterPreprocessing", "172.17.0.1:9092", "tweet", "2"
           ]
 }

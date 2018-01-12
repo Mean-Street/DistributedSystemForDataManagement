@@ -45,13 +45,15 @@ def start_services():
     #List all services here
     start_service(ip, "app_config_files/zookeeper.json")
     time.sleep(10)
-    start_service(ip, "app_config_files/kafka_temperature.json")
+    start_service(ip, "app_config_files/kafka.json")
     time.sleep(10)
     start_service(ip, "app_config_files/cassandra.json")
     time.sleep(20)
     start_service(ip, "app_config_files/spark_temperature.json")
+    start_service(ip, "app_config_files/spark_tweet.json")
     time.sleep(30)
     start_service(ip, "app_config_files/akka_weatherfinder.json")
+    start_service(ip, "app_config_files/akka_tweet.json")
         
 
 if __name__ == "__main__":

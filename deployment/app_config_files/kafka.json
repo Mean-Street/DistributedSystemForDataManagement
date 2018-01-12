@@ -1,7 +1,7 @@
 {
-  "id": "sdtd/kafka-temperature",
+  "id": "sdtd/kafka",
   "cpus": 0.3,
-  "mem": 450.0,
+  "mem": 950.0,
   "instances": 1,
   "networks": [ { "mode": "container/bridge" } ],
   "container": {
@@ -18,6 +18,6 @@
     "KAFKA_ZOOKEEPER_CONNECT": "172.17.0.1:2182",
     "KAFKA_ADVERTISED_HOST_NAME": "172.17.0.1",
     "KAFKA_ADVERTISED_PORT": "9092",
-    "KAFKA_CREATE_TOPICS": "temperature:1:1"
+    "KAFKA_CREATE_TOPICS": "temperature:1:1,tweet:1:1"
   }
 }

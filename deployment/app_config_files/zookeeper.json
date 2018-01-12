@@ -1,5 +1,5 @@
 {
-  "id": "sdtd/zookeeper-tweet",
+  "id": "sdtd/zookeeper",
   "cpus": 0.2,
   "mem": 64,
   "instances": 1,
@@ -11,7 +11,7 @@
       "forcePullImage": true
     },
     "portMappings": [
-      { "containerPort": 2181, "hostPort": 0, "servicePort": 2183, "protocol": "tcp" }
+      { "containerPort": 2181, "hostPort": 0, "servicePort": 2182, "protocol": "tcp" }
     ]
   }
 }
