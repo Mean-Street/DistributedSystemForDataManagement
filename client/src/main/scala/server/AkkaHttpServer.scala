@@ -10,7 +10,7 @@ import scala.concurrent.{ ExecutionContext, Future }
 object GlobalVars {
   var serverPort: String = "8080"
   var sparkAddress: String = "0.0.0.0"
-  var sparkPort: String = "4040"
+  var sparkPort: String = "7077"
 }
 
 object AkkaHttpServer extends App with Routes {
