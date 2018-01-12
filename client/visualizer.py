@@ -1,12 +1,17 @@
 import requests
 import json
 import matplotlib.pyplot as plt
+import sys
 
+if len(sys.argv) != 2:
+    print("Usage: python3 visualizer.py <host>")
+    exit()
 
+host = sys.argv[1]
 headers = {'content-type': 'application/json'}
 payload = {'begin': '2018-01-01 01', 'end': '2018-01-01 22'}
 
-r = requests.post('http://localhost:8080/weather',
+r = requests.post('http://' + host + ':8080/weather',
                   data=json.dumps(payload),
                   headers=headers)
 
