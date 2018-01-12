@@ -106,10 +106,18 @@ public class RequesterTwitter extends AbstractActor {
     }
     
     private void startTwitter(StatusListener listener) {
-                    String CONSUMER_KEY = "AqE6FxhWmTpRMAE18JBjxldT9";
-                    String CONSUMER_SECRET = "OwCW5bbBDLNbQQfFW1gErKxonXoYWIzkXmyRPqw0WoajuUcrzU";
-                    String ACCESS_TOKEN = "950812402299342848-v3GoArUSUNFOrZhAAYU6AZgscK4uU32";
-                    String ACCESS_TOKEN_SECRET = "QJmCBDTAmbBP79AiVNrbCaj8aqURoTBRwJ32UMEr5P9YZ";
+        
+                    /* APPLI 1*/
+//                    String CONSUMER_KEY = "AqE6FxhWmTpRMAE18JBjxldT9";
+//                    String CONSUMER_SECRET = "OwCW5bbBDLNbQQfFW1gErKxonXoYWIzkXmyRPqw0WoajuUcrzU";
+//                    String ACCESS_TOKEN = "950812402299342848-v3GoArUSUNFOrZhAAYU6AZgscK4uU32";
+//                    String ACCESS_TOKEN_SECRET = "QJmCBDTAmbBP79AiVNrbCaj8aqURoTBRwJ32UMEr5P9YZ";
+        
+                    /* APPLI PrePresentation*/
+                    String CONSUMER_KEY = "Z0RVHxgllP5TFbGqyZjwG45Br";
+                    String CONSUMER_SECRET = "0ebIeqaX7KraVWvPjy6ixxMgIFy7yIscWHO1S7kdojrdOfXECe";
+                    String ACCESS_TOKEN = "950812402299342848-svOgXuXmf8rPQKseVCE8qJSQISThKUY";
+                    String ACCESS_TOKEN_SECRET = "aM8nMNWSDdMyOhgxoNhxa6kz4LURtlv8SnGjkUJuMTRIg";
 
                     double[][] grenoble = { {5.6901,45.157}, {5.7498,45.201} };
                     double[][] new_york = { {-74,40}, {-73,41} };
