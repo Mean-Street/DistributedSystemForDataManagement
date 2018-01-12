@@ -3,6 +3,7 @@ package WeatherFinder.Responses;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 /**
@@ -52,7 +53,11 @@ public class OpenWeatherMapResponse extends Response {
 
     @Override
     public LocalDateTime getDate() {
-        return LocalDateTime.now();
+        LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formatDateTime = date.format(formatter);
+        date  = LocalDateTime.parse(formatDateTime, formatter);
+        return date;
     }
     
     @Override

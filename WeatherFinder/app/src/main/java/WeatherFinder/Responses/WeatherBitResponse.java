@@ -3,6 +3,7 @@ package WeatherFinder.Responses;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +76,11 @@ public static class Entry {
 
     @Override
     public LocalDateTime getDate() {
-        return LocalDateTime.now();
+        LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formatDateTime = date.format(formatter);
+        date  = LocalDateTime.parse(formatDateTime, formatter);
+        return date;
     }
 
     List<Coordinate> getCoordinates() {

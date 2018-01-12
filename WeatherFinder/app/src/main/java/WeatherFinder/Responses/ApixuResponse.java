@@ -36,7 +36,6 @@ public class ApixuResponse extends Response {
 
     private Double temperature;
     private Coordinates location;
-    private String date;
 
     @JsonSetter("location")
     public void setLocation(Coordinates location) {
@@ -46,7 +45,6 @@ public class ApixuResponse extends Response {
     @JsonSetter("current")
     public void setTemperature(Current current) {
         this.temperature = current.temp_c;
-        this.date = current.last_updated;
     }
 
     @Override
@@ -63,12 +61,14 @@ public class ApixuResponse extends Response {
     
     @Override
     public LocalDateTime getDate() {
+        LocalDateTime date = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
-        return dateTime;
+        String formatDateTime = date.format(formatter);
+        date  = LocalDateTime.parse(formatDateTime, formatter);
+        return date;
     }
 
     public String toString() {
-        return getTemperature() + "°C, at: " + getLocation() + " at: " + date;
+        return getTemperature() + "°C, at: " + getLocation();
     }
 }

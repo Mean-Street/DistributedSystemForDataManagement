@@ -14,6 +14,7 @@ import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import akka.http.javadsl.Http;
+import akka.routing.RoundRobinPool;
 import akka.stream.Materializer;
 
 public class RequestDispatcher extends AbstractActor {
@@ -41,7 +42,7 @@ public class RequestDispatcher extends AbstractActor {
         this.apixuApiRef = getContext().actorOf(Requester.props(http, materializer, ApixuRequestTemperature.class,
                                                 ApixuResponse.class, config));
 
-        this.twitterRef = getContext().actorOf(RequesterTwitter.props(http, materializer, config));
+        this.twitterRef = getContext().actorOf(new RoundRobinPool(5).props(RequesterTwitter.props(http, materializer, config)));
     }
 
     @Override

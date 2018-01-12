@@ -23,15 +23,11 @@ public class TwitterResponse {
     
 
     @JsonSetter("created_at")
-    public void setCoord(String date) throws ParseException {
-        date = date.replace("+0000", "");
-        date = date.substring(4);
-        SimpleDateFormat ft = new SimpleDateFormat("MMM dd hh:mm:ss yyyy");
-        java.util.Date t=ft.parse(date);
-        ft.applyPattern("yyyy-MM-dd HH:mm");
-        date = ft.format(t);
-        date = date.replace(" ", "T");
-        this.created_at = date;
+    public void setDate(String useless) throws ParseException {
+        LocalDateTime date = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formatDateTime = date.format(formatter);
+        this.created_at = formatDateTime;
     }
 
 }
