@@ -22,7 +22,7 @@ make run cassandra_host=<host> cassandra_port=<port>
 Once the server up and running, and the user is ready to be flabbergasted, send a post request with `curl` or any other
 tool such as the following one:
 ```sh
-curl -H "Content-Type: application/json" -X POST -d '{"begin":"01/01/2018 01","end":"01/01/2018 03"}' http://localhost:8080/weather
+curl -H "Content-Type: application/json" -X POST -d '{"begin":"2018-01-01 01","end":"2018-01-01 03"}' http://localhost:8080/weather
 ```
 
 
@@ -40,8 +40,8 @@ make run cassandra_host=<host> cassandra_port=<port>
 ```
 
 ## Notes on Cassandra
-Date is a string formatted: "dd/mm/yyyy hh:mm:ss".
-The HTTP request is a post with JSON formatted like: {"begin": "dd/mm/yyyy hh", "end": "dd/mm/yyyy hh"}
+Date is a string formatted: ""yyyy-MM-dd'T'HH:mm:ss".
+The HTTP request is a post with JSON formatted like: {"begin": "yyyy-MM-dd HH", "end": "yyyy-MM-dd HH"}
 
 ## How to use
 Without docker :
