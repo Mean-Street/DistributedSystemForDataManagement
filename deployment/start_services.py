@@ -28,7 +28,7 @@ def prepare_cassandra(master_ips): #Rewrites the cassandra.json file to include 
 
 
 def start_service(ip, filepath):
-    print_header("Starting ", filepath)
+    print_header("Starting " + filepath)
     with open(filepath) as f:
         data = json.load(f)
         resp = requests.post('http://' + ip + ':8080/v2/apps', json=data)
