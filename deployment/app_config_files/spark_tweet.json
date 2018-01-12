@@ -1,13 +1,14 @@
 {
   "id": "/sdtd/spark-tweet",
   "cpus": 0.3,
-  "mem": 450.0,
+  "mem": 1024.0,
   "instances": 1,
   "networks": [ { "mode": "container/bridge" } ],
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "sdtdensimag/spark:latest"
+      "image": "sdtdensimag/spark:latest",
+      "forcePullImage": true
     },
     "portMappings": [
       { "containerPort": 4040, "hostPort": 0, "servicePort": 4041, "protocol": "tcp" }

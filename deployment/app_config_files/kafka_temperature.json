@@ -7,7 +7,8 @@
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "sdtdensimag/kafka:latest"
+      "image": "sdtdensimag/kafka:latest",
+      "forcePullImage": true
     },
     "portMappings": [
       { "containerPort": 9092, "hostPort": 0, "servicePort": 9092, "protocol": "tcp" }

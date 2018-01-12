@@ -1,5 +1,5 @@
 {
-  "id": "sdtd/zookeeper",
+  "id": "sdtd/zookeeper-temperature",
   "cpus": 0.2,
   "mem": 64,
   "instances": 1,
@@ -7,7 +7,8 @@
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "sdtdensimag/zookeeper:latest"
+      "image": "sdtdensimag/zookeeper:latest",
+      "forcePullImage": true
     },
     "portMappings": [
       { "containerPort": 2181, "hostPort": 0, "servicePort": 2182, "protocol": "tcp" }
