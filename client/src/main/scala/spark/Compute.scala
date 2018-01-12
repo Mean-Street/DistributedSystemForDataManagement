@@ -35,7 +35,7 @@ object DataBase {
 
   def parseDate(date: String): Calendar = {
     val calendar: Calendar = Calendar.getInstance()
-    calendar.setTime(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date))
+    calendar.setTime(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(date))
     calendar
   }
 }
