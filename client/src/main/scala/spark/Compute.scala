@@ -86,9 +86,8 @@ object Compute {
     /**
     * A handy constructor, which from a row of the table, creates an EntryFeeling
     */
-    def apply(row: CassandraRow): EntryFeeling = {
-      EntryFeeling(DataBase.parseDate(row.getString(DataBase.Feeling.date)),
-                   row.getString(DataBase.Feeling.feeling).toDouble)
+    def apply(feeling: Double, row: CassandraRow): EntryFeeling = {
+      EntryFeeling(DataBase.parseDate(row.getString(DataBase.Feeling.date)), feeling)
     }
   }
 
@@ -128,7 +127,15 @@ object Compute {
   */
   private def loadFeelings(begin: Calendar, end: Calendar): RDD[(HourSlot, EntryFeeling)] = {
     val rdd = sc.cassandraTable(DataBase.keyspace, DataBase.Feeling.table)
-    averageInterval[EntryFeeling](rdd.map(EntryFeeling(_)), begin, end)
+    val rddEntryFeeling = rdd.map(e => e.getString(DataBase.Feeling.feeling) match {
+                                            case "VERY_NEGATIVE" => (0.0, e)
+                                            case "NEGATIVE"      => (1.0, e)
+                                            case "NEUTRAL"       => (2.0, e)
+                                            case "POSITIVE"      => (3.0, e)
+                                            case "VERY_POSITIVE" => (4.0, e)
+                                            case _               => (-1.0, e)
+                                          }).map(v => EntryFeeling(v._1, v._2))
+    averageInterval[EntryFeeling](rddEntryFeeling, begin, end)
   }
 
   /**
