@@ -30,7 +30,7 @@ def start_mesos(pub_ip, priv_ip, master_ips):
 
 
 def start_marathon(pub_ip, master_ips):
-    cmd = 'sudo docker run -d --name="marathonakka_weatherfinder" --net="host" --privileged mesosphere/marathon:v1.4.9 --master zk://'
+    cmd = 'sudo docker run -d --name="marathon" --net="host" --privileged mesosphere/marathon:v1.5.2 --local_port_min=1 --local_port_max=20000 --master zk://'
     zk = ''
     for ip in master_ips:
         zk += ip + ':2181,'
@@ -41,10 +41,10 @@ def start_marathon(pub_ip, master_ips):
 
 
 def start_cassandra(pub_ip, id_, master_ip):
-    cmd = 'sudo docker run --rm --network="host" -p 9042:9042 -p 7000:7000 -p 7001:7001 -e MAX_HEAP_SIZE="400M" -e HEAP_NEWSIZE="100M"'
+    cmd = 'sudo docker run -d --name="cassandra" --network="host" -p 9042:9042 -p 7000:7000 -p 7001:7001 -e MAX_HEAP_SIZE="400M" -e HEAP_NEWSIZE="100M"'
     if id_ != 1:
         cmd += ' -e CASSANDRA_SEEDS=' + master_ip
-    cmd += ' -d sdtdensimag/cassandra'
+    cmd += ' sdtdensimag/cassandra'
     return ssh(pub_ip, cmd)
 
 
@@ -89,6 +89,7 @@ def configure_masters():
     processes = []
     for i, instance in enumerate(get_instances(is_slave=False)):
         p = start_cassandra(get_public_ip(instance), i+1, private_ips[0])
+        time.sleep(5)
         p.wait()
 
 
