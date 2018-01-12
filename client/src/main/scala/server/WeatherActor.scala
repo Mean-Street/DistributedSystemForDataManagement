@@ -17,7 +17,8 @@ final case class Weather(temperature: Double, city: String, date: String) {
 object WeatherActor {
   //final case class Output(description: String)
   final case class GetWeather(begin: Calendar, end: Calendar)
-  val sc = new SparkContext(new SparkConf())
+  // val sc = new SparkContext(new SparkConf())
+  // val computeAverageInterval = new Compute
 
   def props: Props = Props[WeatherActor]
 }
@@ -27,6 +28,6 @@ class WeatherActor extends Actor {
 
   def receive: Receive = {
     case GetWeather(begin, end) =>
-      sender ! Compute.processMagic(sc, begin, end)
+      sender ! Compute.processMagic(begin, end)
   }
 }

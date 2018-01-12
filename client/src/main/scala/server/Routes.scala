@@ -22,13 +22,13 @@ import java.util.{ Calendar, Date }
 import java.text.SimpleDateFormat
 
 
-final case class Request(begin: String, end: String)
+final case class Request(begin: Calendar, end: Calendar)
 final case class Response(res: List[Compute.AveragePair], r2: Double)
 
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
   implicit object CalendarFormat extends JsonFormat[Calendar] {
-    val calendarFormat = new SimpleDateFormat("dd/mm/yyyy hh")
+    val calendarFormat = new SimpleDateFormat("yyyy-MM-dd HH")
 
     def write(date: Calendar) = JsString(calendarFormat.format(date.getTime()))
     def read(json: JsValue) = json match {
@@ -41,18 +41,12 @@ trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
   }
 
   implicit val requestFormat  = jsonFormat2(Request)
-  implicit val averagePairFormat     = jsonFormat3(Compute.AveragePair)
+  implicit val averagePairFormat = jsonFormat3(Compute.AveragePair)
   implicit val responseFormat = jsonFormat2(Response)
 }
 
 //#user-routes-class
 trait Routes extends JsonSupport {
-  def toCalendar(date: String): Calendar = {
-    val calendar: Calendar = Calendar.getInstance()
-    calendar.setTime(new SimpleDateFormat("dd/mm/yyyy hh").parse(date))
-    calendar
-  }
-
   // we leave these abstract, since they will be provided by the App
   implicit def actorSystem: ActorSystem
   def weatherActor: ActorRef
@@ -64,8 +58,8 @@ trait Routes extends JsonSupport {
     path("weather") {
       post {
         entity(as[Request]) { request =>
-          onComplete(weatherActor ? GetWeather(toCalendar(request.begin), toCalendar(request.end))) {
-            case util.Success(r) => 
+          onComplete(weatherActor ? GetWeather(request.begin, request.end)) {
+            case util.Success(r) =>
                 val result = r.asInstanceOf[(Array[Compute.AveragePair], Double)]
                 complete(Response(result._1.toList, result._2))
             case util.Failure(ex) => complete(500, ex.toString)

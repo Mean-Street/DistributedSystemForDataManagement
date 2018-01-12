@@ -12,4 +12,4 @@ shift
 cassandra_port=$1
 shift
 
-docker run --rm -it -p 4040:4040 -p 8080:8080 -e CASSANDRA_HOST="$cassandra_host" -e CASSANDRA_PORT="$cassandra_port" spark-client run-spark $@
+docker run --rm -it -p 4040:4040 -p 8080:8080 -e CASSANDRA_HOST="$cassandra_host" -e CASSANDRA_PORT="$cassandra_port" sdtdensimag/spark-client run-spark $@
