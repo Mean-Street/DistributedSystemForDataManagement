@@ -78,7 +78,7 @@ def configure_slave(instance):
     p.wait()
     p = start_slave(get_public_ip(instance))
     p.wait()
-    p = start_marathonlb(get_public_ip(instance))
+    p = start_marathonlb(get_public_ip(instance), master_ips)
     p.wait()
 
 

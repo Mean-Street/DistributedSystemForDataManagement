@@ -21,6 +21,6 @@
   "env": {
     "MAX_HEAP_SIZE": "200M",
     "HEAP_NEWSIZE": "50M",
-    "CASSANDRA_SEEDS": ""
+    "CASSANDRA_SEEDS":""
   }
 }

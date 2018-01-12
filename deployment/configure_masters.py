@@ -1,3 +1,4 @@
+import time
 import config as cfg
 from get_instances import get_instances, get_private_ip, get_public_ip, is_master
 from tools import ssh
@@ -85,11 +86,11 @@ def configure_masters():
     for p in processes:
         p.wait()
 
+    return # TODO
     print_header("Starting Cassandra...")
     processes = []
     for i, instance in enumerate(get_instances(is_slave=False)):
         p = start_cassandra(get_public_ip(instance), i+1, private_ips[0])
-        time.sleep(5)
         p.wait()
 
 
