@@ -6,8 +6,25 @@
 
 ## Prerequisites
 
-* Up and running Spark machine connected to Cassandra
+* Up and running Cassandra database
 * At minimum a small machine (sbt needs RAM)
+
+## Test
+
+* Requires a database
+* Run the queries contained in `client/mock_queries.csql` in a cqlshell
+* Build the image and run the container with the following commands:
+```sh
+make build
+make run cassandra_host=<host> cassandra_port=<port>
+```
+
+Once the server up and running, and the user is ready to be flabbergasted, send a post request with `curl` or any other
+tool such as the following one:
+```sh
+curl -H "Content-Type: application/json" -X POST -d '{"begin":"2018-01-01 01","end":"2018-01-01 03"}' http://localhost:8080/weather
+```
+
 
 ## Deployment
 
@@ -19,14 +36,12 @@ Just build & run the docker file with 3 arguments :
 Example :
 ```sh
 make build
-make run cassandra_host=<host> cassandra_port=<port> main_class=<class>
+make run cassandra_host=<host> cassandra_port=<port>
 ```
 
 ## Notes on Cassandra
-Currently, it loads a table named: "test.temperatures" which contains three columns: ("date", "temperature", "feeling").
-Date is a string formatted: "dd/mm/yyyy hh:mm:ss" and "temperature" and "feeling" are doubles.
-
-The HTTP request is a post with JSON formatted like: {"begin": "dd/mm/yyyy hh", "end": "dd/mm/yyyy hh"}
+Date is a string formatted: ""yyyy-MM-dd'T'HH:mm:ss".
+The HTTP request is a post with JSON formatted like: {"begin": "yyyy-MM-dd HH", "end": "yyyy-MM-dd HH"}
 
 ## How to use
 Without docker :

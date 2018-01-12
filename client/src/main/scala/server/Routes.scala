@@ -18,20 +18,35 @@ import server.WeatherActor._
 import spark.Compute
 
 import spray.json._
+import java.util.{ Calendar, Date }
+import java.text.SimpleDateFormat
 
 
-final case class WeatherRequest(begin: String, end: String)
-final case class WeatherResponse(res: List[Compute.DataEntry])
+final case class Request(begin: Calendar, end: Calendar)
+final case class Response(res: List[Compute.AveragePair], r2: Double)
+
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
-  implicit val weatherRequestFormat  = jsonFormat2(WeatherRequest)
-  implicit val dataEntryFormat       = jsonFormat3(Compute.DataEntry)
-  implicit val weatherResponseFormat = jsonFormat1(WeatherResponse)
+  implicit object CalendarFormat extends JsonFormat[Calendar] {
+    val calendarFormat = new SimpleDateFormat("yyyy-MM-dd HH")
+
+    def write(date: Calendar) = JsString(calendarFormat.format(date.getTime()))
+    def read(json: JsValue) = json match {
+      case JsString(rawCalendar) =>
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.setTime(calendarFormat.parse(rawCalendar))
+        calendar
+      case error => deserializationError(s"Expected JsString, got $error")
+    }
+  }
+
+  implicit val requestFormat  = jsonFormat2(Request)
+  implicit val averagePairFormat = jsonFormat3(Compute.AveragePair)
+  implicit val responseFormat = jsonFormat2(Response)
 }
 
 //#user-routes-class
 trait Routes extends JsonSupport {
-
   // we leave these abstract, since they will be provided by the App
   implicit def actorSystem: ActorSystem
   def weatherActor: ActorRef
@@ -42,10 +57,12 @@ trait Routes extends JsonSupport {
   lazy val httpRoutes: Route = {
     path("weather") {
       post {
-        entity(as[WeatherRequest]) { request =>
+        entity(as[Request]) { request =>
           onComplete(weatherActor ? GetWeather(request.begin, request.end)) {
-            case util.Success(result) => complete(WeatherResponse(result.asInstanceOf[List[Compute.DataEntry]]))
-            case util.Failure(ex)     => complete(500, ex.toString)
+            case util.Success(r) =>
+                val result = r.asInstanceOf[(Array[Compute.AveragePair], Double)]
+                complete(Response(result._1.toList, result._2))
+            case util.Failure(ex) => complete(500, ex.toString)
           }
         }
       }
