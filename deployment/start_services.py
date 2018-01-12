@@ -54,6 +54,7 @@ def start_services():
     time.sleep(30)
     start_service(ip, "app_config_files/akka_weatherfinder.json")
     start_service(ip, "app_config_files/akka_tweet.json")
+    start_service(ip, "app_config_files/client.json")
         
 
 if __name__ == "__main__":

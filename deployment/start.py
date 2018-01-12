@@ -23,6 +23,10 @@ if __name__ == "__main__":
     run_instance('slave 3', 't2.small', False, [cfg.GLOBAL_SECURITY_GROUP, cfg.CLIENT_SECURITY_GROUP])
     run_instance('slave 4', 't2.small', False, [cfg.GLOBAL_SECURITY_GROUP, cfg.CLIENT_SECURITY_GROUP])
     run_instance('slave 5', 't2.small', False, [cfg.GLOBAL_SECURITY_GROUP, cfg.CLIENT_SECURITY_GROUP])
+    run_instance('slave 6', 't2.small', False, [cfg.GLOBAL_SECURITY_GROUP, cfg.CLIENT_SECURITY_GROUP])
+    run_instance('slave 7', 't2.small', False, [cfg.GLOBAL_SECURITY_GROUP, cfg.CLIENT_SECURITY_GROUP])
+    run_instance('slave 8', 't2.small', False, [cfg.GLOBAL_SECURITY_GROUP, cfg.CLIENT_SECURITY_GROUP])
+    run_instance('slave 9', 't2.small', False, [cfg.GLOBAL_SECURITY_GROUP, cfg.CLIENT_SECURITY_GROUP])
 
     print_title("Waiting {0}s for instances to start...".format(cfg.EC2_STARTING_DURATION))
     time.sleep(cfg.EC2_STARTING_DURATION)
