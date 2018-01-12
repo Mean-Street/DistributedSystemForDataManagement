@@ -1,7 +1,7 @@
 {
   "id": "/sdtd/spark-temperature",
   "cpus": 0.3,
-  "mem": 450.0,
+  "mem": 990.0,
   "instances": 1,
   "networks": [ { "mode": "container/bridge" } ],
   "container": {

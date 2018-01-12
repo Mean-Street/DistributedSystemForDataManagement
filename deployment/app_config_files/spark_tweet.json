@@ -1,7 +1,7 @@
 {
   "id": "/sdtd/spark-tweet",
   "cpus": 0.3,
-  "mem": 1024.0,
+  "mem": 990.0,
   "instances": 1,
   "networks": [ { "mode": "container/bridge" } ],
   "container": {
