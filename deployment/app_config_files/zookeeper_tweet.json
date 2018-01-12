@@ -1,0 +1,17 @@
+{
+  "id": "sdtd/zookeeper-tweet",
+  "cpus": 0.2,
+  "mem": 64,
+  "instances": 1,
+  "networks": [ { "mode": "container/bridge" } ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "sdtdensimag/zookeeper:latest",
+      "forcePullImage": true
+    },
+    "portMappings": [
+      { "containerPort": 2181, "hostPort": 0, "servicePort": 2183, "protocol": "tcp" }
+    ]
+  }
+}
