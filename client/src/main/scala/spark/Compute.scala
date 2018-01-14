@@ -18,8 +18,8 @@ import org.apache.spark.sql.{ SparkSession, Row }
 /**
  * Constants related to Cassandra's table
  */
-object DataBase {
-  val keyspace: String = "sdtd"
+object Database {
+  var keyspace: String = "sdtd"
 
   object Temperature {
     val table: String = "temperature"
@@ -45,8 +45,6 @@ object DataBase {
  * Main object where the computation takes place
  */
 object Compute {
-  val sc = new SparkContext(new SparkConf())
-
   /**
   * The type extracted from a row of a table in the database
   */
@@ -69,8 +67,8 @@ object Compute {
     * A handy constructor, which from a row of the table, creates an EntryTemperature
     */
     def apply(row: CassandraRow): EntryTemperature = {
-      EntryTemperature(DataBase.parseDate(row.getString(DataBase.Temperature.date)),
-                       row.getDouble(DataBase.Temperature.temperature))
+      EntryTemperature(Database.parseDate(row.getString(Database.Temperature.date)),
+                       row.getDouble(Database.Temperature.temperature))
     }
   }
 
@@ -87,7 +85,7 @@ object Compute {
     * A handy constructor, which from a row of the table, creates an EntryFeeling
     */
     def apply(feeling: Double, row: CassandraRow): EntryFeeling = {
-      EntryFeeling(DataBase.parseDate(row.getString(DataBase.Feeling.date)), feeling)
+      EntryFeeling(Database.parseDate(row.getString(Database.Feeling.date)), feeling)
     }
   }
 
@@ -125,9 +123,9 @@ object Compute {
   /**
   * Loads the sentiments from the database and groups them by hour, then computes every averages.
   */
-  private def loadFeelings(begin: Calendar, end: Calendar): RDD[(HourSlot, EntryFeeling)] = {
-    val rdd = sc.cassandraTable(DataBase.keyspace, DataBase.Feeling.table)
-    val rddEntryFeeling = rdd.map(e => e.getString(DataBase.Feeling.feeling) match {
+  private def loadFeelings(begin: Calendar, end: Calendar, sc: SparkContext): RDD[(HourSlot, EntryFeeling)] = {
+    val rdd = sc.cassandraTable(Database.keyspace, Database.Feeling.table)
+    val rddEntryFeeling = rdd.map(e => e.getString(Database.Feeling.feeling) match {
                                             case "VERY_NEGATIVE" => (0.0, e)
                                             case "NEGATIVE"      => (1.0, e)
                                             case "NEUTRAL"       => (2.0, e)
@@ -141,8 +139,8 @@ object Compute {
   /**
   * Loads the temperatures from the database and groups them by hour, then computes every averages.
   */
-  private def loadTemperatures(begin: Calendar, end: Calendar): RDD[(HourSlot, EntryTemperature)] = {
-    val rdd = sc.cassandraTable(DataBase.keyspace, DataBase.Temperature.table)
+  private def loadTemperatures(begin: Calendar, end: Calendar, sc: SparkContext): RDD[(HourSlot, EntryTemperature)] = {
+    val rdd = sc.cassandraTable(Database.keyspace, Database.Temperature.table)
     averageInterval[EntryTemperature](rdd.map(EntryTemperature(_)), begin, end)
   }
 
@@ -181,9 +179,9 @@ object Compute {
   *   - the average temperature and sentiment for every hour of the selected interval
   *   - a linear regression between the two previous results and returns the coefficient of determination
   */
-  def processMagic(begin: Calendar, end: Calendar): (Array[AveragePair], Double) = {
-    val feelings: RDD[(HourSlot, EntryFeeling)] = loadFeelings(begin, end)
-    val temperatures: RDD[(HourSlot, EntryTemperature)] = loadTemperatures(begin, end)
+  def processMagic(begin: Calendar, end: Calendar, sc: SparkContext): (Array[AveragePair], Double) = {
+    val feelings: RDD[(HourSlot, EntryFeeling)] = loadFeelings(begin, end, sc)
+    val temperatures: RDD[(HourSlot, EntryTemperature)] = loadTemperatures(begin, end, sc)
     correlate(feelings, temperatures)
   }
 }

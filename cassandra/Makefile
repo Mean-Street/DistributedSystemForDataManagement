@@ -33,5 +33,3 @@ cqlsh:
 
 check:
 	sudo docker exec -it ${DOCKER_NAME} nodetool status
-
-

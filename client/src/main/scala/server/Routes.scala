@@ -15,7 +15,7 @@ import scala.concurrent.duration._
 
 import server.WeatherActor._
 
-import spark.Compute
+import spark.{ Compute, Database }
 
 import spray.json._
 import java.util.{ Calendar, Date }
@@ -55,6 +55,23 @@ trait Routes extends JsonSupport {
   implicit lazy val timeout = Timeout(60.seconds)
 
   lazy val httpRoutes: Route = {
+    path("test") {
+      post {
+        entity(as[Request]) { request =>
+          val keyspace = Database.keyspace
+          Database.keyspace = "test"
+          onComplete(weatherActor ? GetWeather(request.begin, request.end)) {
+            case util.Success(r) =>
+                Database.keyspace = keyspace
+                val result = r.asInstanceOf[(Array[Compute.AveragePair], Double)]
+                complete(Response(result._1.toList, result._2))
+            case util.Failure(ex) =>
+                Database.keyspace = keyspace
+                complete(500, ex.toString)
+          }
+        }
+      }
+    } ~
     path("weather") {
       post {
         entity(as[Request]) { request =>

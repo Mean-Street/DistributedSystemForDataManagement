@@ -28,6 +28,9 @@ object AkkaHttpServer extends App with Routes {
   implicit val executionContext: ExecutionContext = actorSystem.dispatcher
   val weatherActor: ActorRef = actorSystem.actorOf(WeatherActor.props, "weatherActor")
 
+  // Evaluate Spark Context at bootstart
+  // WeatherActor.sc
+
   val routes = httpRoutes;
 
   val serverBindingFuture: Future[ServerBinding] = Http().bindAndHandle(routes, "0.0.0.0", 8080)
