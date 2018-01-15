@@ -8,7 +8,8 @@
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "sdtdensimag/cassandra:latest"
+      "image": "sdtdensimag/cassandra:latest",
+      "forcePullImage": true
     },
     "portMappings": [
       { "containerPort": 9042, "hostPort": 0, "servicePort": 9042, "protocol": "tcp" },

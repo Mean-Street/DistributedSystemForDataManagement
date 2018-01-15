@@ -1,13 +1,14 @@
 {
   "id": "/sdtd/spark-tweet",
   "cpus": 0.3,
-  "mem": 450.0,
+  "mem": 990.0,
   "instances": 1,
   "networks": [ { "mode": "container/bridge" } ],
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "sdtdensimag/spark:latest"
+      "image": "sdtdensimag/spark:latest",
+      "forcePullImage": true
     },
     "portMappings": [
       { "containerPort": 4040, "hostPort": 0, "servicePort": 4041, "protocol": "tcp" }
@@ -18,6 +19,6 @@
     "CASSANDRA_PORT": "9042"
   },
   "args": [
-            "run-spark", "TwitterPreprocessing", "172.17.0.1:9093", "tweet", "2"
+            "run-spark", "TwitterPreprocessing", "172.17.0.1:9092", "tweet", "2"
           ]
 }

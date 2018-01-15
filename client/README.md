@@ -11,20 +11,30 @@
 
 ## Test
 
-* Requires a database
-* Run the queries contained in `client/mock_queries.csql` in a cqlshell
-* Build the image and run the container with the following commands:
+### Web server
+In order to test if the client is reachable, run:
 ```sh
-make build
-make run cassandra_host=<host> cassandra_port=<port>
+make test_client client_host=<host>
 ```
 
-Once the server up and running, and the user is ready to be flabbergasted, send a post request with `curl` or any other
-tool such as the following one:
+The string "test réussi" should be echoed.
+
+### Flow Akka - Spark - Cassandra
+To test the flow, run first the following command on the machine running cassandra's container:
 ```sh
-curl -H "Content-Type: application/json" -X POST -d '{"begin":"2018-01-01 01","end":"2018-01-01 03"}' http://localhost:8080/weather
+make create_test cassandra_container=<name>
 ```
 
+Then, on the machine running the client, execute:
+```sh
+make test_cassandra cassandra_host=<host> client_host=<host>
+```
+This command should return the following string:
+```json
+{"res":[{"hourSlot":"2018-01-01 14","feeling":1.6666666666666667,"temperature":7.0},{"hourSlot":"2018-01-01 03","feeling":2.0,"temperature":7.0}],"r2":0.0}
+```
+
+To clear the created test keyspace, run `make clear_test cassandra_container=<name>` on cassandra's machine.
 
 ## Deployment
 

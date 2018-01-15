@@ -6,6 +6,7 @@ KEY_PAIR_NAME = "smack"
 KEY_PAIR_PATH = os.path.join(ROOT, KEY_PAIR_NAME + ".pem")
 
 GLOBAL_SECURITY_GROUP = "global"
+CLIENT_SECURITY_GROUP = "client"
 MESOS_SECURITY_GROUP = "mesos"
 MARATHON_SECURITY_GROUP = "marathon"
 

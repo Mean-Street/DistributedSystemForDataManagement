@@ -28,7 +28,7 @@ def prepare_cassandra(master_ips): #Rewrites the cassandra.json file to include 
 
 
 def start_service(ip, filepath):
-    print_header("Starting ", filepath)
+    print_header("Starting " + filepath)
     with open(filepath) as f:
         data = json.load(f)
         resp = requests.post('http://' + ip + ':8080/v2/apps', json=data)
@@ -45,13 +45,16 @@ def start_services():
     #List all services here
     start_service(ip, "app_config_files/zookeeper.json")
     time.sleep(10)
-    start_service(ip, "app_config_files/kafka_temperature.json")
+    start_service(ip, "app_config_files/kafka.json")
     time.sleep(10)
     start_service(ip, "app_config_files/cassandra.json")
     time.sleep(20)
     start_service(ip, "app_config_files/spark_temperature.json")
+    start_service(ip, "app_config_files/spark_tweet.json")
     time.sleep(30)
     start_service(ip, "app_config_files/akka_weatherfinder.json")
+    start_service(ip, "app_config_files/akka_tweet.json")
+    start_service(ip, "app_config_files/client.json")
         
 
 if __name__ == "__main__":

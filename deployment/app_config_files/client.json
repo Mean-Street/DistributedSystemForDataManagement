@@ -1,17 +1,17 @@
 {
-  "id": "/sdtd/spark-temperature",
+  "id": "sdtd/client",
   "cpus": 0.3,
-  "mem": 990.0,
+  "mem": 450,
   "instances": 1,
   "networks": [ { "mode": "container/bridge" } ],
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "sdtdensimag/spark:latest",
+      "image": "sdtdensimag/spark-client:latest",
       "forcePullImage": true
     },
     "portMappings": [
-      { "containerPort": 4040, "hostPort": 0, "servicePort": 4040, "protocol": "tcp" }
+      { "containerPort": 8080, "hostPort": 0, "servicePort": 8080, "protocol": "tcp" }
     ]
   },
   "env": {
@@ -19,6 +19,6 @@
     "CASSANDRA_PORT": "9042"
   },
   "args": [
-            "run-spark", "DataPreprocessing", "172.17.0.1:9092", "temperature", "2"
+            "run-spark", "server.AkkaHttpServer"
           ]
 }
