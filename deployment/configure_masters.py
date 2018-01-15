@@ -42,7 +42,7 @@ def start_marathon(pub_ip, master_ips):
 
 
 def start_cassandra(pub_ip, id_, master_ip):
-    cmd = 'sudo docker run -d --name="cassandra" --network="host" -p 9042:9042 -p 7000:7000 -p 7001:7001 -e MAX_HEAP_SIZE="400M" -e HEAP_NEWSIZE="100M"'
+    cmd = 'sudo docker run -d --name="cassandra" --network="host" -p 9042:9042 -p 7000:7000 -p 7001:7001 -p 7199:7199 -p 9160:9160 -e MAX_HEAP_SIZE="400M" -e HEAP_NEWSIZE="100M"'
     if id_ != 1:
         cmd += ' -e CASSANDRA_SEEDS=' + master_ip
     cmd += ' sdtdensimag/cassandra'
@@ -86,12 +86,14 @@ def configure_masters():
     for p in processes:
         p.wait()
 
-    return # TODO
+
     print_header("Starting Cassandra...")
     processes = []
     for i, instance in enumerate(get_instances(is_slave=False)):
         p = start_cassandra(get_public_ip(instance), i+1, private_ips[0])
         p.wait()
+        if i == 0:
+           time.sleep(40)
 
 
 if __name__ == "__main__":
