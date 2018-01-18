@@ -5,9 +5,10 @@ All the commands are to be executed on the user's machine, not on AWS.
 ## Install
 
 ```bash
-# virtualenv venv -p python3
-# source venv/bin/activate
-pip install awscli boto3 requests # With Python 3
+pip install --user virtualenv
+virtualenv venv -p python3
+source venv/bin/activate
+pip install awscli boto3 requests
 ```
 
 ## Configure
@@ -15,6 +16,8 @@ pip install awscli boto3 requests # With Python 3
 cf. http://docs.aws.amazon.com/fr_fr/cli/latest/userguide/tutorial-ec2-ubuntu.html
 
 ```bash
+# source venv/bin/activate
+
 # Register AWS credentials
 aws configure
 # AWS Access Key ID: See in the AWS Educate Lab page
@@ -33,17 +36,22 @@ python configure.py
 ## Manage the machines
 
 ```bash
+# source venv/bin/activate
+
 # Note: edit the file to launch more instances
 python start.py
 ```
 
 ```bash
+# source venv/bin/activate
 python stop.py
 ```
 
 ## Demo
 
 ```bash
+# source venv/bin/activate
+
 # List running machines
 python get_instances.py
 
