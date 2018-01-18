@@ -65,6 +65,9 @@ public class WeatherFinderApp
         // trigger the tweet streaming (in new york)
         actor.tell("start_twitter", ActorRef.noSender());
         
+        // test to stop the twitter stream
+//        system.scheduler().schedule(Duration.Zero(), Duration.create(5, TimeUnit.SECONDS),
+//                                    actor, "stop_twitter", system.dispatcher(), ActorRef.noSender());
         }
     }
 }
