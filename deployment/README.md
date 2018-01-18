@@ -53,8 +53,9 @@ python kill_machine.py <instance-id>
 # Add a slave (scalability)
 python add_slave.py <name> t2.<size>
 
-# List containers
-python get_services.py <instance-id>
+# List services
+python get_services.py
+python get_services.py <public-ip>
 
 # Kill container
 python kill_service.py <instance-id> <container-id>
