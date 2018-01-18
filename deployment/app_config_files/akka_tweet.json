@@ -1,5 +1,5 @@
 {
-  "id": "/sdtd/akka-tweet",
+  "id": "akka-tweet",
   "cpus": 0.5,
   "mem": 512.0,
   "instances": 1,

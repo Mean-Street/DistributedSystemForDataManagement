@@ -1,5 +1,5 @@
 {
-  "id": "sdtd/zookeeper",
+  "id": "zookeeper",
   "cpus": 0.2,
   "mem": 64,
   "instances": 1,
