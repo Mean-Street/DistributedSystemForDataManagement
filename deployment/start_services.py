@@ -37,22 +37,22 @@ def start_service(ip, filepath):
 def start_services():
     instances = get_instances(is_slave=False)
     ip = get_public_ip(instances[0])
-    master_ips = [get_private_ip(instance) for instance in get_instances(is_slave=False)]
-    services = []
 
-    prepare_cassandra(master_ips)
+    #master_ips = [get_private_ip(instance) for instance in get_instances(is_slave=False)]
+    #prepare_cassandra(master_ips)
 
-    #List all services here
-#    start_service(ip, "app_config_files/hello_world.json") #Test file
     start_service(ip, "app_config_files/zookeeper.json")
     time.sleep(10)
-    start_service(ip, "app_config_files/kafka_temperature.json")
+    start_service(ip, "app_config_files/kafka.json")
     time.sleep(10)
-    start_service(ip, "app_config_files/cassandra2.json")
+    start_service(ip, "app_config_files/cassandra.json")
     time.sleep(20)
     start_service(ip, "app_config_files/spark_temperature.json")
+    start_service(ip, "app_config_files/spark_tweet.json")
     time.sleep(30)
     start_service(ip, "app_config_files/akka_weatherfinder.json")
+    start_service(ip, "app_config_files/akka_tweet.json")
+    start_service(ip, "app_config_files/client.json")
         
 
 if __name__ == "__main__":
