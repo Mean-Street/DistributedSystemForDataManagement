@@ -1,5 +1,5 @@
 {
-  "id": "/sdtd/spark-tweet",
+  "id": "spark-tweet",
   "cpus": 0.3,
   "mem": 990.0,
   "instances": 3,

@@ -1,5 +1,5 @@
 {
-  "id": "sdtd/cassandra",
+  "id": "cassandra",
   "cpus": 0.3,
   "mem": 512.0,
   "instances": 1,

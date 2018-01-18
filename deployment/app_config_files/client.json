@@ -1,5 +1,5 @@
 {
-  "id": "sdtd/client",
+  "id": "client",
   "cpus": 0.3,
   "mem": 450,
   "instances": 1,
