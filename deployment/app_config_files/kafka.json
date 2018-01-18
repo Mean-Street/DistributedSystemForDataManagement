@@ -2,7 +2,7 @@
   "id": "sdtd/kafka",
   "cpus": 0.3,
   "mem": 950.0,
-  "instances": 1,
+  "instances": 2,
   "networks": [ { "mode": "container/bridge" } ],
   "container": {
     "type": "DOCKER",
