@@ -18,14 +18,12 @@ def is_smack_instance(instance):
     return False
 
 
-def ssh(ip, cmd, shell=False):
+def ssh(ip, cmd, shell=False, stdout=None):
     cmd = "ssh -i " + cfg.KEY_PAIR_PATH + " -o StrictHostKeyChecking=no " + cfg.UBUNTU_USER + "@" + ip + " " + cmd
 
     with open(LOG_PATH, "a") as logfile:
         logfile.write(cmd + "\n")
 
     if not shell:
-        p = sp.Popen(cmd.split())
-    else:
-        p = sp.Popen(cmd, shell=True)
-    return p
+        cmd = cmd.split()
+    return sp.Popen(cmd, shell=shell, stdout=stdout)

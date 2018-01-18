@@ -60,3 +60,9 @@ python get_services.py <public-ip>
 # Kill container
 python kill_service.py <instance-id> <container-id>
 ```
+
+## Benchmark
+
+```
+python benchmark_restart_client.py
+```
