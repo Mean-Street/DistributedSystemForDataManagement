@@ -42,7 +42,7 @@ public class RequestDispatcher extends AbstractActor {
         this.apixuApiRef = getContext().actorOf(Requester.props(http, materializer, ApixuRequestTemperature.class,
                                                 ApixuResponse.class, config));
 
-        this.twitterRef = getContext().actorOf(new RoundRobinPool(10).props(RequesterTwitter.props(http, materializer, config)));
+        this.twitterRef = getContext().actorOf(new RoundRobinPool(10).props(RequestDispatcherTwitter.props(http, materializer, config)));
     }
 
     @Override
@@ -62,9 +62,6 @@ public class RequestDispatcher extends AbstractActor {
                 })
                 .matchEquals("start_twitter", s -> {
                     log.info("Forwarding a request to Tweeter");
-                    twitterRef.forward(s, getContext());
-                })
-                .matchEquals("stop_twitter", s -> {
                     twitterRef.forward(s, getContext());
                 })
                 .build();
