@@ -42,7 +42,7 @@ public class RequestDispatcher extends AbstractActor {
         this.apixuApiRef = getContext().actorOf(Requester.props(http, materializer, ApixuRequestTemperature.class,
                                                 ApixuResponse.class, config));
 
-        this.twitterRef = getContext().actorOf(new RoundRobinPool(5).props(RequesterTwitter.props(http, materializer, config)));
+        this.twitterRef = getContext().actorOf(new RoundRobinPool(10).props(RequestDispatcherTwitter.props(http, materializer, config)));
     }
 
     @Override
