@@ -27,6 +27,7 @@ public class RequestDispatcherTwitter extends AbstractActor {
     private TwitterStream twitterStream;
     private StatusListener listener;
     private int cpt = 0;
+    private long startTime;
 
     public final static String name = "request-dispatcher";
 
@@ -36,13 +37,26 @@ public class RequestDispatcherTwitter extends AbstractActor {
 
     private RequestDispatcherTwitter(Http http, Materializer materializer, KafkaConfig config) {
 
-        this.twitterRef = getContext().actorOf(new RoundRobinPool(4).props(RequesterTwitter.props(http, materializer, config)));
+        this.twitterRef = getContext().actorOf(new RoundRobinPool(100).props(RequesterTwitter.props(http, materializer, config)));
         this.listener = new StatusListener(){
                         public void onStatus(Status status) {
+                            
+//                            System.out.println("tweet " + cpt);
+                            if(cpt == 0 && config.getTopic().equals("test") ){
+                                System.out.println("start time initialized");
+                                startTime = System.currentTimeMillis();
+                            }
+                            
+                            if(cpt == 500 && config.getTopic().equals("test") ){
+                                long endTime = System.currentTimeMillis();
+                                System.out.println("100 tweets streamed in : " + (endTime - startTime));
+                            }
+                            
                             cpt += 1;
 //                            System.out.println("to process : " + cpt);
                             String json = TwitterObjectFactory.getRawJSON(status);
                             twitterRef.forward(json+"/"+cpt, getContext());
+//                            twitterStream.shutdown();
                         }
                         public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
                             System.out.println("onDeletionNotice");
@@ -67,6 +81,9 @@ public class RequestDispatcherTwitter extends AbstractActor {
     public AbstractActor.Receive createReceive() {
         return receiveBuilder()
                 .matchEquals("start_twitter", s -> {
+                    startTwitter(listener);
+                })
+                .matchEquals("test", s -> {
                     startTwitter(listener);
                 })
                 .build();
@@ -109,7 +126,7 @@ public class RequestDispatcherTwitter extends AbstractActor {
                     twitterStream.addListener(listener);
                     FilterQuery filterQuery = new FilterQuery("botname");
             //        //filterQuery.track();
-                    filterQuery.locations(new_york);
+                    filterQuery.locations(slice_of_usa);
                     twitterStream.filter(filterQuery);
     }
     

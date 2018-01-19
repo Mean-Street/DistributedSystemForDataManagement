@@ -31,6 +31,7 @@ public class RequesterTwitter extends AbstractActor {
     private final Materializer materializer;
     private final Producer<String, String> producer;
     private final KafkaConfig config;
+    private long startTime;
 
     private static KafkaProducer<String, String> initProducer(KafkaConfig config) {
 
@@ -65,6 +66,7 @@ public class RequesterTwitter extends AbstractActor {
                 .build();
     }
     
+    //not used
     private void benchmarkingNotify(int cpt) {
         //create date
         LocalDateTime date = LocalDateTime.now();
@@ -82,6 +84,8 @@ public class RequesterTwitter extends AbstractActor {
         try {
             // Handle Json Object
             int cpt = Integer.parseInt(json.substring(json.lastIndexOf("/") + 1));
+            
+//            System.out.println("kafka " + cpt);
 //            System.out.println("to Kafka : " + cpt);
             json = json.substring(0, json.lastIndexOf("/"));
             TwitterResponse response = parseJson(json);
@@ -90,11 +94,19 @@ public class RequesterTwitter extends AbstractActor {
             ProducerRecord<String, String> newRecord = new ProducerRecord<>(config.getTopic(), responseSerialized);
             log.info("response: " + newRecord);
             producer.send(newRecord);
-                                
-            // benchmarking
-            if (cpt % 100 == 0) {
-//                benchmarkingNotify(cpt);
+            
+            
+//           Benchmarking
+            if(cpt == 1 && config.getTopic().equals("test") ){
+                System.out.println("KAFKA start time initialized");
+                startTime = System.currentTimeMillis();
             }
+                            
+            if(cpt == 10 && config.getTopic().equals("test") ){
+                long endTime = System.currentTimeMillis();
+                System.out.println("100 tweets sent to KAFKA in : " + (endTime - startTime));
+            }
+            
         } catch (IOException ex) {
             Logger.getLogger(RequesterTwitter.class.getName()).log(Level.SEVERE, null, ex);
         }

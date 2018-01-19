@@ -1,0 +1,294 @@
+\documentclass[a4paper,titlepage,openany,12pt]{article}
+
+% BASICS
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc} % Reconnaissance des accents en entrée
+\usepackage[T1]{fontenc} % Reconnaissance des accents en sortie
+%\usepackage{lmodern} % Ajout de polices
+\usepackage{stmaryrd} % Ajout de symboles
+
+\usepackage{indentfirst} % Alinéa du premier paragraphe
+\usepackage{graphicx} % Pour utiliser des graphiques
+\usepackage{array} % Pour utiliser des tableaux
+\usepackage{amsmath, amsfonts, amssymb, }%dsfont} % Pour les formules mathématiques et polices associées et symboles associés et fonction indicatrice
+\usepackage[mathscr]{eucal} % Pour la police mathcal
+
+% AVANCES
+
+\usepackage{dirtree}
+
+\usepackage[svgnames]{xcolor} % Couleurs
+\usepackage{hyperref} % Hyperrefs sur le PDF
+\hypersetup{colorlinks=true,linkcolor=blue} % ... et en bleus
+
+\usepackage{pdfpages} % Ajout de documents PDF dans le rapport
+\usepackage{pdflscape} % Utilisation du format paysage
+\usepackage{todonotes} % Explicite
+\usepackage{glossaries} % Pour créer un glossaire : http://blog.dorian-depriester.fr/latex/utilisation-du-package-glossaries
+\usepackage{pdflscape} % Pour passer certaines pages en orientation portrait
+\usepackage{rotating} % Pour passer certaines pages en orientation portrait
+\usepackage{chngcntr} % Pour modifier la numérotation des graphiques : https://texblog.org/2014/12/04/continuous-figuretable-numbering-in-latex/
+\usepackage{multirow} % Pour diviser une case d'un tableau
+
+\usepackage{enumitem} % Pour jouer sur les paramètres des itemize
+
+% MISE EN PAGE
+\usepackage[left=25mm,right=25mm,top=25mm,bottom=25mm]{geometry}
+\usepackage{lastpage} % numérotation par rapport à la dernière page
+\usepackage{here} % Pour bloquer les éléments avec [H]
+
+\usepackage{fancyhdr} % Agencement des en-tête et pied-de-page
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\nouppercase \leftmark}
+\fancyfoot[R]{\thepage}
+\fancyfoot[L]{Introduction à la sécurité des systèmes d'information - Rapport 1}
+\renewcommand{\footrulewidth}{1pt}
+
+
+\fancypagestyle{lscape}{% 
+\fancyhf{} % clear all header and footer fields 
+\fancyfoot[LE]{%
+\begin{textblock}{20}(1,5){\rotatebox{90}{\leftmark}}\end{textblock}
+\begin{textblock}{1}(13,10.5){\rotatebox{90}{\thepage}}\end{textblock}}
+\fancyfoot[LO] {%
+\begin{textblock}{1}(13,10.5){\rotatebox{90}{\thepage}}\end{textblock}
+\begin{textblock}{20}(1,13.25){\rotatebox{90}{\rightmark}}\end{textblock}}
+\renewcommand{\headrulewidth}{0pt} 
+\renewcommand{\footrulewidth}{0pt}}
+
+
+\usepackage{titletoc} % Agencement de la Table des matières
+%\dottedcontents{part}[3.5em]{\Large \bf \addvspace{10pt}}{2.2em}{0em}
+%\dottedcontents{chapter}[2.3em]{\large \bf \addvspace{10pt}}{1.5em}{0em}
+\dottedcontents{section}[5em]{\bf \addvspace{5pt}}{2.2em}{1.2em}
+\dottedcontents{subsection}[8em]{\addvspace{3.5pt}}{3em}{.7em}
+
+\usepackage{titlesec} % Agencement des Titres
+%\titlespacing{\chapter}{0pt}{*3}{*9}
+%\titleformat{\chapter}[display]
+%{\normalfont\Large\filcenter \bfseries}
+%{\rule[1mm]{15mm}{1mm} \hspace{4mm} \hspace{5mm} \rule[1mm]{15mm}{1mm}}
+%{1pc}
+%{%\titlerule
+%\vspace{1pc}%
+%\Huge}
+
+\titlespacing*{\subsection} {15pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+% Affichage Tableaux et figures
+\usepackage{caption}
+
+	% Affichage figure en couleur
+\renewcommand{\figurename}{FIGURE}
+\captionsetup[figure]{labelfont={color=DarkRed}}
+	% Affichage table -> tableau (et petites capitales)
+%\renewcommand\tablename{\textsc{Tableau}}
+	% Affichage tableau en couleur 
+%\renewcommand{\tablename}{TABLE}
+%\captionsetup[table]{labelfont={color=DarkRed}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%\frontmatter
+
+\includepdf{pageDeGarde.pdf}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\newpage
+%\listoffigures
+%\listoftables
+%\mainmatter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CHAPTER 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Compromission}
+\vspace{-0.6cm}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{0.1cm}
+	
+Le service compromis est la bibliothèque standard C, GNU C Library (glibc). Cette librairie est utilisée par différents types de systèmes : différents types de noyaux et différents types d'architectures. Elle est surtout présente dans les systèmes Linux sur une architecture x86. La glibc est notamment présente sur CentOS, Ubuntu, RedHat, Suse, Ubuntu, Fedora...\\
+
+Il s’agit d’une compromission de type \hyperlink{Glossaire}{Local Exploit} et référencée comme \hyperlink{Glossaire}{stack clash}.
+
+
+
+\hypertarget{S2}{}
+\section{Vulnérabilité}
+\vspace{-0.6cm}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{0.1cm}
+
+Les programmes dans l’OS utilisent une pile pour stocker leurs variables et les valeurs de retours des fonctions. Cette pile s’agrandit en fonction du nombre de ces variables et de la profondeur de l’arbre de fonction. De plus elle partage le même espace mémoire que les programmes, tas et librairies ordinaires ; il est donc nécessaire de gérer l’expansion de la pile pour qu’elle ne recouvre pas des régions mémoire déjà utilisées. 
+
+ En temps normal, si le pointeur de pile vient à rejoindre le début de la pile, une exception “page-fault” est levée et le kernel agrandie la pile. Or, si le début de la pile est contiguë à une autre mémoire, il est possible de déplacer le pointeur de pile sur l’autre mémoire sans lever d’exceptions. Cela permet ainsi d’accéder à l’autre zone mémoire.
+
+
+Dans cette idée un “stack guard gap” de 4KB existe au début de la pile (début de pile -> plus petite adresse) et sert de tampon. Le but de cette zone mémoire est de détecter les éventuels chevauchements d’une zone mémoire contiguë avec la pile. Ainsi, quand on tente d’accéder à ce tampon, une exception “page fault” est levée puis capturée par le kernel, et le processus est terminé avec une erreur \hyperlink{Glossaire}{SIGSEGV} car la pile ne peut pas être agrandie.
+
+Le problème, c’est qu’il a été mis en évidence que le pointeur de la pile peut passer outre ce stack guard page (en sautant la plage d’adresse) et, par la suite, potentiellement entraîner des réécritures dans des régions mémoire occupées, sans que d’exceptions ne soient levées. Tout ce qui se trouve dans ce nouvel espace mémoire est alors accessible.\\
+
+En résumé, glibc contient une vulnérabilité qui permet d’utiliser des valeurs de \\ \hyperlink{Glossaire}{LD\_LIBRARY\_PATH} forgées pour manipuler la pile d’exécution. Cela peut potentiellement mener à des exécutions de code arbitraire et permettre de réaliser une \hyperlink{Glossaire}{élévation de privilèges}.\\
+
+Celle vulnérabilité affecte les versions de glibc antérieures à 2.25 et concerne toute machine Linux dont l’OS utilise la glibc. La faille peut donc concerner des machines clientes et / ou serveur.
+
+
+\section{Exemple d'architecture vulnérable}
+\vspace{-0.6cm}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{0.1cm}
+
+Dans l'exemple suivant, on fait l’hypothèse que les machines concernées utilisent une version de la glibc antérieure à la 2.25 avec n’importe lequel OS se servant cette librairie.\\
+
+La faille étudiée ici peut être exploitée à différentes fins. Son exploitation permet potentiellement de mettre hors service n’importe quel service faisant appel à la glibc. En effet, lors de l’exploitation de la faille, qui se fait en local (ou ssh) sur la machine visée, l’attaquant peut forger des valeurs de \hyperlink{Glossaire}{LD\_LIBRARY\_PATH} de manière à élever ses privilèges à accéder à des ressources protégées.
+
+L’attaquant peut alors exécuter du code sur le système cible que ce soit pour le mettre hors service, le modifier, ou pour récupérer des ressources.
+
+
+\section{Préconisations}
+\vspace{-0.6cm}
+\noindent\rule{\textwidth}{0.4pt}
+\vspace{0.1cm}
+
+Déjà il est important d’insister sur le fait que cette faille n’est pas issue d’une erreur de programmation mais vient plutôt de la mauvaise solution employée pour gérer l’agrandissement de la pile par l’\hyperlink{Glossaire}{ABI} (application binary interface) au niveau du compilateur et du noyau. On ne peut donc pas la corriger simplement en modifiant le code.\\
+
+Une première solution pour réduire l’utilisation de la faille est d’augmenter la taille du “stack guard gap” de manière significative, c’est à dire passer de 4KB à l’ordre de grandeur du MB. Cependant cela ne fait pas disparaître la faille, mais la rend seulement moins accessible.
+
+Afin de corriger cette faille une solution à long terme consiste à recompiler tout le code de l’espace utilisateur avec l’option gcc “-fstack-check”, qui permet d’empêcher le pointeur de pile (stack pointer) d’accéder à des espaces mémoire adjacents sans passer par la guard page. Cependant cela a un coup puisque du code est généré en plus pour vérifier, en run time, la conformité des accès mémoire.
+
+En revanche, il n’y a pas de “bonnes pratiques” à respecter pour éviter ce genre d’écueil.\\
+
+\hypertarget{^1}{}Dans un contexte d’entreprise il serait judicieux, dans un premier temps , de donner les autorisations aux administrateurs système pour modifier la taille du stack guard gap. Ensuite il faudrait planifier la recompilation du code de l’espace utilisateur à l’échelle de l’entreprise pour supprimer la faille.
+
+Plutôt que d'entraîner une modification de la PSSI (puisqu'il ne s'agit pas ici de modifier les pratiques et donc la politique de sécurité) la communication par rapport à cette faille prendrait plutôt la forme d'un billet envoyé aux équipes, de la forme suivante : \\
+
+\begin{figure}[H] %[H] : insertion à l'emplacement dans le texte
+
+Merci de prendre connaissance de la faille CVE-2017-1000366 rencontrée dans nos systèmes et d'agir suivant les recommandations du département de sécurité informatique. \\
+
+  \dirtree{%
+          .1 \textbf{CVE-2017-1000366}.
+          .2 \textbf{Type}.
+          .3 Local exploit. 
+          .3 Stack smashing.
+          .2 \textbf{Service compromis}.
+          .3 Bibliothèque standard C, GNU C Librairy (glibc). 
+          .2 \textbf{Systèmes affectés}.
+          .3 Linux, architecture x86.
+          .3 OS : CentOS, Ubuntu, RedHat, Suse, Ubuntu, Fedora.
+          .2 \textbf{Compromission}.
+          .3 Confidentialité [Totalement compromis].
+          .3 Intégrité [Totalement compromis].
+          .3 Authentifications [outrepassées]\\.
+        }
+        
+	%\caption{Note du département de sécurité informatique sur la faille indexée CVE-2017-1000366}
+	
+
+Accompagné des instructions sur les changements à effectuer dans l'immédiat et du détail des procédures  à venir (évoqué dans les paragraphes précédants \hyperlink{^1}{1}). Ainsi éventuellement qu'un descriptif détaillé du principe de fonctionnement de la faille (cf section \hyperlink{S2}{Vulnérabilité}). 
+\end{figure}
+
+\section{Expérimentations}
+
+Pour réaliser un exploit de type “Stack Clash”, quatre étapes sont requises:
+Dans un premier temps, il faut faire “clasher” la pile avec un autre espace mémoire. C’est à dire que l’on cherche à obtenir une situation où: la mémoire ciblée, la stack guard et la pile sont toutes trois contigues. Dans l'expérimentation, on a ciblé la mémoire liée à la \hyperlink{Glossaire}{ld.so}. Pour faire en sorte que les deux zones mémoires se rejoignent plus facilement, il est possible de fixer la valeur de \hyperlink{Glossaire}{RLIMIT\_STACK} à \hyperlink{Glossaire}{RLIM\_INFINITY}. Ainsi que modifier le comportement par défaut  de la fonction mmap utilisée par l’implémentation de malloc dans la \hyperlink{Glossaire}{ld.so}, de manière à allouer la mémoire “de bas en haut”.
+
+
+Ensuite, il est nécessaire de déplacer le pointeur de pile au début de celle ci. Cela est effectué en “allouant” un grand stack buffer et en y effectuant un \hyperlink{Glossaire}{memset()} sur toutes ses cellules.
+
+La troisième étape consiste donc à déplacer le pointeur de pile sur la mémoire ciblée. Pour cela, est “alloué” un autre stack buffer qui doit commencer dans la zone de la \hyperlink{Glossaire}{ld.so}, être de dimension supérieure à la guard-page, et terminer dans la pile, tout en évitant d’accéder aux cellules de ce tampon. Lors de l'exécution d’un programme dans l’exploit en fournissant des arguments et des variables d’environnement forgées pour l’occasion, execve() appelle process\_envvars() qui alloue un buffer respectant les conditions décrites précédemment. 
+
+Maintenant, il est possible de “smasher” la pile avec la zone ciblée. Dans notre cas, le sous-processus \_dl\_init\_paths() de process\_envvars() a écrit dans le mmap le résultat de \_dl\_important\_hwcaps(), une fonction liant les librairies spécifiques à la machine physique et les répertoires “trusted”, par exemple: “/lib/i386-linux-gnu” et “/lib”. C’est précisément cette zone que l’exploit vise à réécrire. Pour cela, on remplace la partie relative aux “hardware-capability” par 
+
+/**
+If our 16-byte-aligned good-write overwrites the 8-byte-aligned first
+hardware-capability string with the 8-byte pattern "/../tmp/", and if we
+append the trusted directory "/lib" to our \hyperlink{Glossaire}{LD\_LIBRARY\_PATH}, then (after
+\_dl\_init\_paths() returns to dl\_main()):
+
+- dlmopen\_doit() tries to load an LD\_AUDIT library "a" (our memory leak
+  from Step 1);
+
+- \_dl\_map\_object() searches for "a" in the trusted directory "/lib" from
+  our\\ 
+\hyperlink{Glossaire}{LD\_LIBRARY\_PATH};
+
+- open\_path() finds our library "a" in "/lib//../tmp//../tmp//../tmp/"
+  because we overwrote the first hardware-capability string with the
+  pattern "/../tmp/";
+
+- dl\_open\_worker() executes our library's \_init() constructor, as root.
+
+**/
+
+il est possible d’exploiter des binaires \hyperlink{Glossaire}{SUID} ou \hyperlink{Glossaire}{SGID} à travers la \hyperlink{Glossaire}{ld.so}.
+
+
+Les noyaux de certaines machines 32 bit, imposent une dimension maximale aux arguments fournis en ligne de commande, ainsi qu’aux variables d’environnement définie à un quart de \hyperlink{Glossaire}{RLIMIT\_STACK}. Mais pas à la dimension des tableaux de pointeurs argv[] et envp[]
+
+64 bits
+Du fait de l’espace mémoire plus vaste, il est nécessaire recourir à certaines stratégies pour réduire l’espace initial entre la fin du tas et le début de la pile, mais après cela, le même exploit peut être répété sur des machines 64 bit.
+
+
+\newpage
+
+\section*{\hypertarget{Glossaire}{Glossaire}}
+\addcontentsline{toc}{section}{Glossaire}
+\vspace{-0.6cm}
+\noindent\rule{\textwidth}{0.4pt}
+
+\begin{description}
+\item [ld.so]
+  Le programme ld.so est chargé de trouver et charger les bibliothèques partagées nécessaires pour un programme, prépare son démarrage et le lance.
+\item [LD\_LIBRARY\_PATH]
+  La  variable \texttt{LD\_LIBRARY\_PATH} contient une liste de répertoires, où se trouvent les biblioothèques qui ne sont pas installées  dans les répertoires par défaut. Lors de l'exécution d'une applciation liée dynamiquement à une bibliotèque, la bibliothèque est d'abord recherchée dans les répertoires par défaut, puis dans \texttt{LD\_LIBRARY\_PATH}.
+\item [local\_exploit]
+  Exploitation de la faille et exécution de l'exploit sur la même machine.
+\item [privilege\_escalation]
+  L'élévation de privilège, en français, est un mécanisme permettant à un utiliisateur d'obtenir des privilèges supérieurs à ceux qu'il a normalement.
+\item [stack\_clash (parfois stack\_smashing)]
+  Forme de vulnérabilité pour laquelle la pile d'une application ou d'un OS est amenée à faire un overflow. Cela peut entraîner la subvertion du système/programme concernée.
+\item [Application Binary Interface]
+  Interface de bas niveau entre les applications et le système d'exploitation, entre une application et une bibliothèque ou bien entre différentes parties d'une application.
+\item [RLIMIT\_STACK / RLIM\_INFINITY]
+  Taille maximum de la pile d'un processus.
+\item [memset()]
+  Fonction permettant de remplir une zone mémoire avec un octet donné.
+\item [SUID / SGID]
+  Moyen de transfert des droits aux utilisateurs, sous la forme de bits de contrôle d'accès.
+\item [SIGnal de Violation de SEGmentation]
+  Signal envoyé à un processus lorsque celui ci fait référence à une zone mémoire invalide.
+\end{description}
+
+\section*{Bibliographie}
+\addcontentsline{toc}{section}{Bibliographie}
+\vspace{-0.6cm}
+\noindent\rule{\textwidth}{0.4pt}
+
+\begin{itemize}
+\item \url {http://www.cvedetails.com/cve/CVE-2017-1000366/}
+\item \url{https://www.exploit-db.com/exploits/42275/}
+\item \url{https://www.suse.com/support/kb/doc/?id=7020973}
+\item \url{https://securitytracker.com/id/1038712}
+\item \url{https://www.qualys.com/2017/06/19/stack-clash/stack-clash.txt}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ANNEXES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
+
+  %\chapter{Login}
+  %\label{appendix:login}
+  %\includegraphics[width=\textwidth]{login2.PNG}
+ 
+
+\end{document}
+\grid

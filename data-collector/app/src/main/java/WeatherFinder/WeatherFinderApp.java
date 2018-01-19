@@ -39,32 +39,39 @@ public class WeatherFinderApp
 
         if (topic.equals("temperature")) {
         
-        // ******** REQUEST WITH TIMER : each minute **********
-        
-        // ******** WeatherBit ********
-        WeatherBitRequestTemperature WBRequest = new WeatherBitRequestTemperature(new Location("new+york", "USA"));
-        system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
-                                    actor, WBRequest, system.dispatcher(), ActorRef.noSender());
-        
-        // ******** OpenWeatherMap ********
-        
-        OpenWeatherMapRequestTemperature OWMRequest = new OpenWeatherMapRequestTemperature(new Location("new+york", "USA"));
-        system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
-                                    actor, OWMRequest, system.dispatcher(), ActorRef.noSender());
-        
-        // ******** Apixu ********
-        
-        ApixuRequestTemperature apixuRequest = new ApixuRequestTemperature(new Location("new_york", "USA"));
-        system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
-                                    actor, apixuRequest, system.dispatcher(), ActorRef.noSender());
+            // ******** REQUEST WITH TIMER : each minute **********
 
-        } else {
+            // ******** WeatherBit ********
+            WeatherBitRequestTemperature WBRequest = new WeatherBitRequestTemperature(new Location("new+york", "USA"));
+            system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
+                                        actor, WBRequest, system.dispatcher(), ActorRef.noSender());
+
+            // ******** OpenWeatherMap ********
+
+            OpenWeatherMapRequestTemperature OWMRequest = new OpenWeatherMapRequestTemperature(new Location("new+york", "USA"));
+            system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
+                                        actor, OWMRequest, system.dispatcher(), ActorRef.noSender());
+
+            // ******** Apixu ********
+
+            ApixuRequestTemperature apixuRequest = new ApixuRequestTemperature(new Location("new_york", "USA"));
+            system.scheduler().schedule(Duration.Zero(), Duration.create(60, TimeUnit.SECONDS),
+                                        actor, apixuRequest, system.dispatcher(), ActorRef.noSender());
+
+        } else if (topic.equals("tweet")) {
         
         // ******** TWEETS STREAMING **********
         
         // trigger the tweet streaming (in new york)
-        actor.tell("start_twitter", ActorRef.noSender());
+            actor.tell("start_twitter", ActorRef.noSender());
         
+        } else {
+            
+        
+        // ******** BENCHMAKING TWEETS STREAMING **********
+        
+        // trigger the tweet streaming (in a slice of te usa)
+            actor.tell("test", ActorRef.noSender());
         }
     }
 }

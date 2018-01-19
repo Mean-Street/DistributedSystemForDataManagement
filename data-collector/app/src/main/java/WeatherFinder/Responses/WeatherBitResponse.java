@@ -31,7 +31,6 @@ public class WeatherBitResponse extends Response {
 
     @Override
     public Double getTemperature() {
-        System.out.println("getTemperature()");
         return temperatures.get(0);
     }
     
