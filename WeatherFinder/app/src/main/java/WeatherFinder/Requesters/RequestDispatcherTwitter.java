@@ -1,11 +1,5 @@
 package WeatherFinder.Requesters;
 
-import WeatherFinder.Requests.ApixuRequestTemperature;
-import WeatherFinder.Requests.OpenWeatherMapRequestTemperature;
-import WeatherFinder.Requests.WeatherBitRequestTemperature;
-import WeatherFinder.Responses.ApixuResponse;
-import WeatherFinder.Responses.OpenWeatherMapResponse;
-import WeatherFinder.Responses.WeatherBitResponse;
 import WeatherFinder.Configurations.KafkaConfig;
 
 import akka.actor.AbstractActor;
@@ -21,6 +15,7 @@ import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
+import twitter4j.TwitterObjectFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
@@ -41,13 +36,13 @@ public class RequestDispatcherTwitter extends AbstractActor {
 
     private RequestDispatcherTwitter(Http http, Materializer materializer, KafkaConfig config) {
 
-        this.twitterRef = getContext().actorOf(new RoundRobinPool(10).props(RequesterTwitter.props(http, materializer, config)));
+        this.twitterRef = getContext().actorOf(new RoundRobinPool(4).props(RequesterTwitter.props(http, materializer, config)));
         this.listener = new StatusListener(){
                         public void onStatus(Status status) {
                             cpt += 1;
-                            System.out.println("to process : " + cpt);
-                            System.out.println("STATUS : " + status);
-                            twitterRef.forward(status, getContext());
+//                            System.out.println("to process : " + cpt);
+                            String json = TwitterObjectFactory.getRawJSON(status);
+                            twitterRef.forward(json+"/"+cpt, getContext());
                         }
                         public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
                             System.out.println("onDeletionNotice");
@@ -114,7 +109,7 @@ public class RequestDispatcherTwitter extends AbstractActor {
                     twitterStream.addListener(listener);
                     FilterQuery filterQuery = new FilterQuery("botname");
             //        //filterQuery.track();
-                    filterQuery.locations(slice_of_usa);
+                    filterQuery.locations(new_york);
                     twitterStream.filter(filterQuery);
     }
     
