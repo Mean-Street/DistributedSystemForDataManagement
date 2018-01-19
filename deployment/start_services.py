@@ -16,15 +16,21 @@ def print_header(text):
     print("\n")
 
 
-def prepare_cassandra(master_ips): #Rewrites the cassandra.json file to include master ips
-    cmd = ''
-    for ip in master_ips:
-        cmd += ip + ","
-    cmd = cmd[:-1]
-    command = ["sed", "-i", "-e", "s/\"CASSANDRA_SEEDS\":.*/\"CASSANDRA_SEEDS\":\"" + cmd + "\",/g", "app_config_files/cassandra2.json"]
-    sp.call(command)
-    command = ["sed", "-i", "-e", "s/\"CASSANDRA_LISTEN_ADDRESS\":.*/\"CASSANDRA_LISTEN_ADDRESS\":\"" + cmd + "\"/g", "app_config_files/cassandra2.json"]
-    sp.call(command)
+def prepare_spark_cassandra_connection(filepath, master_ips):
+    with open(filepath, "r") as f:
+        data = json.load(f)
+    data["env"]["CASSANDRA_HOST"] = ','.join(master_ips)
+    with open(filepath, "w") as f:
+        json.dump(data, f, indent=4)
+
+    #  cmd = ''
+    #  for ip in master_ips:
+    #      cmd += ip + ","
+    #  cmd = cmd[:-1]
+    #  command = ["sed", "-i", "-e", "s/\"CASSANDRA_SEEDS\":.*/\"CASSANDRA_SEEDS\":\"" + cmd + "\",/g", "app_config_files/cassandra2.json"]
+    #  sp.call(command)
+    #  command = ["sed", "-i", "-e", "s/\"CASSANDRA_LISTEN_ADDRESS\":.*/\"CASSANDRA_LISTEN_ADDRESS\":\"" + cmd + "\"/g", "app_config_files/cassandra2.json"]
+    #  sp.call(command)
 
 
 def start_service(ip, filepath):
@@ -38,8 +44,10 @@ def start_services():
     instances = get_instances(is_slave=False)
     ip = get_public_ip(instances[0])
 
-    #master_ips = [get_private_ip(instance) for instance in get_instances(is_slave=False)]
-    #prepare_cassandra(master_ips)
+    # Set masters IP for Spark to contact Cassandra nodes
+    master_ips = [get_private_ip(instance) for instance in get_instances(is_slave=False)]
+    prepare_spark_cassandra_connection("app_config_files/spark_temperature.json", master_ips)
+    prepare_spark_cassandra_connection("app_config_files/spark_tweet.json", master_ips)
 
     start_service(ip, "app_config_files/zookeeper.json")
     time.sleep(10)
