@@ -24,10 +24,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import twitter4j.Status;
-import twitter4j.StatusListener;
-import twitter4j.TwitterObjectFactory;
-import twitter4j.TwitterStream;
 
 public class RequesterTwitter extends AbstractActor {
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
@@ -35,9 +31,6 @@ public class RequesterTwitter extends AbstractActor {
     private final Materializer materializer;
     private final Producer<String, String> producer;
     private final KafkaConfig config;
-    private StatusListener listener;
-    private int cpt = 0;
-    private TwitterStream twitterStream;
 
     private static KafkaProducer<String, String> initProducer(KafkaConfig config) {
 
@@ -66,30 +59,31 @@ public class RequesterTwitter extends AbstractActor {
 //        log.info("createReceive");
         return receiveBuilder()
 
-                .match(Status.class, request -> {
-                    tweetProcessing(request);
+                .match(String.class, json -> {
+                    tweetProcessing(json);
                 })
                 .build();
     }
     
-    private void benchmarkingNotify() {
+    private void benchmarkingNotify(int cpt) {
         //create date
         LocalDateTime date = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String formatDateTime = date.format(formatter);
+        String formatDateTime = "{date:"+date.format(formatter)+",cpt:"+cpt+"}";
         //create kafka producer
         ProducerRecord<String, String> benchmarkingRecord = new ProducerRecord<>(config.getTopic(), formatDateTime);
         log.info("response: " + benchmarkingRecord);
         // sending to kafka
         producer.send(benchmarkingRecord);
-        System.out.println("Kafka notified at " + formatDateTime);
+        System.out.println("Kafka notified at " + benchmarkingRecord);
     }
     
-    private void tweetProcessing(Status status) {
+    private void tweetProcessing(String json) {
         try {
             // Handle Json Object
-            String json = TwitterObjectFactory.getRawJSON(status);
-            System.out.println("JSON " + json);
+            int cpt = Integer.parseInt(json.substring(json.lastIndexOf("/") + 1));
+//            System.out.println("to Kafka : " + cpt);
+            json = json.substring(0, json.lastIndexOf("/"));
             TwitterResponse response = parseJson(json);
             //Send json to Kafka
             String responseSerialized = new ObjectMapper().writeValueAsString(response);
@@ -98,10 +92,8 @@ public class RequesterTwitter extends AbstractActor {
             producer.send(newRecord);
                                 
             // benchmarking
-            cpt += 1;
-            System.out.println("to Kafka : " + cpt);
-            if (cpt >= 100) {
-                benchmarkingNotify();
+            if (cpt % 100 == 0) {
+//                benchmarkingNotify(cpt);
             }
         } catch (IOException ex) {
             Logger.getLogger(RequesterTwitter.class.getName()).log(Level.SEVERE, null, ex);
