@@ -8,7 +8,7 @@ import sys
 addrServ = sys.argv[1]
 
 def http_test():
-	url = 'http://' + addrServ + ':8080/weather'
+	url = 'http://' + addrServ + ':8080/test'
 
 	data = {
         'begin': '2018-01-01 02',
