@@ -31,7 +31,8 @@ def benchmark_start(app_id, n_apps=1, timeout=TIMEOUT):
 def benchmark_restart(app_id):
     old_services = get_services()[app_id]
     ip = old_services[0]
-    image = get_image(os.path.join(CONFIG_FILES_DIR, app_id))
+    config_fpath = os.path.join(CONFIG_FILES_DIR, app_id[1:]) + ".json" # The first char is a slash
+    image = get_image(config_fpath)
     containers = get_services(ip)
     container = containers[image][0]
 
