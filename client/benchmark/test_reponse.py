@@ -3,8 +3,9 @@
 import datetime
 import time
 import requests
+import sys
 
-addrServ = 'localhost'
+addrServ = sys.argv[1]
 
 def http_test():
 	url = 'http://' + addrServ + ':8080/weather'

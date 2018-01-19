@@ -3,14 +3,15 @@
 import datetime
 import time
 import requests
+import sys
 
-addrServ = 'localhost'
+addrServ = sys.argv[1]
 
 def http_test():
 	url = 'http://' + addrServ + ':8080/example'
 
 	res = requests.get(url)
-	if res.text == u'test réussi\n':
+	if res.text == u'test réussi':
 		return 1
 	return 0
 
