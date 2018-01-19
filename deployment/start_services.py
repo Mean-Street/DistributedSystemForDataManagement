@@ -49,9 +49,9 @@ def start_services():
     times = {}
 
     # Set masters IP for Spark to contact Cassandra nodes
-    master_ips = [get_private_ip(instance) for instance in get_instances(is_slave=False)]
-    prepare_spark_cassandra_connection("app_config_files/spark-temperature.json", master_ips)
-    prepare_spark_cassandra_connection("app_config_files/spark-tweet.json", master_ips)
+    #  master_ips = [get_private_ip(instance) for instance in get_instances(is_slave=False)]
+    #  prepare_spark_cassandra_connection("app_config_files/spark-temperature.json", master_ips)
+    #  prepare_spark_cassandra_connection("app_config_files/spark-tweet.json", master_ips)
 
     for service in ["zookeeper", "kafka", "cassandra", "spark-temperature",
                     "spark-tweet", "akka-temperature", "akka-tweet", "client"]:
