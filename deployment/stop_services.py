@@ -8,10 +8,10 @@ def stop_services():
     ip = get_public_ip(instances[0])
     services = [
         "app_config_files/client.json",
-        "app_config_files/akka_tweet.json",
-        "app_config_files/akka_weatherfinder.json",
-        "app_config_files/spark_tweet.json",
-        "app_config_files/spark_temperature.json",
+        "app_config_files/akka-tweet.json",
+        "app_config_files/akka-temperature.json",
+        "app_config_files/spark-tweet.json",
+        "app_config_files/spark-temperature.json",
         "app_config_files/cassandra.json",
         "app_config_files/kafka.json",
         "app_config_files/zookeeper.json",

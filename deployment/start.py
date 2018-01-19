@@ -1,17 +1,21 @@
+import time 
+import json
+from configure_masters import configure_masters
+from configure_slaves import configure_slaves
+from launch_instances import run_instance
+from start_services import start_services
+import config as cfg
+from tools import init_logs
+
+
 def print_title(text):
     print("\n##########################")
     print(text)
     print("##########################\n")
 
-if __name__ == "__main__":
-    import time 
-    from configure_masters import configure_masters
-    from configure_slaves import configure_slaves
-    from launch_instances import run_instance
-    from start_services import start_services
-    import config as cfg
-    from tools import init_logs
 
+def start():
+    times = {}
     init_logs()
 
     print_title("Starting instances...")
@@ -32,9 +36,19 @@ if __name__ == "__main__":
     time.sleep(cfg.EC2_STARTING_DURATION)
 
     print_title("Configuring masters...")
+    start = time.time()
     configure_masters()
+    times["configure_masters"] = time.time() - start
+
     print_title("Configuring slaves...")
+    start = time.time()
     configure_slaves()
+    times["configure_slaves"] = time.time() - start
 
     print_title("Launching services...")
-    start_services()
+    times["services"] = start_services()
+    return times
+
+
+if __name__ == "__main__":
+    print(json.dumps(start(), indent=2))

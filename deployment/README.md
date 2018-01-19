@@ -40,6 +40,7 @@ python configure.py
 
 # Note: edit the file to launch more instances
 python start.py
+# Output: configuration times
 ```
 
 ```bash
@@ -72,5 +73,8 @@ python kill_service.py <instance-id> <container-id>
 ## Benchmark
 
 ```
-python benchmark_restart_client.py
+# source venv/bin/activate
+
+# Note: edit the file to benchmark more services
+python benchmark.py
 ```
